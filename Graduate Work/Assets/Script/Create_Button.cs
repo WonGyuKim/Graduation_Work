@@ -9,6 +9,8 @@ public class Create_Button : MonoBehaviour
 
     public void Action()
     {
-        Instantiate(Pool[0]);
+        //Instantiate(Pool[0]);
+        GameObject data = Instantiate(Resources.Load("\\Assets\\Models\\Prefabs\\15gear.prefab")) as GameObject;
+
     }
 }
