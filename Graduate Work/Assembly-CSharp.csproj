@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\Create_Button.cs" />
+    <Compile Include="Assets\Script\Create_Object.cs" />
     <Compile Include="Assets\Script\Manager.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\temp1\brick.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="Assets\Script\temp1\Parts.cs" />
     <Compile Include="Assets\Script\temp1\Saver.cs" />
     <Compile Include="Assets\Script\temp1\wheel.cs" />
+    <Compile Include="Assets\Script\UIManager.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>E:/School/졸업작품/Graduation_Work/Graduate Work/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

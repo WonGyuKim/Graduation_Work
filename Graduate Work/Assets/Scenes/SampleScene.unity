@@ -804,9 +804,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6139bdfe452448641a03012edb56b806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pool:
-  - {fileID: 3044591516180210053, guid: 66d0a81145939b444b2dbbb8693ad78f, type: 3}
-  - {fileID: 9098333960270091727, guid: 4f46bba9c130b304a9b7ba27b2215c51, type: 3}
 --- !u!1 &1032376028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,6 +1029,7 @@ GameObject:
   - component: {fileID: 1286925980}
   - component: {fileID: 1286925979}
   - component: {fileID: 1286925978}
+  - component: {fileID: 1286925981}
   m_Layer: 5
   m_Name: Dropdown
   m_TagString: Untagged
@@ -1128,7 +1126,18 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1286925981}
+        m_MethodName: DropDownList
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Dropdown+DropdownEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1286925979
@@ -1168,6 +1177,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1286925976}
   m_CullTransparentMesh: 0
+--- !u!114 &1286925981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286925976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6139bdfe452448641a03012edb56b806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1334052324
 GameObject:
   m_ObjectHideFlags: 0
