@@ -60,14 +60,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\BtnCreate.cs" />
-    <Compile Include="Assets\Script\DDLCreate.cs" />
-    <Compile Include="Assets\Script\Manager.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\temp1\brick.cs" />
     <Compile Include="Assets\Script\temp1\builder.cs" />
     <Compile Include="Assets\Script\temp1\engine.cs" />
     <Compile Include="Assets\Script\temp1\Graph.cs" />
+    <Compile Include="Assets\Script\temp1\Manager_temp.cs" />
     <Compile Include="Assets\Script\temp1\Parts.cs" />
     <Compile Include="Assets\Script\temp1\Saver.cs" />
     <Compile Include="Assets\Script\temp1\wheel.cs" />
