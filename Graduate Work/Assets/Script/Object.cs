@@ -9,8 +9,8 @@ public class Object : MonoBehaviour
     {
         if (transform.parent != null)
         {
-
             Transform parent = transform;
+
             while (parent.transform.parent != null)
             {
                 parent = parent.transform.parent;
@@ -19,7 +19,6 @@ public class Object : MonoBehaviour
         }
         else        
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 10));
-        
         
     }
 

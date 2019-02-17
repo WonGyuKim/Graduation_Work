@@ -298,7 +298,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -410,7 +410,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 15Gear
+  m_Text: Gear15
 --- !u!222 &225641821
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -743,7 +743,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 947467438}
-        m_MethodName: Action
+        m_MethodName: CreateObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -801,7 +801,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 947467433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6139bdfe452448641a03012edb56b806, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c36f3d1935628f458506f06125b10d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1032376028
@@ -1104,31 +1104,31 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: 15Gear
+    - m_Text: Gear15
       m_Image: {fileID: 0}
-    - m_Text: 30Gear
+    - m_Text: Gear30
       m_Image: {fileID: 0}
-    - m_Text: 1axle
+    - m_Text: Axle1
       m_Image: {fileID: 0}
-    - m_Text: 2axle
+    - m_Text: Axle2
       m_Image: {fileID: 0}
-    - m_Text: 4axle
+    - m_Text: Axle4
       m_Image: {fileID: 0}
-    - m_Text: 3beam
+    - m_Text: Beam3
       m_Image: {fileID: 0}
-    - m_Text: 6beam
+    - m_Text: Beam6
       m_Image: {fileID: 0}
-    - m_Text: 12beam
+    - m_Text: Beam12
       m_Image: {fileID: 0}
-    - m_Text: 1Connector
+    - m_Text: Connector1
       m_Image: {fileID: 0}
-    - m_Text: 2Connector
+    - m_Text: Connector2
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1286925981}
-        m_MethodName: DropDownList
+        m_MethodName: GetObjectValue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1186,7 +1186,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1286925976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6139bdfe452448641a03012edb56b806, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c36f3d1935628f458506f06125b10d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1334052324

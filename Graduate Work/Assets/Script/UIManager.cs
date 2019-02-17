@@ -4,9 +4,32 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    
+    // UI Components
+    BtnCreate BtnCreate;
+    DDLCreate DDLCreate;
 
-    // Update is called once per frame
-    
+    // Variables
+    private static int target;
+
+    private void Start()
+    {
+        // Init UI Components
+        BtnCreate = gameObject.AddComponent<BtnCreate>();
+        DDLCreate = gameObject.AddComponent<DDLCreate>();
+
+        // Init Variables
+        //target = DDLCreate.Value;
+        target = 0;
+    }
+
+    public void CreateObject()
+    {
+        BtnCreate.Action(target);
+    }
+
+    public void GetObjectValue()
+    {
+        target = DDLCreate.Value;
+        Debug.Log(target);
+    }
 }
