@@ -14,7 +14,11 @@ GameObject:
   - component: {fileID: 5427560511533777710}
   - component: {fileID: 3954338393807031822}
   m_Layer: 0
+<<<<<<< HEAD
   m_Name: gear30
+=======
+  m_Name: 30gear
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,8 +34,12 @@ Transform:
   m_LocalRotation: {x: 0.00000008146034, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.794, y: 1.27, z: -2.9403575e-23}
   m_LocalScale: {x: 1, y: 1, z: 1}
+<<<<<<< HEAD
   m_Children:
   - {fileID: 1189890507126155807}
+=======
+  m_Children: []
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -106,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!1 &6057262031991387720
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,3 +177,5 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+=======
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c

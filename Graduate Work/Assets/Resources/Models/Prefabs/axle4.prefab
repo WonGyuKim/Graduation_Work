@@ -13,10 +13,16 @@ GameObject:
   - component: {fileID: 4641736542793419950}
   - component: {fileID: 6719972476604877548}
   - component: {fileID: 469894682464127355}
+<<<<<<< HEAD
   - component: {fileID: 5971252976460921180}
   m_Layer: 0
   m_Name: axle4
   m_TagString: Axle
+=======
+  m_Layer: 0
+  m_Name: axle4
+  m_TagString: Untagged
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!114 &5971252976460921180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,3 +125,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84b719ba3d76dce4ba82eed530b70583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c

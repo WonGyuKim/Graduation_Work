@@ -1,5 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+<<<<<<< HEAD
 --- !u!1 &318206906985896650
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,6 +125,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+=======
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
 --- !u!1 &7205012171987555484
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,6 +154,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7205012171987555484}
+<<<<<<< HEAD
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.33007208, y: 4.169934, z: -0.33629012}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -158,6 +162,12 @@ Transform:
   - {fileID: 2562882591255319553}
   - {fileID: 7353749546941505073}
   - {fileID: 7508189997259486972}
+=======
+  m_LocalRotation: {x: 0.00000008146034, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.27102375, y: 4.1986594, z: -0.4327077}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!1 &8898071660235005705
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,3 +305,5 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+=======
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c

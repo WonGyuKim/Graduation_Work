@@ -30,10 +30,14 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0.2655621, y: 0.15097256, z: 0.079289734}
   m_LocalScale: {x: 1, y: 1, z: 1}
+<<<<<<< HEAD
   m_Children:
   - {fileID: 269639995432907675}
   - {fileID: 5510051574644074522}
   - {fileID: 2189305082568529814}
+=======
+  m_Children: []
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Father: {fileID: 796599799}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -202,10 +206,14 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0.2655621, y: 0.15097256, z: 0.079289734}
   m_LocalScale: {x: 1, y: 1, z: 1}
+<<<<<<< HEAD
   m_Children:
   - {fileID: 6118277124722573549}
   - {fileID: 8478390968269036461}
   - {fileID: 8354492717410134807}
+=======
+  m_Children: []
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Father: {fileID: 487373838}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -310,10 +318,14 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0.60528165, y: 0.15097256, z: 0.07929206}
   m_LocalScale: {x: 1, y: 1, z: 1}
+<<<<<<< HEAD
   m_Children:
   - {fileID: 3336441101285740530}
   - {fileID: 1120070125720996853}
   - {fileID: 73047938261676655}
+=======
+  m_Children: []
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Father: {fileID: 796599799}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -450,10 +462,14 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0.60528165, y: 0.15097256, z: 0.07929206}
   m_LocalScale: {x: 1, y: 1, z: 1}
+<<<<<<< HEAD
   m_Children:
   - {fileID: 131633325795041411}
   - {fileID: 640390745216085173}
   - {fileID: 4346921063553047485}
+=======
+  m_Children: []
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   m_Father: {fileID: 487373838}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -528,6 +544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!1 &521039719539305689
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,3 +1289,5 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+=======
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c

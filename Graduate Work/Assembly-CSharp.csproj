@@ -2,20 +2,31 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
+<<<<<<< HEAD
     <TargetFrameworkProfile />
+=======
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+<<<<<<< HEAD
     <RootNamespace>
     </RootNamespace>
+=======
+    <RootNamespace></RootNamespace>
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
     <ProjectGuid>{D520C3EE-4EF9-EB46-4A07-8C8DFE0C441B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
+<<<<<<< HEAD
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+=======
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
   </PropertyGroup>
@@ -62,9 +73,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="Assets\Script\Collide.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+=======
+    <Compile Include="Assets\Script\Object.cs" />
+>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
     <Compile Include="Assets\Script\temp1\brick.cs" />
     <Compile Include="Assets\Script\temp1\builder.cs" />
     <Compile Include="Assets\Script\temp1\engine.cs" />
