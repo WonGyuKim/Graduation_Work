@@ -87,7 +87,7 @@ public class UIManager : MonoBehaviour
                 break;
         }
 
-        UnityEngine.GameObject obj = Resources.Load(path + ObjectName) as GameObject;
+        GameObject obj = Resources.Load(path + ObjectName) as GameObject;
 
         return obj;
     }

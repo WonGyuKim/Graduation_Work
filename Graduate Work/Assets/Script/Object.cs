@@ -15,18 +15,11 @@ public class Object : MonoBehaviour
             {
                 parent = parent.transform.parent;
             }
-//<<<<<<< HEAD
-            //parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 2));
-        
-        /*else        
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 2));
-=======*/
-            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 10));
+
+            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 5));
         }
         else        
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 10));
-//>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
-        
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 5));
     }
 
     // Update is called once per frame
@@ -45,17 +38,29 @@ public class Object : MonoBehaviour
             {
                 parent = parent.transform.parent;
             }
-/*<<<<<<< HEAD
-            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 2));
-        }
-        else
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 2));
-=======*/
-            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-        }
-        else
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
-//>>>>>>> fc084b894c8c4f5c063d2b44f3c55f26483f076c
 
+            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
+        }
+        else
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
+
+    }
+
+    void OnMouseDown()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            transform.Rotate(90f, 0, 0);
+        }
+
+        else if (Input.GetKey(KeyCode.W))
+        {
+            transform.Rotate(0, 90f, 0);
+        }
+
+        else if (Input.GetKey(KeyCode.E))
+        {
+            transform.Rotate(0, 0, 90f);
+        }
     }
 }
