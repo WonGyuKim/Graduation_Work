@@ -8,7 +8,7 @@ public class Object : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        origin = new Vector3();
 
         if (transform.parent != null)
         {
@@ -35,9 +35,11 @@ public class Object : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            origin.x = transform.position.x;
-            origin.y = transform.position.y;
-            origin.z = transform.position.z;
+            origin = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
+
+            origin.x -= transform.position.x;
+            origin.y -= transform.position.y;
+            origin.z -= transform.position.z;
         }
         else if (Input.GetKey(KeyCode.Q))
         {
@@ -56,7 +58,7 @@ public class Object : MonoBehaviour
     void OnMouseDrag()
     {
         Transform parent = transform;
-        Vector3 click = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y));
+        Vector3 click = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - transform.position.x, Input.mousePosition.y - transform.position.y, 5 - transform.position.z));
 
         while (parent.transform.parent != null)
         {
