@@ -5,11 +5,12 @@ using UnityEngine;
 public class Object : MonoBehaviour
 {
     Vector3 origin;
+    GameObject plane;
     // Start is called before the first frame update
     void Start()
     {
         origin = new Vector3();
-
+        plane = GameObject.Find("Plane");
         if (transform.parent != null)
         {
             Transform parent = transform;
@@ -31,7 +32,7 @@ public class Object : MonoBehaviour
         
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
@@ -55,7 +56,7 @@ public class Object : MonoBehaviour
         }
     }
 
-    void OnMouseDrag()
+    private void OnMouseDrag()
     {
         Transform parent = transform;
         Vector3 click = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - transform.position.x, Input.mousePosition.y - transform.position.y, 5 - transform.position.z));
@@ -129,17 +130,17 @@ public class Object : MonoBehaviour
             parent.transform.rotation = rotation;
             */
         }
-
-        else if (transform.parent != null)
+        /*
+        else if (!parent.Equals(transform))
         {
             parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
         }
         else
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
-
+        */
     }
 
-    void OnMouseUp()
+    private void OnMouseUp()
     {
     }
 
