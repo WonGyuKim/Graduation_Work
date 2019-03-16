@@ -6,24 +6,22 @@ public class Object : MonoBehaviour
 {
     Vector3 origin;
     GameObject plane;
+    Transform parent;
+
     // Start is called before the first frame update
     void Start()
     {
         origin = new Vector3();
         plane = GameObject.Find("Plane");
-        if (transform.parent != null)
+        parent = transform;
+
+        if (parent.parent != null)
         {
-            Transform parent = transform;
-
-            while (parent.transform.parent != null)
-            {
-                parent = parent.transform.parent;
-            }
-
-            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 5));
+            while (parent.parent != null)
+                parent = parent.parent;
         }
-        else        
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, 5));
+
+        parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, plane.transform.position.z - Camera.main.transform.position.z));
     }
 
     // Update is called once per frame
@@ -58,13 +56,7 @@ public class Object : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        Transform parent = transform;
         Vector3 click = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - transform.position.x, Input.mousePosition.y - transform.position.y, 5 - transform.position.z));
-
-        while (parent.transform.parent != null)
-        {
-            parent = parent.transform.parent;
-        }
 
         if (Input.GetKey(KeyCode.LeftControl))
         {
@@ -96,52 +88,17 @@ public class Object : MonoBehaviour
 
             // Step_4. Now We can make conclusion Rotation by Quaternion
             Quaternion rotation = new Quaternion(CroPro.x, CroPro.y, CroPro.z, angle);
-            Debug.Log(rotation);
-            parent.transform.rotation = rotation;
-            /*
-            // arcball rotation
-            Debug.Log("Origin : (x, y, z) = (" + origin.x + ", " + origin.y + ", " + origin.z + ")");
-            Debug.Log("Dynamic : (x, y, z) = (" + parent.transform.position.x + ", " + parent.transform.position.y + ", " + parent.transform.position.z + ")");
-
-
-            // Step_1. 
-            float V1 = Mathf.Sqrt(origin.x * origin.x + origin.y * origin.y + origin.z * origin.z);
-            float V2 = Mathf.Sqrt(parent.transform.position.x * parent.transform.position.x + parent.transform.position.y * parent.transform.position.y + parent.transform.position.z * parent.transform.position.z);
-            float Scale = V2 / V1;
-            V1 *= Scale;
-
-
-            // Step_2.
-            Vector3 ScaledV1 = new Vector3(origin.x * Scale, origin.y * Scale, origin.z * Scale);
-            //Inner Product
-            float InPro = ScaledV1.x * parent.transform.position.x + ScaledV1.y * parent.transform.position.y + ScaledV1.z * parent.transform.position.z;
-            InPro /= V1 * V2;
-            float angle = Mathf.Acos(InPro);
-                
-            // Step_3.
-            // Cross Product
-            Vector3 CroPro = new Vector3(ScaledV1.y * parent.transform.position.z - ScaledV1.z * parent.transform.position.y,
-                                            ScaledV1.z * parent.transform.position.x - ScaledV1.x * parent.transform.position.z,
-                                            ScaledV1.x * parent.transform.position.y - ScaledV1.y * parent.transform.position.x);
-
-            // Step_4. Now We can make conclusion Rotation by Quaternion
-            Quaternion rotation = new Quaternion(CroPro.x, CroPro.y, CroPro.z, angle);
-            Debug.Log(rotation);
-            parent.transform.rotation = rotation;
-            */
+            //Debug.Log(rotation);
+            parent.rotation = rotation;
+           
         }
-        /*
-        else if (!parent.Equals(transform))
-        {
-            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
-        }
+
         else
-            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
-        */
-    }
-
-    private void OnMouseUp()
-    {
+        {
+            parent.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, plane.transform.position.z - Camera.main.transform.position.z));
+        }
+            
+        
     }
 
 }
