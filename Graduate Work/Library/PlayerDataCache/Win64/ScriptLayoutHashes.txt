@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-D:/학교/졸업작품/프로젝트/Graduation_Work/Debug/Graduate Work.exe
+E:/School/졸업작품/Debug/Graduate Work.exe
 SceneListBegin?
 Assets/Scenes/SampleScene.unity
 SceneListEnd?

@@ -115,6 +115,8 @@ public class Object : MonoBehaviour
             float InPro = ScaledV1.x * click.x + ScaledV1.y * click.y + ScaledV1.z * click.z;
             //InPro /= V1 * V2;
             float angle = Mathf.Acos(InPro);
+            /*if (angle < 0)
+                angle = Mathf.PI / 2 - angle;*/
 
             // Step_3.
             // Cross Product
@@ -126,7 +128,7 @@ public class Object : MonoBehaviour
             //Quaternion rotation = new Quaternion(CroPro.x, CroPro.y, CroPro.z, angle);
             //Debug.Log(rotation);
             //parent.rotation = new Quaternion(parent.rotation.x + CroPro.x, parent.rotation.y + CroPro.y, parent.rotation.z + CroPro.z, parent.rotation.w + angle);
-            parent.rotation = new Quaternion(parent.rotation.x + CroPro.x, parent.rotation.y + CroPro.y, parent.rotation.z + CroPro.z, parent.rotation.w + Mathf.Abs(angle));
+            parent.rotation = new Quaternion(parent.rotation.x + CroPro.x * Mathf.Sin(angle / 2), parent.rotation.y + CroPro.y * Mathf.Sin(angle / 2), parent.rotation.z + CroPro.z * Mathf.Sin(angle / 2), parent.rotation.w + Mathf.Cos(angle));
 
         }
 
