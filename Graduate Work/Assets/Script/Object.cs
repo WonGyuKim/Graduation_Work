@@ -8,6 +8,7 @@ public class Object : MonoBehaviour
     GameObject plane;
     GameObject sphere;
     Transform parent;
+    Quaternion temp_rotate;
 
     // Start is called before the first frame update
     void Start()
@@ -40,14 +41,20 @@ public class Object : MonoBehaviour
             RaycastHit rayhit;
             if (Physics.Raycast(ray, out rayhit))
             {
-                sphere = new GameObject("Sphere Collider");
-                SphereCollider temp = sphere.AddComponent<SphereCollider>();
                 origin = rayhit.point - parent.position;
-                temp.radius = origin.magnitude;
-                temp.transform.position = parent.transform.position;
+
+                sphere = new GameObject("Sphere Collider");
                 sphere.transform.parent = parent;
+                sphere.transform.position = parent.position;
                 sphere.transform.rotation = parent.rotation;
 
+                SphereCollider temp = sphere.AddComponent<SphereCollider>();
+                temp.radius = origin.magnitude;
+                //temp.transform.position = parent.transform.position;
+                //temp.transform.rotation = parent.rotation;
+                //temp.transform.localRotation = new Quaternion(-parent.rotation.x, -parent.rotation.y, -parent.rotation.z, -parent.rotation.w);
+
+                temp_rotate = parent.rotation;
             }
 
             if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
@@ -64,43 +71,7 @@ public class Object : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            Vector3 click;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayhit;
-            /*
-            if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
-            {
-                click = rayhit.point - parent.position;
-            }
-            else
-            {
-                //click = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - transform.position.x, Input.mousePosition.y - transform.position.y, plane.transform.position.z - transform.position.z));
-                click = rayhit.point - parent.position;
-            }
-            */
-            Physics.Raycast(ray, out rayhit);
-            click = rayhit.point - parent.position;
-
-            // arcball rotation
-            // Step_1. 
-            float Scale = click.magnitude / origin.magnitude;
-            
-            // Step_2.
-            Vector3 ScaledV1 = new Vector3(origin.x * Scale, origin.y * Scale, origin.z * Scale);
-            //Inner Product
-            float InPro = ScaledV1.x * click.x + ScaledV1.y * click.y + ScaledV1.z * click.z;
-            //InPro /= V1 * V2;
-            float angle = Mathf.Acos(InPro);
-
-            // Step_3.
-            // Cross Product
-            Vector3 CroPro = new Vector3(   ScaledV1.y * click.z - ScaledV1.z * click.y,
-                                            ScaledV1.z * click.x - ScaledV1.x * click.z,
-                                            ScaledV1.x * click.y - ScaledV1.y * click.x);
-
-            // Step_4. Now We can make conclusion Rotation by Quaternion
-            parent.rotation = new Quaternion(parent.rotation.x + CroPro.x * Mathf.Sin(angle / 2), parent.rotation.y + CroPro.y * Mathf.Sin(angle / 2), parent.rotation.z + CroPro.z * Mathf.Sin(angle / 2), parent.rotation.w + Mathf.Cos(angle));
-
+            ArcballRotation();
         }
 
         else
@@ -115,4 +86,39 @@ public class Object : MonoBehaviour
     {
         Destroy(sphere);
     }
+
+    private void ArcballRotation()
+    {
+        Vector3 click;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit rayhit;
+        
+        if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+        {
+            click = rayhit.point - parent.position;
+
+            // arcball rotation
+            // Step_1. 
+            float Scale = click.magnitude / origin.magnitude;
+
+            // Step_2.
+            Vector3 ScaledV1 = new Vector3(origin.x * Scale, origin.y * Scale, origin.z * Scale);
+
+            //Inner Product
+            float InPro = ScaledV1.x * click.x + ScaledV1.y * click.y + ScaledV1.z * click.z;
+            //InPro /= V1 * V2;
+            float angle = Mathf.Acos(InPro);
+
+            // Step_3.
+            // Cross Product
+            Vector3 CroPro = new Vector3(ScaledV1.y * click.z - ScaledV1.z * click.y,
+                                            ScaledV1.z * click.x - ScaledV1.x * click.z,
+                                            ScaledV1.x * click.y - ScaledV1.y * click.x);
+
+            // Step_4. Now We can make conclusion Rotation by Quaternion
+            Quaternion result = new Quaternion(CroPro.x, CroPro.y, CroPro.z, Mathf.Cos(angle));
+            parent.rotation = (temp_rotate * result).normalized;
+        }
+    }
+
 }
