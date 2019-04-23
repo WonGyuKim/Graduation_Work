@@ -41,6 +41,8 @@ public class Object : MonoBehaviour
             RaycastHit rayhit;
             if (Physics.Raycast(ray, out rayhit))
             {
+                
+                MeshCollider mesh = rayhit.collider as MeshCollider;
                 origin = rayhit.point - parent.position;
 
                 sphere = new GameObject("Sphere Collider");
@@ -50,11 +52,8 @@ public class Object : MonoBehaviour
 
                 SphereCollider temp = sphere.AddComponent<SphereCollider>();
                 temp.radius = origin.magnitude;
-                //temp.transform.position = parent.transform.position;
-                //temp.transform.rotation = parent.rotation;
-                //temp.transform.localRotation = new Quaternion(-parent.rotation.x, -parent.rotation.y, -parent.rotation.z, -parent.rotation.w);
-
                 temp_rotate = parent.rotation;
+                
             }
 
             if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
@@ -107,7 +106,7 @@ public class Object : MonoBehaviour
             //Inner Product
             float InPro = ScaledV1.x * click.x + ScaledV1.y * click.y + ScaledV1.z * click.z;
             //InPro /= V1 * V2;
-            float angle = Mathf.Acos(InPro);
+            float angle = Mathf.Acos(InPro) / 2;
 
             // Step_3.
             // Cross Product
@@ -116,8 +115,8 @@ public class Object : MonoBehaviour
                                             ScaledV1.x * click.y - ScaledV1.y * click.x);
 
             // Step_4. Now We can make conclusion Rotation by Quaternion
-            Quaternion result = new Quaternion(CroPro.x, CroPro.y, CroPro.z, Mathf.Cos(angle));
-            parent.rotation = (temp_rotate * result).normalized;
+            Quaternion result = new Quaternion(Mathf.Sin(angle) * CroPro.x, Mathf.Sin(angle) * CroPro.y, Mathf.Sin(angle) * CroPro.z, Mathf.Cos(angle));
+            parent.rotation = result * temp_rotate;
         }
     }
 
