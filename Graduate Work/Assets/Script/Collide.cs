@@ -4,63 +4,61 @@ using UnityEngine;
 
 public class Collide : MonoBehaviour
 {
-    Collider col;
-    int Collide_num = 0;
-    bool colli = false;
-    // Start is called before the first frame update
+    private Object pnt;
+    private bool close;
+    private Transform Parent;
+    private Vector3 dst;
+    private Object ob;
+    private GameObject gobj;
+    
     void Start()
     {
-        col = null;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void OnMouseDrag()
-    {
-        if (col != null)
-        {
-            transform.position = col.transform.position;
-            transform.rotation = col.transform.rotation;
-        }
+        Parent = transform.parent;
+        pnt = Parent.gameObject.GetComponent<Object>();
+        close = false;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if(this.tag == "Axle")
+        if (!other.gameObject.Equals(Parent.gameObject) && (pnt.OnDrag || other.gameObject.GetComponent<Object>().OnDrag) && !close)
         {
-            col = other;
-            colli = true;
-        }
-        else if(this.tag == "Connector")
-        {
-            if(other.tag == "Conn_Hole")
+            if ((transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) || (transform.tag == "Axle_Hole" && other.tag == "Axle"))
             {
-                col = other;
-                colli = true;
+                ob = other.gameObject.GetComponent<Object>();
+                gobj = other.gameObject;
+                pnt.tEnter = true;
+                ob.tEnter = true;
+                close = true;
+                if (pnt.OnDrag)
+                {
+                    dst = other.transform.position - transform.position;
+                    Parent.position = Parent.position + dst;
+                    Parent.rotation = other.transform.rotation;
+                    pnt.befoMouse = Input.mousePosition;
+                }
+                else if (ob.OnDrag)
+                {
+                    other.transform.position = transform.position;
+                    other.transform.rotation = transform.rotation;
+                    ob.befoMouse = Input.mousePosition;
+                }
             }
         }
     }
 
     void OnTriggerStay(Collider other)
     {
-        if (Collide_num != 30 && colli)
-            Collide_num++;
-        else
-        {
-            col = null;
-            Collide_num = 0;
-            colli = false;
-        }
+        if (close && !other.gameObject.Equals(Parent.gameObject))
+            pnt.tEnter = true;
     }
 
     void OnTriggerExit(Collider other)
     {
-        col = null;
-        Collide_num = 0;
-        colli = false;
+        if (other.gameObject.Equals(gobj))
+        {
+            pnt.tEnter = false;
+            ob.tEnter = false;
+            close = false;
+        }
     }
 }
