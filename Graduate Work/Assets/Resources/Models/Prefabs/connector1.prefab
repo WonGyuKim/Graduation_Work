@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7102086262500196696}
   - component: {fileID: 98404233105259939}
   - component: {fileID: 8204701527815958707}
-  - component: {fileID: 6409238802224795939}
+  - component: {fileID: 8775615376224848851}
   m_Layer: 0
   m_Name: connector1
   m_TagString: Connector
@@ -93,7 +93,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 2d7d76863a731c3479189892344a4f89, type: 3}
---- !u!114 &6409238802224795939
+--- !u!114 &8775615376224848851
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,6 +102,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4814822158415062222}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c88c37411b5f134f8e20da2dd1ffd1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

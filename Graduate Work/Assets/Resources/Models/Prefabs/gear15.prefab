@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3223684280834607024}
   - component: {fileID: 478516285711683807}
   - component: {fileID: 575695871486827216}
-  - component: {fileID: 7521942913326102913}
+  - component: {fileID: 2887831936790111310}
   m_Layer: 0
   m_Name: gear15
   m_TagString: Untagged
@@ -94,7 +94,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 47c7c46f719bd1f48900ccfae4794ce3, type: 3}
---- !u!114 &7521942913326102913
+--- !u!114 &2887831936790111310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1973173787807791811}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
+  m_Script: {fileID: 11500000, guid: fd14758347c237d48bd19147a243fb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7933886976796332937
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 2376232309475023650}
   - component: {fileID: 3356217767456958279}
   - component: {fileID: 2350651129431516195}
-  - component: {fileID: 7763233023078735197}
+  - component: {fileID: 6240760111267407896}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Axle_Hole
@@ -169,7 +169,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &7763233023078735197
+--- !u!114 &6240760111267407896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,6 +178,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7933886976796332937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b719ba3d76dce4ba82eed530b70583, type: 3}
+  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

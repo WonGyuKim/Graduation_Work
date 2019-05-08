@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4142052955609555275}
   - component: {fileID: 353961009810086292}
   - component: {fileID: 6572708295001157066}
+  - component: {fileID: 1179653714209203206}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -62,6 +63,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &1179653714209203206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4935499643354201710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6998191781617843802
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,8 +87,7 @@ GameObject:
   - component: {fileID: 7462917944669925266}
   - component: {fileID: 9010233678358545472}
   - component: {fileID: 2759249247077573942}
-  - component: {fileID: 1859142432707606476}
-  - component: {fileID: 6460242469846017572}
+  - component: {fileID: 2210161747539759845}
   m_Layer: 0
   m_Name: gear30
   m_TagString: Axle_Hole
@@ -157,7 +169,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 0b1b79012583b9f4aa1df1338f509445, type: 3}
---- !u!114 &1859142432707606476
+--- !u!114 &2210161747539759845
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,18 +178,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6998191781617843802}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6460242469846017572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6998191781617843802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b719ba3d76dce4ba82eed530b70583, type: 3}
+  m_Script: {fileID: 11500000, guid: fd14758347c237d48bd19147a243fb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
