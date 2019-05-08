@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8922215427068777790}
   - component: {fileID: 1573769583831379404}
   - component: {fileID: 4697663867698024792}
-  - component: {fileID: 5807125793673700087}
+  - component: {fileID: 2844883216222384255}
   m_Layer: 0
   m_Name: axle4
   m_TagString: Axle
@@ -93,7 +93,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: b929aa7ee8a3e6b43b5b36c21620f948, type: 3}
---- !u!114 &5807125793673700087
+--- !u!114 &2844883216222384255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,6 +102,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2168685874894426830}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48edec539386dd84ea8433e57b57e660, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f31e68f68283441ab1f9fd282fc62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
