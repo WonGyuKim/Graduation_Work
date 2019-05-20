@@ -297,7 +297,6 @@ public class Gear : MonoBehaviour, IParts
         if(other.tag == "Gear")
         {
             LinkParts.Add(other.gameObject);
-            //linkGear = other.gameObject;
         }
     }
 

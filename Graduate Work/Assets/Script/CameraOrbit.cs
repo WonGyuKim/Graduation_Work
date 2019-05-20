@@ -35,7 +35,7 @@ public class CameraOrbit : MonoBehaviour
             input += new Vector2(Input.GetAxis("Mouse X") * speed, Input.GetAxis("Mouse Y") * -speed);
 
             transform.rotation = Quaternion.Euler(input.y, input.x, 0);
-            transform.position = target.position - (transform.localRotation * Vector3.forward * distance);
+            transform.position = target.position - (transform.rotation * Vector3.forward * distance);
         }
         else if (Input.GetMouseButton(2))
         {
