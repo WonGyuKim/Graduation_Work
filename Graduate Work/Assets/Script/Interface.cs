@@ -23,6 +23,12 @@ public interface IParts
 
     void MotoringMove();
 
+    void LinkAllMove();//연결된 파츠들과 같이 움직임
+
+    List<GameObject> LinkSearch();//연결된 파츠들을 탐색
+
+    void SearchReset();//검색된 결과 리셋
+
     bool OnDragCheck
     {
         get;

@@ -18,12 +18,19 @@ public class Gear : MonoBehaviour, IParts
     private GameObject sphere;
     private Quaternion temp_rotate;
 
+    public bool search; //탐색 확인 변수
+    public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
+    public GameObject Parent;//부모 개체
+    public List<GameObject> AllList;//연결된 모든 파츠 리스트
+
     void Start()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
         onDrag = false;
         tEnter = false;
+        emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
+        search = false;
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -34,10 +41,12 @@ public class Gear : MonoBehaviour, IParts
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        dst = otherTrans.position - hole.position;
-        this.transform.position = this.transform.position + dst;
         this.transform.rotation = otherTrans.rotation;
         befoMouse = Input.mousePosition;
+        dst = otherTrans.position - hole.position;
+        Vector3 zAxis = otherTrans.TransformDirection(otherTrans.forward).normalized;
+        zAxis = Vector3.Dot(zAxis, dst) * zAxis;
+        this.transform.position = this.transform.position - zAxis + dst;
     }
 
     public void LinkExit(Transform hole, Transform otherTrans)
@@ -189,13 +198,54 @@ public class Gear : MonoBehaviour, IParts
             {
                 origin = rayhit.point - transform.position;
             }
-
         }
+
+        if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
+        {
+            AllList = LinkSearch();
+            Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
+            foreach (GameObject gobj in AllList)
+            {
+                gobj.transform.parent = Parent.transform;
+            }
+        }
+    }
+
+    public List<GameObject> LinkSearch()//연결된 파츠들 탐색
+    {
+        List<GameObject> list = new List<GameObject>();
+        if (!search)//탐색이 안된 상태
+        {
+            list.Add(transform.gameObject);//자신을 리스트에 추가
+            search = true;//탐색 완료
+            foreach (GameObject gobj in LinkParts)//자신과 연결된 파츠들 탐색
+            {
+                IParts Ip = gobj.GetComponent<IParts>();//IParts 컴포넌트 불러오기
+                list.AddRange(Ip.LinkSearch());//연결된 파츠와 연결된 파츠들을 LinkSearch 재귀로 불러오고 자신의 리스트와 합침
+            }
+        }
+        return list;
+    }
+
+    public void LinkAllMove()
+    {
+        scrSpace = Camera.main.WorldToScreenPoint(Parent.transform.position);
+        Parent.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
     }
 
     void OnMouseUp()
     {
         onDrag = false;
+        if(Input.GetKey(KeyCode.A))
+        {
+            foreach(GameObject gobj in AllList)
+            {
+                gobj.transform.parent = null;
+                gobj.GetComponent<IParts>().SearchReset();
+            }
+            AllList.Clear();
+            Destroy(Parent);
+        }
     }
 
     void OnMouseDrag()
@@ -203,6 +253,20 @@ public class Gear : MonoBehaviour, IParts
         if(Input.GetKey(KeyCode.LeftControl))
         {
             ArcballMove();
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            LinkAllMove();
+        }
+        else if(Input.GetKeyUp(KeyCode.A))
+        {
+            foreach (GameObject gobj in AllList)
+            {
+                gobj.transform.parent = null;
+                gobj.GetComponent<IParts>().SearchReset();
+            }
+            AllList.Clear();
+            Destroy(Parent);
         }
         else
         {
@@ -215,7 +279,17 @@ public class Gear : MonoBehaviour, IParts
 
     void GearMove()
     {
-
+        //Vector3 vec = Input.mousePosition - befoMouse;
+        //Quaternion qua = Quaternion.AngleAxis(90, linkGear.transform.TransformDirection(linkGear.transform.forward));
+        //Vector3 Vev = qua * Vec;
+        //speed = Vector3.Dot(Vev, vec);
+        //if (speed > 10)
+        //    speed = 10;
+        //if (speed < -10)
+        //    speed = -10;
+        //transform.RotateAround(linkGear.transform.position, transform.TransformDirection(transform.forward), speed);
+        //Vec = transform.position - linkGear.transform.position;
+        //befoMouse = Input.mousePosition;
     }
 
     void OnTriggerEnter(Collider other)
@@ -223,6 +297,20 @@ public class Gear : MonoBehaviour, IParts
         if(other.tag == "Gear")
         {
             LinkParts.Add(other.gameObject);
+            //linkGear = other.gameObject;
         }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Gear")
+        {
+            LinkParts.Remove(other.gameObject);
+        }
+    }
+
+    public void SearchReset()
+    {
+        search = false;
     }
 }

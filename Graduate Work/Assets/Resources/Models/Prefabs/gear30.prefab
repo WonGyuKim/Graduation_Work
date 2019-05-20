@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 2210161747539759845}
   m_Layer: 0
   m_Name: gear30
-  m_TagString: Axle_Hole
+  m_TagString: Gear
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -181,3 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd14758347c237d48bd19147a243fb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  emptyObject: {fileID: 0}
+  Parent: {fileID: 0}
+  search: 0
+  AllList: []

@@ -37,8 +37,8 @@ public class Player : MonoBehaviour
     {
 
         Move();
-        CameraRotation();
-        CharacterRotation();
+        //CameraRotation();
+        //CharacterRotation();
 
     }
 
@@ -76,9 +76,6 @@ public class Player : MonoBehaviour
         //float _cameraRotationX = _xRotation * lookSensitivity;
         //currentCameraRotationX -= _cameraRotationX;
         //currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
-
-
-
         //theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
     }
 
