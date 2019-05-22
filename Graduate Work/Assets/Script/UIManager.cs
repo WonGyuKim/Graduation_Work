@@ -7,10 +7,12 @@ public class UIManager : MonoBehaviour
 {
     // UI Components
     public Button BtnCreate;
+    public Button BtnPower;
     public Dropdown DDLCreate;
 
     // Variables
     private int target;
+    public Motor[] motors;
 
     enum Object
     {
@@ -38,7 +40,6 @@ public class UIManager : MonoBehaviour
 
         Instantiate(obj);
     }
-
     public void GetObjectValue()
     {
         target = DDLCreate.value;
@@ -85,10 +86,28 @@ public class UIManager : MonoBehaviour
             case Object.connector2:
                 ObjectName = Object.connector2.ToString();
                 break;
+            case Object.motor:
+                ObjectName = Object.motor.ToString();
+                break;
         }
 
         GameObject obj = Resources.Load(path + ObjectName) as GameObject;
 
         return obj;
+    }
+
+    /*
+     * Search the whole motors and turn them on
+     */
+    public void EnableMotors()
+    {
+        motors = GetComponents(typeof(Motor)) as Motor[];
+
+        Debug.Log(motors.Length);
+        foreach (Motor motor in motors)
+        {
+            Debug.Log(motor.ToString());
+            motor.Activated = !motor.Activated;
+        }
     }
 }

@@ -196,6 +196,7 @@ public class Gear : MonoBehaviour, IParts
     void OnMouseUp()
     {
         onDrag = false;
+        Destroy(sphere);
     }
 
     void OnMouseDrag()
