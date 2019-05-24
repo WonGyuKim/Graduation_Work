@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Axle : MonoBehaviour, IParts
 {
+    Vector3 origin;
+    GameObject plane;
+    GameObject sphere;
+    Quaternion temp_rotate;
+
     private bool onDrag;
     private bool tEnter;
     private float speed;
@@ -20,6 +25,9 @@ public class Axle : MonoBehaviour, IParts
 
     void Start()
     {
+        origin = new Vector3();
+        plane = GameObject.Find("Plane");
+
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
         onDrag = false;
@@ -74,7 +82,37 @@ public class Axle : MonoBehaviour, IParts
 
     public void ArcballMove()
     {
+        Vector3 click;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit rayhit;
 
+        if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+        {
+            click = rayhit.point - transform.position;
+
+            // arcball rotation
+            // Step_1. 
+            //float Scale = click.magnitude / origin.magnitude;
+            click = Vector3.Normalize(click);
+            origin = Vector3.Normalize(origin);
+
+            // Step_2.
+            //Inner Product
+            float InPro = origin.x * click.x + origin.y * click.y + origin.z * click.z;
+            //InPro /= V1 * V2;
+            float angle = Mathf.Acos(InPro) / 2;
+
+            // Step_3.
+            // Cross Product
+            Vector3 CroPro = new Vector3(
+                origin.y * click.z - origin.z * click.y,
+                origin.z * click.x - origin.x * click.z,
+                origin.x * click.y - origin.y * click.x);
+
+            // Step_4. Now We can make conclusion Rotation by Quaternion
+            Quaternion result = new Quaternion(Mathf.Sin(angle) * CroPro.x, Mathf.Sin(angle) * CroPro.y, Mathf.Sin(angle) * CroPro.z, Mathf.Cos(angle));
+            transform.rotation = result * temp_rotate;
+        }
     }
 
     public void MotoringMove()
@@ -127,12 +165,61 @@ public class Axle : MonoBehaviour, IParts
                 gobj.transform.parent = Parent.transform;
             }
         }
+        else if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayhit;
+
+            if (Physics.Raycast(ray, out rayhit))
+            {
+                float round = 0;
+                float InPro, nearOrtho;
+                Vector3 far = new Vector3(rayhit.point.x, rayhit.point.y, rayhit.point.z);
+                Vector3 asspnt;
+
+                MeshCollider mesh = rayhit.collider as MeshCollider;
+
+                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+                {
+                    if (((transform.rotation * vertex + transform.position) - rayhit.point).magnitude > (far - rayhit.point).magnitude)
+                    {
+                        far = (transform.rotation * vertex + transform.position);
+                    }
+                }
+                nearOrtho = far.x * far.x + far.y * far.y + far.z * far.z;
+                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+                {
+                    asspnt = (transform.rotation * vertex + transform.position);
+                    InPro = far.x * asspnt.x + far.y * asspnt.y + far.z * asspnt.z;
+                    if (round < Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude) && Mathf.Abs(InPro) < Mathf.Abs(nearOrtho))
+                    {
+                        round = Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude);
+                        nearOrtho = InPro;
+                    }
+                }
+
+                sphere = new GameObject("Sphere Collider");
+                sphere.transform.position = transform.position;
+                sphere.transform.parent = transform;
+                sphere.transform.rotation = transform.rotation;
+
+                SphereCollider temp = sphere.AddComponent<SphereCollider>();
+                temp.radius = round / 2;
+                temp_rotate = transform.rotation;
+                
+            }
+
+            if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+            {
+                origin = rayhit.point - transform.position;
+            }
+        }
+        
     }
 
     void OnMouseUp()
     {
         onDrag = false;
-
         if (Input.GetKey(KeyCode.A))
         {
             foreach (GameObject gobj in AllList)
@@ -143,6 +230,8 @@ public class Axle : MonoBehaviour, IParts
             AllList.Clear();
             Destroy(Parent);
         }
+        Destroy(sphere);
+
     }
 
     void OnMouseDrag()

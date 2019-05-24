@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Gear : MonoBehaviour, IParts
 {
+    private Vector3 origin;
+    private GameObject plane;
+    private GameObject sphere;
+    private Quaternion temp_rotate;
+
     private bool onDrag;
     private bool tEnter;
     private float speed;
@@ -14,9 +19,6 @@ public class Gear : MonoBehaviour, IParts
     private List<GameObject> LinkParts = new List<GameObject>();
     private Vector3 dst;
     private Vector3 Vec;
-    private Vector3 origin;
-    private GameObject sphere;
-    private Quaternion temp_rotate;
 
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
@@ -25,6 +27,9 @@ public class Gear : MonoBehaviour, IParts
 
     void Start()
     {
+        origin = new Vector3();
+        plane = GameObject.Find("Plane");
+
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
         onDrag = false;
@@ -132,6 +137,16 @@ public class Gear : MonoBehaviour, IParts
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
+
+        if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
+        {
+            AllList = LinkSearch();
+            Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
+            foreach (GameObject gobj in AllList)
+            {
+                gobj.transform.parent = Parent.transform;
+            }
+        }
         if (Input.GetKey(KeyCode.LeftControl))
         {
 
@@ -174,39 +189,11 @@ public class Gear : MonoBehaviour, IParts
                 SphereCollider temp = sphere.AddComponent<SphereCollider>();
                 temp.radius = round / 2;
                 temp_rotate = transform.rotation;
-
-
-
-
-                //MeshCollider mesh = rayhit.collider as MeshCollider;
-                //origin = rayhit.point - transform.position;
-
-                //sphere = new GameObject("Sphere Collider");
-                //sphere.transform.position = transform.position;
-                //sphere.transform.parent = transform;
-                //sphere.transform.rotation = transform.rotation;
-
-                //SphereCollider temp = sphere.AddComponent<SphereCollider>();
-                //temp.radius = origin.magnitude;
-                //temp_rotate = transform.rotation;
-
-                ///*foreach (Vector3 vertex in mesh.sharedMesh.vertices)
-                //    Debug.Log(vertex);*/
             }
 
             if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
             {
                 origin = rayhit.point - transform.position;
-            }
-        }
-
-        if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
-        {
-            AllList = LinkSearch();
-            Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
-            foreach (GameObject gobj in AllList)
-            {
-                gobj.transform.parent = Parent.transform;
             }
         }
     }
@@ -246,6 +233,7 @@ public class Gear : MonoBehaviour, IParts
             AllList.Clear();
             Destroy(Parent);
         }
+        Destroy(sphere);
     }
 
     void OnMouseDrag()

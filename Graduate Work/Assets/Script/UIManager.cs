@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     // UI Components
     public Button BtnCreate;
+    public Button BtnMotor;
     public Dropdown DDLCreate;
 
     // Variables
@@ -84,6 +85,9 @@ public class UIManager : MonoBehaviour
                 break;
             case Object.connector2:
                 ObjectName = Object.connector2.ToString();
+                break;
+            case Object.motor:
+                ObjectName = Object.motor.ToString();
                 break;
         }
 

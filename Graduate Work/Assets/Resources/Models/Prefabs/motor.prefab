@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1778346479581443977}
   - component: {fileID: 5970997444150487225}
   - component: {fileID: 6495749551193048575}
+  - component: {fileID: 5980248809982872308}
   m_Layer: 0
   m_Name: motor
   m_TagString: Untagged
@@ -108,3 +109,15 @@ MonoBehaviour:
   OnDrag: 0
   tEnter: 0
   befoMouse: {x: 0, y: 0, z: 0}
+--- !u!114 &5980248809982872308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3658314100135639038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7356581bafb95f429277d248813ca1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
