@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 2759249247077573942}
   - component: {fileID: 2210161747539759845}
   - component: {fileID: 8996512977647131295}
+  - component: {fileID: 5721523201638202812}
   m_Layer: 0
   m_Name: gear30
   m_TagString: Gear
@@ -202,3 +203,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &5721523201638202812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6998191781617843802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9b32fa912c129240ad9f10b332b9149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

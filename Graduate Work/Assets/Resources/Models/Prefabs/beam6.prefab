@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 6082963759196297556}
   - component: {fileID: 1660523791537611858}
   - component: {fileID: 5814837058524623016}
+  - component: {fileID: 6441993285777600535}
   m_Layer: 0
   m_Name: beam6
   m_TagString: Untagged
@@ -259,6 +260,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a65beff4b4f06144e8d81c3cc530f514, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  search: 0
+  emptyObject: {fileID: 0}
+  Parent: {fileID: 0}
+  AllList: []
+--- !u!114 &6441993285777600535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5494148110394488792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2b0897869539849af5316afc4100fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6710525461534656256
