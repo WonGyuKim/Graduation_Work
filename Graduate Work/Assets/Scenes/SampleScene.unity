@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -410,7 +410,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gear15
+  m_Text: axle2
 --- !u!222 &225641821
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1197,25 +1197,55 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Gear15
+    - m_Text: axle2
       m_Image: {fileID: 0}
-    - m_Text: Gear30
+    - m_Text: axle3
       m_Image: {fileID: 0}
-    - m_Text: Axle1
+    - m_Text: axle4
       m_Image: {fileID: 0}
-    - m_Text: Axle2
+    - m_Text: axle5
       m_Image: {fileID: 0}
-    - m_Text: Axle4
+    - m_Text: axle6
       m_Image: {fileID: 0}
-    - m_Text: Beam3
+    - m_Text: axle7
       m_Image: {fileID: 0}
-    - m_Text: Beam6
+    - m_Text: axle8
       m_Image: {fileID: 0}
-    - m_Text: Beam12
+    - m_Text: axle9
       m_Image: {fileID: 0}
-    - m_Text: Connector1
+    - m_Text: axle10
       m_Image: {fileID: 0}
-    - m_Text: Connector2
+    - m_Text: axle11
+      m_Image: {fileID: 0}
+    - m_Text: axle12
+      m_Image: {fileID: 0}
+    - m_Text: beam3
+      m_Image: {fileID: 0}
+    - m_Text: beam7
+      m_Image: {fileID: 0}
+    - m_Text: beam11
+      m_Image: {fileID: 0}
+    - m_Text: bevelGear12
+      m_Image: {fileID: 0}
+    - m_Text: bevelGear20
+      m_Image: {fileID: 0}
+    - m_Text: connector2
+      m_Image: {fileID: 0}
+    - m_Text: connector3
+      m_Image: {fileID: 0}
+    - m_Text: connWithaxle
+      m_Image: {fileID: 0}
+    - m_Text: gear8
+      m_Image: {fileID: 0}
+    - m_Text: gear24
+      m_Image: {fileID: 0}
+    - m_Text: gear40
+      m_Image: {fileID: 0}
+    - m_Text: motor
+      m_Image: {fileID: 0}
+    - m_Text: rackGear
+      m_Image: {fileID: 0}
+    - m_Text: wormGear
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:

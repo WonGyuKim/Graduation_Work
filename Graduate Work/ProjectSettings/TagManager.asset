@@ -9,6 +9,10 @@ TagManager:
   - Connector
   - Conn_Hole
   - Axle
+  - WormGear
+  - RackGear
+  - Motor
+  - BevelGear
   layers:
   - Default
   - TransparentFX

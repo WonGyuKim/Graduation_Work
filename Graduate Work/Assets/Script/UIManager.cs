@@ -14,18 +14,31 @@ public class UIManager : MonoBehaviour
 
     enum Object
     {
-        gear15,
-        gear30,
-        axle1,
         axle2,
+        axle3,
         axle4,
+        axle5,
+        axle6,
+        axle7,
+        axle8,
+        axle9,
+        axle10,
+        axle11,
+        axle12,
         beam3,
-        beam6,
-        beam12,
-        connector1,
+        beam7,
+        beam11,
+        bevelGear12,
+        bevelGear20,
         connector2,
+        connector3,
+        connWithaxle,
+        gear8,
+        gear24,
+        gear40,
         motor,
-        motorbody
+        rackGear,
+        wormGear
     };
 
     public void Start()
@@ -55,35 +68,80 @@ public class UIManager : MonoBehaviour
 
         switch ((Object)target)
         {
-            case Object.gear15:
-                ObjectName = Object.gear15.ToString();
-                break;
-            case Object.gear30:
-                ObjectName = Object.gear30.ToString();
-                break;
-            case Object.axle1:
-                ObjectName = Object.axle1.ToString();
-                break;
             case Object.axle2:
                 ObjectName = Object.axle2.ToString();
+                break;
+            case Object.axle3:
+                ObjectName = Object.axle3.ToString();
                 break;
             case Object.axle4:
                 ObjectName = Object.axle4.ToString();
                 break;
+            case Object.axle5:
+                ObjectName = Object.axle5.ToString();
+                break;
+            case Object.axle6:
+                ObjectName = Object.axle6.ToString();
+                break;
+            case Object.axle7:
+                ObjectName = Object.axle7.ToString();
+                break;
+            case Object.axle8:
+                ObjectName = Object.axle8.ToString();
+                break;
+            case Object.axle9:
+                ObjectName = Object.axle9.ToString();
+                break;
+            case Object.axle10:
+                ObjectName = Object.axle10.ToString();
+                break;
+            case Object.axle11:
+                ObjectName = Object.axle11.ToString();
+                break;
+            case Object.axle12:
+                ObjectName = Object.axle12.ToString();
+                break;
             case Object.beam3:
                 ObjectName = Object.beam3.ToString();
                 break;
-            case Object.beam6:
-                ObjectName = Object.beam6.ToString();
+            case Object.beam7:
+                ObjectName = Object.beam7.ToString();
                 break;
-            case Object.beam12:
-                ObjectName = Object.beam12.ToString();
+            case Object.beam11:
+                ObjectName = Object.beam11.ToString();
                 break;
-            case Object.connector1:
-                ObjectName = Object.connector1.ToString();
+            case Object.bevelGear12:
+                ObjectName = Object.bevelGear12.ToString();
+                break;
+            case Object.bevelGear20:
+                ObjectName = Object.bevelGear20.ToString();
                 break;
             case Object.connector2:
                 ObjectName = Object.connector2.ToString();
+                break;
+            case Object.connector3:
+                ObjectName = Object.connector3.ToString();
+                break;
+            case Object.connWithaxle:
+                ObjectName = Object.connWithaxle.ToString();
+                break;
+            case Object.gear8:
+                ObjectName = Object.gear8.ToString();
+                break;
+            case Object.gear24:
+                ObjectName = Object.gear24.ToString();
+                break;
+            case Object.gear40:
+                ObjectName = Object.gear40.ToString();
+                break;
+            case Object.motor:
+                ObjectName = Object.motor.ToString();
+                break;
+            case Object.rackGear:
+                ObjectName = Object.rackGear.ToString();
+                break;
+            case Object.wormGear:
+                ObjectName = Object.wormGear.ToString();
                 break;
         }
 
