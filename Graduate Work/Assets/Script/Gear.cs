@@ -68,11 +68,11 @@ public class Gear : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        if (speed > 10)
-            speed = 10;
-        if (speed < -10)
-            speed = -10;
-        transform.position -= transform.forward * (speed / 100f);
+        if (speed > 0.01f)
+            speed = 0.01f;
+        if (speed < -0.01f)
+            speed = -0.01f;
+        transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
     }
 

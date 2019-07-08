@@ -35,6 +35,7 @@ public class Hole : MonoBehaviour
             {
                 colIParts.LinkMove(this.transform, Parent);
             }
+
         }
     }
 

@@ -17,7 +17,6 @@ public class Axle : MonoBehaviour, IParts
     private float xf;
     private float yf;
     private List<GameObject> LinkParts = new List<GameObject>();
-
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
@@ -66,11 +65,11 @@ public class Axle : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        if (speed > 10)
-            speed = 10;
-        if (speed < -10)
-            speed = -10;
-        transform.position -= transform.forward * (speed / 100f);
+        if (speed > 0.01f)
+            speed = 0.01f;
+        if (speed < -0.01f)
+            speed = -0.01f;
+        transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
     }
 
