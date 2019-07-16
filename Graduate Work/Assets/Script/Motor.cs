@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Motor : MonoBehaviour, IParts
 {
+    private Vector3 origin;
+    private GameObject plane;
+    private GameObject sphere;
+    private Quaternion temp_rotate;
+
     private bool onDrag;
     private bool tEnter;
     private float speed;
@@ -74,12 +79,50 @@ public class Motor : MonoBehaviour, IParts
 
     public void ArcballMove()
     {
+        Vector3 click;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit rayhit;
 
+        if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+        {
+            click = rayhit.point - transform.position;
+
+            // arcball rotation
+            // Step_1. 
+            //float Scale = click.magnitude / origin.magnitude;
+            click = Vector3.Normalize(click);
+            origin = Vector3.Normalize(origin);
+
+            // Step_2.
+            //Inner Product
+            float InPro = origin.x * click.x + origin.y * click.y + origin.z * click.z;
+            //InPro /= V1 * V2;
+            float angle = Mathf.Acos(InPro) / 2;
+
+            // Step_3.
+            // Cross Product
+            Vector3 CroPro = new Vector3(
+                origin.y * click.z - origin.z * click.y,
+                origin.z * click.x - origin.x * click.z,
+                origin.x * click.y - origin.y * click.x);
+
+            // Step_4. Now We can make conclusion Rotation by Quaternion
+            Quaternion result = new Quaternion(Mathf.Sin(angle) * CroPro.x, Mathf.Sin(angle) * CroPro.y, Mathf.Sin(angle) * CroPro.z, Mathf.Cos(angle));
+            transform.rotation = result * temp_rotate;
+
+        }
     }
 
-    public void MotoringMove()
+    public void LinkRotation(double F, double V)
     {
+        float force = 1, velocity = 1 / force;
+        transform.Rotate(new Vector3(0, 0, velocity));
+        foreach (GameObject parts in LinkParts)
+        {
+            IParts take = parts as IParts;
 
+            (IParts)parts.Link
+        }
     }
 
     public bool OnDragCheck

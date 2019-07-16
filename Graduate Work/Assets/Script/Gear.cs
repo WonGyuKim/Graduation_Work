@@ -149,7 +149,6 @@ public class Gear : MonoBehaviour, IParts
         }
         if (Input.GetKey(KeyCode.LeftControl))
         {
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayhit;
 
@@ -200,6 +199,7 @@ public class Gear : MonoBehaviour, IParts
 
     public List<GameObject> LinkSearch()//연결된 파츠들 탐색
     {
+        Debug.Log(search);
         List<GameObject> list = new List<GameObject>();
         if (!search)//탐색이 안된 상태
         {
