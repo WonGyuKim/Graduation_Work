@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7811473595313075196}
   - component: {fileID: 799945180571742844}
   - component: {fileID: 3103555367711297167}
+  - component: {fileID: 7130006549456740318}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Axle_Hole
@@ -73,6 +74,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7130006549456740318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4885165979863178895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab34b10364375e4c907326861b73b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7754331799839694094

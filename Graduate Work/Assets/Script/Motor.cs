@@ -119,9 +119,7 @@ public class Motor : MonoBehaviour, IParts
         transform.Rotate(new Vector3(0, 0, velocity));
         foreach (GameObject parts in LinkParts)
         {
-            IParts take = parts as IParts;
-
-            (IParts)parts.Link
+            
         }
     }
 
