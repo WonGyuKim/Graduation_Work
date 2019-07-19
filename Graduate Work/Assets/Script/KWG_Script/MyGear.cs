@@ -21,4 +21,20 @@ public class MyGear : MonoBehaviour, PartsAdapter
     {
         return parts;
     }
+
+    private void OnMouseDown()
+    {
+        
+    }
+
+    private void OnMouseDrag()
+    {
+        if (Input.GetKey(KeyCode.LeftControl))
+            parts.ArcballMove(this.gameObject);
+    }
+
+    private void OnMouseUp()
+    {
+        
+    }
 }
