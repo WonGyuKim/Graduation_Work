@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Part : MyParts
+public class BasicParts : MyParts
 {
-    public override void LinkRotation(double F, double V)
+    public override void LinkRotation(float F, float V)
     {
     }
 }
-
+/*
 public class GearPart : MyParts
 {
-    public override void LinkRotation(double F, double V)
+    public override void LinkRotation(float F, float V)
     {
         
     }
 }
+*/

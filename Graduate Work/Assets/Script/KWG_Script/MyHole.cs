@@ -14,7 +14,7 @@ public class MyHole : MonoBehaviour
     void Start()
     {
         parent = transform.parent.gameObject;
-        parentParts = parent.GetComponent<PartsAdapter>().getParts();
+        //parentParts = parent as MyParts;
         Debug.Log(parentParts);
         connecting = false;
     }
