@@ -8,12 +8,3 @@ public class BasicParts : MyParts
     {
     }
 }
-/*
-public class GearPart : MyParts
-{
-    public override void LinkRotation(float F, float V)
-    {
-        
-    }
-}
-*/

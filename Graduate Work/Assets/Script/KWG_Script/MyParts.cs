@@ -16,7 +16,6 @@ public abstract class MyParts : MonoBehaviour
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
     private Vector3 dst;
     private Vector3 Vec;
 
@@ -25,10 +24,13 @@ public abstract class MyParts : MonoBehaviour
     public GameObject Parent;//부모 개체
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
 
+    protected List<MyParts> LinkParts;
+
     void Start()
     {
         origin = new Vector3();
         plane = GameObject.Find("Plane");
+        LinkParts = new List<MyParts>();
 
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
@@ -36,12 +38,10 @@ public abstract class MyParts : MonoBehaviour
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
         search = false;
-
-        
         
     }
 
-    public void MouseMove()
+    private void MouseMove()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
@@ -153,54 +153,6 @@ public abstract class MyParts : MonoBehaviour
         }
     }
 
-    public void Link(Transform hole, Transform otherTrans)
-    {
-        LinkParts.Add(otherTrans.gameObject);
-        tEnter = true;
-    }
-
-    public void LinkMove(Transform hole, Transform otherTrans)
-    {
-        this.transform.rotation = otherTrans.rotation;
-        befoMouse = Input.mousePosition;
-        dst = otherTrans.position - hole.position;
-        Vector3 zAxis = otherTrans.TransformDirection(otherTrans.forward).normalized;
-        zAxis = Vector3.Dot(zAxis, dst) * zAxis;
-        this.transform.position = this.transform.position - zAxis + dst;
-    }
-
-    public void LinkExit(Transform hole, Transform otherTrans)
-    {
-        LinkParts.Remove(otherTrans.gameObject);
-        if (LinkParts.Count == 0)
-        {
-            tEnter = false;
-        }
-    }
-
-    public List<GameObject> LinkSearch()//연결된 파츠들 탐색
-    {
-        Debug.Log(search);
-        List<GameObject> list = new List<GameObject>();
-        if (!search)//탐색이 안된 상태
-        {
-            list.Add(transform.gameObject);//자신을 리스트에 추가
-            search = true;//탐색 완료
-            foreach (GameObject gobj in LinkParts)//자신과 연결된 파츠들 탐색
-            {
-                IParts Ip = gobj.GetComponent<IParts>();//IParts 컴포넌트 불러오기
-                list.AddRange(Ip.LinkSearch());//연결된 파츠와 연결된 파츠들을 LinkSearch 재귀로 불러오고 자신의 리스트와 합침
-            }
-        }
-        return list;
-    }
-
-    public void LinkAllMove()
-    {
-        scrSpace = Camera.main.WorldToScreenPoint(Parent.transform.position);
-        Parent.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
-    }
-
     public abstract void LinkRotation(float F, float V);
 
     void OnMouseDown()
@@ -212,14 +164,14 @@ public abstract class MyParts : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
         {
-            AllList = LinkSearch();
+            //AllList = LinkSearch();
             Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
             foreach (GameObject gobj in AllList)
             {
                 gobj.transform.parent = Parent.transform;
             }
         }
-        if (Input.GetKey(KeyCode.LeftControl))
+        else if (Input.GetKey(KeyCode.LeftControl))
         {
             SetArcballData();
         }
@@ -233,7 +185,7 @@ public abstract class MyParts : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            LinkAllMove();
+            //LinkAllMove();
         }
         else if (Input.GetKeyUp(KeyCode.A))
         {
@@ -270,22 +222,8 @@ public abstract class MyParts : MonoBehaviour
         Destroy(sphere);
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Gear")
-        {
-            LinkParts.Add(other.gameObject);
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Gear")
-        {
-            LinkParts.Remove(other.gameObject);
-        }
-    }
-
+    // if gear is entered... //
+    
     public void SearchReset()
     {
         search = false;

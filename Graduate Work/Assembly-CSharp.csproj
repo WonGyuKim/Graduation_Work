@@ -72,6 +72,7 @@
     <Compile Include="Assets\Script\Hole.cs" />
     <Compile Include="Assets\Script\Interface.cs" />
     <Compile Include="Assets\Script\KWG_Script\BasicParts.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear.cs" />
     <Compile Include="Assets\Script\KWG_Script\MyHole.cs" />
     <Compile Include="Assets\Script\KWG_Script\MyParts.cs" />
     <Compile Include="Assets\Script\LinkMake.cs" />

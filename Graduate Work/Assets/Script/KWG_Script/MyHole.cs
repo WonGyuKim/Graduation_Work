@@ -14,8 +14,8 @@ public class MyHole : MonoBehaviour
     void Start()
     {
         parent = transform.parent.gameObject;
-        //parentParts = parent as MyParts;
-        Debug.Log(parentParts);
+        parentParts = parent.GetComponent<MonoBehaviour>() as MyParts;
+
         connecting = false;
     }
     
@@ -27,6 +27,11 @@ public class MyHole : MonoBehaviour
             (transform.tag == "Axle_Hole" && other.tag == "Axle"))
         {
             connecting = true;
+            target = other.transform.gameObject;
+            targetParts = target.GetComponent<MonoBehaviour>() as MyParts;
+            
+            parentParts.Link(targetParts);
+            targetParts.Link(parentParts);
         }
     }
 
