@@ -18,12 +18,13 @@ public abstract class MyParts : MonoBehaviour
     private float yf;
     private Vector3 dst;
     private Vector3 Vec;
-
+    
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
 
+    protected MyParts parentComponent;
     protected List<MyParts> LinkParts;
 
     void Start()
@@ -31,6 +32,8 @@ public abstract class MyParts : MonoBehaviour
         origin = new Vector3();
         plane = GameObject.Find("Plane");
         LinkParts = new List<MyParts>();
+        parentComponent = null;
+        
 
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
@@ -147,10 +150,46 @@ public abstract class MyParts : MonoBehaviour
 
     public bool OnDragCheck
     {
-        get
+        get { return onDrag; }
+    }
+
+    public MyParts parent
+    {
+        get { return parentComponent; }
+        set
         {
-            return onDrag;
+            parentComponent = value;
+            if (value == null)
+            {
+                transform.parent = null;
+                tEnter = true;
+            }
+            else
+            {
+                transform.parent = value.transform.parent;
+                transform.position = value.transform.position;
+                tEnter = false;
+            }
         }
+    }
+
+    public List<MyParts> child
+    {
+        get { return LinkParts; }
+    }
+
+    public void Link(MyParts input)
+    {
+        LinkParts.Add(input);
+        transform.position = input.transform.position;
+        tEnter = true;
+    }
+
+    public void LinkExit(MyParts input)
+    {
+        LinkParts.Remove(input);
+        if (LinkParts.Count == 0)
+            tEnter = false;
     }
 
     public abstract void LinkRotation(float F, float V);
@@ -160,7 +199,6 @@ public abstract class MyParts : MonoBehaviour
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
-        onDrag = true;
 
         if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
         {
@@ -179,6 +217,8 @@ public abstract class MyParts : MonoBehaviour
 
     void OnMouseDrag()
     {
+        onDrag = true;
+
         if (Input.GetKey(KeyCode.LeftControl))
         {
             ArcballMove();
