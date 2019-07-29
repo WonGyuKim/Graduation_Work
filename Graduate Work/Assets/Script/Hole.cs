@@ -19,7 +19,10 @@ public class Hole : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!close && !other.gameObject.Equals(Parent.gameObject) && ((transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) || (transform.tag == "Axle_Hole" && other.tag == "Axle")))
+        if (!close && 
+            !other.gameObject.Equals(Parent.gameObject) && 
+            ((transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) || 
+            (transform.tag == "Axle_Hole" && other.tag == "Axle")))
         {
             DokObj = other.transform;
             iparts.Link(this.transform, DokObj);
@@ -35,6 +38,7 @@ public class Hole : MonoBehaviour
             {
                 colIParts.LinkMove(this.transform, Parent);
             }
+
         }
     }
 
