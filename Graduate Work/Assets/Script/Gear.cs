@@ -158,9 +158,9 @@ public class Gear : MonoBehaviour, IParts
                 float InPro, nearOrtho;
                 Vector3 far = new Vector3(rayhit.point.x, rayhit.point.y, rayhit.point.z);
                 Vector3 asspnt;
-
+                
                 MeshCollider mesh = rayhit.collider as MeshCollider;
-
+                Debug.Log(mesh);
                 foreach (Vector3 vertex in mesh.sharedMesh.vertices)
                 {
                     if (((transform.rotation * vertex + transform.position) - rayhit.point).magnitude > (far - rayhit.point).magnitude)
