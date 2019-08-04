@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 22874572390306905}
   - component: {fileID: 2782317283576491952}
   - component: {fileID: 3605499005492211887}
-  - component: {fileID: 608916548852087357}
+  - component: {fileID: 28692632993021902}
   m_Layer: 0
   m_Name: motor
-  m_TagString: Untagged
+  m_TagString: Motor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,7 +98,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 93c05b5b226a7c64aa5025610b2481d7, type: 3}
---- !u!114 &608916548852087357
+--- !u!114 &28692632993021902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 975330397262466768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ae750c83fe161c4a8030383e3293893, type: 3}
+  m_Script: {fileID: 11500000, guid: d39912b0e5034f74a95a5a9095e7c992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   search: 0
@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 7216558954106750431}
   - component: {fileID: 2865102597240463186}
   - component: {fileID: 1085540186602401100}
-  - component: {fileID: 7761903920238898134}
   m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Conn_Hole
@@ -177,18 +176,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &7761903920238898134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062491405137458638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5264559417720908941
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +187,6 @@ GameObject:
   - component: {fileID: 1407146302838348245}
   - component: {fileID: 6148976537673766646}
   - component: {fileID: 4534134773086600244}
-  - component: {fileID: 6364347918291070828}
   m_Layer: 0
   m_Name: GameObject (4)
   m_TagString: Conn_Hole
@@ -252,18 +238,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &6364347918291070828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5264559417720908941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5575641209565616712
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +249,6 @@ GameObject:
   - component: {fileID: 245142515055813311}
   - component: {fileID: 6473608952862954019}
   - component: {fileID: 8512649731181362997}
-  - component: {fileID: 8238168987084861736}
   m_Layer: 0
   m_Name: GameObject (3)
   m_TagString: Conn_Hole
@@ -327,18 +300,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &8238168987084861736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5575641209565616712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6155877992971360484
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +311,6 @@ GameObject:
   - component: {fileID: 6718272262569194673}
   - component: {fileID: 509830114702445367}
   - component: {fileID: 9181439160936303461}
-  - component: {fileID: 2290144099713921617}
   m_Layer: 0
   m_Name: GameObject (2)
   m_TagString: Conn_Hole
@@ -402,18 +362,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &2290144099713921617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6155877992971360484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7626968598524915670
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +373,7 @@ GameObject:
   - component: {fileID: 6336597862829967130}
   - component: {fileID: 5797306473446056450}
   - component: {fileID: 8936646034477220533}
-  - component: {fileID: 5733259498024649104}
+  - component: {fileID: 4000336469910542054}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Axle_Hole
@@ -477,7 +425,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &5733259498024649104
+--- !u!114 &4000336469910542054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -486,19 +434,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7626968598524915670}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ab34b10364375e4c907326861b73b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnDrag: 0
-  tEnter: 0
-  befoMouse: {x: 0, y: 0, z: 0}
 --- !u!114 &4976442569570894904
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3658314100135639038}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ba0183af70ab7a4fa0fde7efee5a152, type: 3}

@@ -154,6 +154,7 @@ public class UIManager : MonoBehaviour
     /*
      * Search the whole motors and turn them on
      */
+     /*
     public void EnableMotors()
     {
         motors = GetComponents(typeof(Motor)) as Motor[];
@@ -165,4 +166,5 @@ public class UIManager : MonoBehaviour
             motor.Activated = !motor.Activated;
         }
     }
+    */
 }

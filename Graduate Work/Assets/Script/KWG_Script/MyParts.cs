@@ -18,12 +18,7 @@ public abstract class MyParts : MonoBehaviour
     private float yf;
     private Vector3 dst;
     private Vector3 Vec;
-    
-    public bool search; //탐색 확인 변수
-    public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
-    public GameObject Parent;//부모 개체
-    public List<GameObject> AllList;//연결된 모든 파츠 리스트
-
+   
     protected MyParts parentComponent;
     protected List<MyParts> LinkParts;
 
@@ -33,15 +28,23 @@ public abstract class MyParts : MonoBehaviour
         plane = GameObject.Find("Plane");
         LinkParts = new List<MyParts>();
         parentComponent = null;
-        
 
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
         onDrag = false;
         tEnter = false;
-        emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
-        search = false;
-        
+    }
+
+    private void Update()
+    {
+
+    }
+
+    public void SetMoveData()
+    {
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
     }
 
     private void MouseMove()
@@ -102,7 +105,7 @@ public abstract class MyParts : MonoBehaviour
             sphere.transform.rotation = transform.rotation;
 
             SphereCollider temp = sphere.AddComponent<SphereCollider>();
-            temp.radius = round / 2;
+            temp.radius = round / 2.6f;
             temp_rotate = transform.rotation;
         }
 
@@ -152,27 +155,33 @@ public abstract class MyParts : MonoBehaviour
     {
         get { return onDrag; }
     }
-
+    /*
     public MyParts parent
     {
         get { return parentComponent; }
         set
         {
             parentComponent = value;
+            Debug.Log(parentComponent);
             if (value == null)
             {
-                transform.parent = null;
-                tEnter = true;
+                parentComponent = null;
+                //transform.parent = null;
+                if (LinkParts.Count == 0 && parentComponent == null)
+                    tEnter = false;
             }
             else
             {
-                transform.parent = value.transform.parent;
+                parentComponent = value;
+                //transform.parent = value.transform;
                 transform.position = value.transform.position;
-                tEnter = false;
+                transform.rotation = new Quaternion(value.transform.rotation.x, value.transform.rotation.y, value.transform.rotation.z, value.transform.rotation.w);
+                tEnter = true;
+                
             }
         }
     }
-
+    */
     public List<MyParts> child
     {
         get { return LinkParts; }
@@ -181,91 +190,112 @@ public abstract class MyParts : MonoBehaviour
     public void Link(MyParts input)
     {
         LinkParts.Add(input);
-        transform.position = input.transform.position;
         tEnter = true;
     }
 
     public void LinkExit(MyParts input)
     {
         LinkParts.Remove(input);
-        if (LinkParts.Count == 0)
+        if (LinkParts.Count == 0 && parentComponent == null)
             tEnter = false;
     }
 
-    public abstract void LinkRotation(float F, float V);
+    public abstract void LinkRotation(MyParts parent, PowerData power);
 
-    void OnMouseDown()
+    public void SetLinkMove(MyParts parent)
     {
-        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        xf = Input.mousePosition.x - scrSpace.x;
-        yf = Input.mousePosition.y - scrSpace.y;
-
-        if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
+        SetMoveData();
+        foreach(MyParts parts in LinkParts)
         {
-            //AllList = LinkSearch();
-            Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
-            foreach (GameObject gobj in AllList)
-            {
-                gobj.transform.parent = Parent.transform;
-            }
-        }
-        else if (Input.GetKey(KeyCode.LeftControl))
-        {
-            SetArcballData();
+            if (!parts.Equals(parent))
+                parts.SetMoveData();
         }
     }
 
+    public void LinkMove(MyParts parent)
+    {
+        MouseMove();
+        foreach(MyParts parts in LinkParts)
+        {
+            if (!parts.Equals(parent))
+                parts.LinkMove(this);
+            
+        }
+    }
+    
+    void OnMouseDown()
+    {
+        SetMoveData();
+
+        if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
+            SetLinkMove(this);
+        else if (Input.GetKey(KeyCode.LeftControl))
+            SetArcballData();
+    }
+    
     void OnMouseDrag()
     {
         onDrag = true;
 
         if (Input.GetKey(KeyCode.LeftControl))
-        {
             ArcballMove();
-        }
         else if (Input.GetKey(KeyCode.A))
-        {
-            //LinkAllMove();
-        }
-        else if (Input.GetKeyUp(KeyCode.A))
-        {
-            foreach (GameObject gobj in AllList)
-            {
-                gobj.transform.parent = null;
-                gobj.GetComponent<IParts>().SearchReset();
-            }
-            AllList.Clear();
-            Destroy(Parent);
-        }
+            LinkMove(this);
+        else if (tEnter)
+            VerticalMove();
         else
-        {
-            if (tEnter)
-                VerticalMove();
-            else
-                MouseMove();
-        }
+            MouseMove();
+        
     }
 
     void OnMouseUp()
     {
         onDrag = false;
-        if (Input.GetKey(KeyCode.A))
-        {
-            foreach (GameObject gobj in AllList)
-            {
-                gobj.transform.parent = null;
-                gobj.GetComponent<IParts>().SearchReset();
-            }
-            AllList.Clear();
-            Destroy(Parent);
-        }
         Destroy(sphere);
     }
 
     // if gear is entered... //
     
-    public void SearchReset()
+}
+
+public class PowerData
+{
+    private float force;       // force for movement
+    private float velocity;    // velocity for movement
+    private bool RD;            // Rotation Direction of component
+                                // if RD == true, then rotate Clock Wise
+                                // if RD == false, then rotate Counter Clock Wise
+
+
+    public PowerData()
     {
-        search = false;
+        force = 1;
+        velocity = 1 / force;
+        RD = true;
     }
+    public PowerData(float force, float velocity, bool RD)
+    {
+        this.force = force;
+        this.velocity = velocity;
+        this.RD = RD;
+    }
+
+    public float Force
+    {
+        get { return force; }
+        set { force = value; }
+    }
+
+    public float Velocity
+    {
+        get { return velocity; }
+        set { velocity = value; }
+    }
+
+    public bool RotationDirection
+    {
+        get { return RD; }
+        set { RD = value; }
+    }
+
 }

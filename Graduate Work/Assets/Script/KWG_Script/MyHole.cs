@@ -29,34 +29,35 @@ public class MyHole : MonoBehaviour
             Debug.Log("Hi!");
             target = other.transform.gameObject;
             targetParts = target.GetComponent<MonoBehaviour>() as MyParts;
+            Debug.Log("body Object is : " + bodyParts);
+            Debug.Log("child Object is : " + targetParts);
 
-            /* 
-             * if [target.body == null], it means the object has No body 
-             * the object should be child of this object
-             * and Additionally,
-             * if [target.ChildNum != 0], it means
-             * they already have there Level before attaching this object
-             * so we need to re-build them
-             * 
-             */
-            if (targetParts.parent == null)
+            //if (bodyParts.tag == "Motor")
             {
+                targetParts.Link(bodyParts);
                 bodyParts.Link(targetParts);
-                targetParts.parent = bodyParts;
             }
-            /*
-             * if [target.body != null], it means the object has body
-             * maybe axle, 
-             * So we should attach this object to target
-             * 
-             */
-            else
+            /*else
             {
                 bodyParts.parent = targetParts;
                 targetParts.Link(bodyParts);
+                
+            }*/
+
+            if (targetParts.child.Count != 0)
+            {
+                //bodyParts.transform.rotation = new Quaternion(target.transform.rotation.x, target.transform.rotation.y, target.transform.rotation.z, target.transform.rotation.w);
+                bodyParts.transform.rotation = target.transform.rotation;
+                bodyParts.transform.position = target.transform.position;
             }
-            Debug.Log("body Object is : " + bodyParts);
-            Debug.Log("child Object is : " + targetParts);
+            else
+            {
+                targetParts.transform.rotation = bodyParts.transform.rotation;
+                targetParts.transform.position = bodyParts.transform.position;
+                
+            }
+
+
 
             connecting = true;
 
@@ -68,7 +69,7 @@ public class MyHole : MonoBehaviour
         if (connecting && other.gameObject.Equals(target))
         {
             Debug.Log("Bye!");
-            if (targetParts.parent == bodyParts)
+            /*if (targetParts.parent == bodyParts)
             {
                 targetParts.parent = null;
                 bodyParts.LinkExit(targetParts);
@@ -77,10 +78,11 @@ public class MyHole : MonoBehaviour
             {
                 bodyParts.parent = null;
                 targetParts.LinkExit(bodyParts);
-            }
-            
-            target = null;
+            }*/
 
+            bodyParts.LinkExit(targetParts);
+            targetParts.LinkExit(bodyParts);
+            target = null;
             connecting = false;
 
         }

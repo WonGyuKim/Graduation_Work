@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class MyGear : MyParts
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void LinkRotation(MyParts parent, PowerData power)
     {
-        
-    }
+        if (power.RotationDirection == true)
+            transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
+        else /* power.RotationDirection == false */
+            transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public override void LinkRotation(float F, float V)
-    {
-        throw new System.NotImplementedException();
+        foreach (MyParts parts in LinkParts)
+        {
+            if (!parts.Equals(parent))
+            {
+                if (parts.tag == "Gear")
+                    parts.LinkRotation(this, new PowerData(power.Force, power.Velocity, !power.RotationDirection));
+                else
+                    parts.LinkRotation(this, power);
+            }
+            
+        }
     }
 
     void OnTriggerEnter(Collider other)
