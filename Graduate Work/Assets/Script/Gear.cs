@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gear : MonoBehaviour, IParts
+public class Gear : MonoBehaviour, IGear
 {
     private bool onDrag;
     private bool tEnter;
@@ -17,11 +17,13 @@ public class Gear : MonoBehaviour, IParts
     private Vector3 origin;
     private GameObject sphere;
     private Quaternion temp_rotate;
-
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
+    private MotorNode Node;
+    public GearControl gearControl;
+    public RotateMotor rotM;
 
     void Start()
     {
@@ -31,6 +33,11 @@ public class Gear : MonoBehaviour, IParts
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
         search = false;
+        Node = transform.gameObject.GetComponent<MotorNode>();
+        Node.parts = this;
+        gearControl = GameObject.Find("snapControl").GetComponent<GearControl>();
+        gearControl.AddGearList(this);
+        rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -113,9 +120,39 @@ public class Gear : MonoBehaviour, IParts
         }
     }
 
-    public void MotoringMove()
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed)
     {
+        if (!search)
+        {
+            transform.RotateAround(point, axis, speed);
+            search = true;
+            rotM.nodeList.Add(Node);
+            foreach (MotorLink link in Node.lList)
+            {
+                IParts lparts;
+                if (link.left.gameObj == this.gameObj)
+                    lparts = link.right;
+                else
+                    lparts = link.left;
 
+                if (link.type == MotorLink.LinkType.Tight)
+                {
+                    lparts.MotoringMove(point, axis, speed);
+                }
+                else if (link.type == MotorLink.LinkType.Loose)
+                {
+                    lparts.MotoringMove(point, axis, speed);
+                }
+                else if (link.type == MotorLink.LinkType.Gear)
+                {
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
+                }
+                else if (link.type == MotorLink.LinkType.Bevel)
+                {
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
+                }
+            }
+        }
     }
 
     public bool OnDragCheck
@@ -123,6 +160,14 @@ public class Gear : MonoBehaviour, IParts
         get
         {
             return onDrag;
+        }
+    }
+
+    public GameObject gameObj
+    {
+        get
+        {
+            return this.gameObject;
         }
     }
 
@@ -233,6 +278,19 @@ public class Gear : MonoBehaviour, IParts
         Parent.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
     }
 
+    public MotorNode node
+    {
+        get
+        {
+            return Node;
+        }
+
+        set
+        {
+            Node = value;
+        }
+    }
+
     void OnMouseUp()
     {
         onDrag = false;
@@ -277,7 +335,7 @@ public class Gear : MonoBehaviour, IParts
         }
     }
 
-    void GearMove()
+    public void GearMove()
     {
         //Vector3 vec = Input.mousePosition - befoMouse;
         //Quaternion qua = Quaternion.AngleAxis(90, linkGear.transform.TransformDirection(linkGear.transform.forward));
@@ -294,17 +352,27 @@ public class Gear : MonoBehaviour, IParts
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Gear")
+        if(other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
+            if (onDrag)
+            {
+                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+                gearControl.linkGear(this, linkGear);
+            }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Gear")
+        if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Remove(other.gameObject);
+            if (onDrag)
+            {
+                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+                gearControl.deLinkGear(this, linkGear);
+            }
         }
     }
 

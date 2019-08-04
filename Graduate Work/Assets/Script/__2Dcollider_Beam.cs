@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class __2Dcollider_Beam : MonoBehaviour
 {
-    private GameObject target;//2d
+    private GameObject target = null;//2d
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -35,7 +35,7 @@ public class __2Dcollider_Beam : MonoBehaviour
 
     public void RayLook(GameObject clicked_one, Ray ray, RaycastHit hit)
     {
-        GameObject hitten_one;
+        GameObject hitten_one = null;
 
         if (true == (Physics.Raycast(target.transform.position, ray.direction * 10, out hit)))
         {
@@ -45,11 +45,12 @@ public class __2Dcollider_Beam : MonoBehaviour
 
             if (hitten_one.transform.tag == "Axle")
             {
-                Debug.Log("YES");
+                //Debug.Log("YES");
 
                 Debug.DrawRay(ray.origin, ray.direction * 10f, Color.green, 0.5f);
 
-                target.transform.position = hitten_one.transform.position;
+                //target.transform.position = hitten_one.transform.position;
+                target.transform.position = hit.point;
             }
         }
     }

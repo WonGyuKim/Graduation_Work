@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4732339540968263699}
   - component: {fileID: 1555733043243184182}
   - component: {fileID: 8113024856061115133}
+  - component: {fileID: 8397799281189521347}
   m_Layer: 0
   m_Name: rackGear
   m_TagString: RackGear
@@ -95,6 +96,8 @@ MonoBehaviour:
   emptyObject: {fileID: 0}
   Parent: {fileID: 0}
   AllList: []
+  gearControl: {fileID: 0}
+  rotM: {fileID: 0}
 --- !u!64 &8113024856061115133
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -109,3 +112,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 8188ca5b896e1d6449a49aff551182a9, type: 3}
+--- !u!114 &8397799281189521347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3977034000420575092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff13c87cc3c5342b26d871c400a399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lList: []

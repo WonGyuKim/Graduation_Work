@@ -17,6 +17,8 @@ public class Connector : MonoBehaviour, IParts
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
+    private MotorNode Node;
+    public RotateMotor rotM;
 
     void Start()
     {
@@ -26,6 +28,9 @@ public class Connector : MonoBehaviour, IParts
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
         search = false;
+        Node = transform.gameObject.GetComponent<MotorNode>();
+        Node.parts = this;
+        rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -77,9 +82,31 @@ public class Connector : MonoBehaviour, IParts
         
     }
 
-    public void MotoringMove()
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed)
     {
-
+        if (!search)
+        {
+            transform.RotateAround(point, axis, speed);
+            search = true;
+            rotM.nodeList.Add(Node);
+            foreach (MotorLink link in Node.lList)
+            {
+                IParts lparts;
+                if(link.left.gameObj == this.gameObj)
+                    lparts = link.right;
+                else
+                    lparts = link.left;
+                if (link.type == MotorLink.LinkType.Tight)
+                {
+                    lparts.MotoringMove(point, axis, speed);
+                }
+                else if (link.type == MotorLink.LinkType.Loose)
+                {
+                    if (point.x != transform.position.x && point.y != transform.position.y && point.z != transform.position.z)
+                        lparts.MotoringMove(point, axis, speed);
+                }
+            }
+        }
     }
 
     public bool OnDragCheck
@@ -87,6 +114,14 @@ public class Connector : MonoBehaviour, IParts
         get
         {
             return onDrag;
+        }
+    }
+
+    public GameObject gameObj
+    {
+        get
+        {
+            return this.gameObject;
         }
     }
 
@@ -126,6 +161,19 @@ public class Connector : MonoBehaviour, IParts
             {
                 gobj.transform.parent = Parent.transform;
             }
+        }
+    }
+
+    public MotorNode node
+    {
+        get
+        {
+            return Node;
+        }
+
+        set
+        {
+            Node = value;
         }
     }
 

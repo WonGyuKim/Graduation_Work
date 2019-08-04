@@ -10,11 +10,13 @@ public class MotorLink : MonoBehaviour
         Loose,
         Gear,
         Bevel,
+        Worm,
         Rack,
     }
+    public GameObject linkObject;
 
     public LinkType type;
 
-    public MotorNode left;
-    public MotorNode right;
+    public IParts left;
+    public IParts right;
 }

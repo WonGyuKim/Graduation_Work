@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 671939065140842463}
   - component: {fileID: 7976798812465232509}
   - component: {fileID: 2728699362231037712}
+  - component: {fileID: 2006189312469657531}
   m_Layer: 0
   m_Name: wormGear
   m_TagString: WormGear
@@ -97,6 +98,8 @@ MonoBehaviour:
   emptyObject: {fileID: 0}
   Parent: {fileID: 0}
   AllList: []
+  gearControl: {fileID: 0}
+  rotM: {fileID: 0}
 --- !u!64 &7976798812465232509
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -123,6 +126,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b32fa912c129240ad9f10b332b9149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2006189312469657531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4822969078596590345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff13c87cc3c5342b26d871c400a399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lList: []
 --- !u!1 &5870243452958774971
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,3 +214,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  link: {fileID: 0}

@@ -21,7 +21,7 @@ public interface IParts
 
     void ArcballMove();
 
-    void MotoringMove();
+    void MotoringMove(Vector3 point, Vector3 axis, float speed);
 
     void LinkAllMove();//연결된 파츠들과 같이 움직임
 
@@ -33,4 +33,20 @@ public interface IParts
     {
         get;
     }
+
+    GameObject gameObj
+    {
+        get;
+    }
+
+    MotorNode node
+    {
+        get;
+        set;
+    }
+}
+
+public interface IGear : IParts
+{
+    void GearMove();
 }

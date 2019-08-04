@@ -69,14 +69,15 @@
     <Compile Include="Assets\Script\Collide.cs" />
     <Compile Include="Assets\Script\Connector.cs" />
     <Compile Include="Assets\Script\Gear.cs" />
+    <Compile Include="Assets\Script\GearControl.cs" />
     <Compile Include="Assets\Script\Hole.cs" />
     <Compile Include="Assets\Script\Interface.cs" />
     <Compile Include="Assets\Script\Motor.cs" />
-    <Compile Include="Assets\Script\MotorGraph.cs" />
     <Compile Include="Assets\Script\MotorLink.cs" />
     <Compile Include="Assets\Script\MotorNode.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\RotateMotor.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\brick.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\builder.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\engine.cs" />

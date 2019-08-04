@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7182426891524049472}
   - component: {fileID: 2157033523957526061}
   - component: {fileID: 8027417146432858038}
+  - component: {fileID: 8715619287328562730}
   m_Layer: 0
   m_Name: connWithaxle
   m_TagString: Untagged
@@ -109,3 +110,17 @@ MonoBehaviour:
   emptyObject: {fileID: 0}
   Parent: {fileID: 0}
   AllList: []
+  rotM: {fileID: 0}
+--- !u!114 &8715619287328562730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6538291211859015893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff13c87cc3c5342b26d871c400a399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lList: []

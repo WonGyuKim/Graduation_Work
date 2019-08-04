@@ -9,6 +9,7 @@ public class Hole : MonoBehaviour
     private bool close;
     private IParts colIParts;
     private Transform DokObj;
+    public MotorLink link;
 
     void Start()
     {
@@ -31,11 +32,33 @@ public class Hole : MonoBehaviour
             {
                 iparts.LinkMove(this.transform, DokObj);
             }
-            else if(colIParts.OnDragCheck)
+            else if (colIParts.OnDragCheck)
             {
                 colIParts.LinkMove(this.transform, Parent);
             }
 
+            link = transform.gameObject.GetComponent<MotorLink>();
+            link.linkObject = this.gameObject;
+            link.left = iparts;
+            link.right = colIParts;
+
+            if (this.tag == "Axle_Hole" && other.tag == "Axle")
+            {
+                link.type = MotorLink.LinkType.Tight;
+            }
+
+            else if(this.tag == "Conn_Hole" && other.tag == "Connector")
+            {
+                link.type = MotorLink.LinkType.Tight;
+            }
+
+            else if (this.tag == "Conn_Hole" && other.tag == "Axle")
+            {
+                link.type = MotorLink.LinkType.Loose;
+            }
+
+            link.left.node.AddLink(link);
+            link.right.node.AddLink(link);
         }
     }
 
@@ -47,6 +70,8 @@ public class Hole : MonoBehaviour
             colIParts.LinkExit(this.transform, Parent);
             close = false;
             DokObj = null;
+            iparts.node.lList.Remove(link);
+            colIParts.node.lList.Remove(link);
         }
     }
 }
