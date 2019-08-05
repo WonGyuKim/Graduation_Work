@@ -15,15 +15,21 @@ public class MyMotor : MyParts
     void Update()
     {
         if (action)
-            EnableRotation(new PowerData(1, 1, true));
+            EnableRotation(new PowerData(0.1f, 0.1f, true));
     }
 
     public void EnableRotation(PowerData power)
     {
+        /*
         if (power.RotationDirection == true)
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
-        else /* power.RotationDirection == false */
+        else // power.RotationDirection == false 
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
+            */
+        if (power.RotationDirection == true)
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity);
+        else
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1);
 
         foreach (MyParts parts in LinkParts)
         {
@@ -33,10 +39,16 @@ public class MyMotor : MyParts
 
     public override void LinkRotation(MyParts parent, PowerData power)
     {
+        /*
         if (power.RotationDirection == true)
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
-        else /* power.RotationDirection == false */
+        else // power.RotationDirection == false
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
+            */
+        if (power.RotationDirection == true)
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity);
+        else
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1);
 
         foreach (MyParts parts in LinkParts)
         {

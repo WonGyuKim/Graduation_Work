@@ -6,10 +6,21 @@ public class MyGear : MyParts
 {
     public override void LinkRotation(MyParts parent, PowerData power)
     {
+        /*
         if (power.RotationDirection == true)
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
-        else /* power.RotationDirection == false */
+        else // power.RotationDirection == false
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
+        */
+        /*if (power.RotationDirection == true)
+            transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
+        else // power.RotationDirection == false
+            transform.Rotate(new Vector3(0, 0, 1), power.Velocity);*/
+
+        if (power.RotationDirection == true)
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity);
+        else
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1);
 
         foreach (MyParts parts in LinkParts)
         {
@@ -30,7 +41,9 @@ public class MyGear : MyParts
 
         if (other.tag == "Gear")
         {
-            //LinkParts.Add(other.gameObject);
+            //LinkParts.Add(other.gameObject.GetComponent<MyParts>());
+
+            Link(other.gameObject.GetComponent<MyParts>());
         }
     }
 
@@ -40,6 +53,7 @@ public class MyGear : MyParts
         if (other.tag == "Gear")
         {
             //LinkParts.Remove(other.gameObject);
+            LinkExit(other.gameObject.GetComponent<MyParts>());
         }
     }
 

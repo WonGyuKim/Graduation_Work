@@ -28,7 +28,7 @@ public class MyHole : MonoBehaviour
         {
             Debug.Log("Hi!");
             target = other.transform.gameObject;
-            targetParts = target.GetComponent<MonoBehaviour>() as MyParts;
+            targetParts = target.GetComponent<MyParts>();
             Debug.Log("body Object is : " + bodyParts);
             Debug.Log("child Object is : " + targetParts);
 
