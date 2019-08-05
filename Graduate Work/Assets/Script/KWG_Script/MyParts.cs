@@ -19,7 +19,7 @@ public abstract class MyParts : MonoBehaviour
     private Vector3 dst;
     private Vector3 Vec;
    
-    protected MyParts parentComponent;
+    protected GameObject parentComponent;
     protected List<MyParts> LinkParts;
 
     void Start()
@@ -202,33 +202,45 @@ public abstract class MyParts : MonoBehaviour
 
     public abstract void LinkRotation(MyParts parent, PowerData power);
 
-    public void SetLinkMove(MyParts parent)
+    public void SetLinkMove(MyParts parent, GameObject head)
     {
-        SetMoveData();
+        transform.parent = head.transform;
+
         foreach(MyParts parts in LinkParts)
         {
             if (!parts.Equals(parent))
-                parts.SetMoveData();
+                parts.SetLinkMove(this, head);
         }
     }
 
     public void LinkMove(MyParts parent)
     {
-        MouseMove();
+        scrSpace = Camera.main.WorldToScreenPoint(parentComponent.transform.position);
+        parentComponent.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
+    }
+    
+    public void QuitLinkMove(MyParts parent)
+    {
+        transform.parent = null;
+
         foreach(MyParts parts in LinkParts)
         {
             if (!parts.Equals(parent))
-                parts.LinkMove(this);
-            
+                parts.QuitLinkMove(this);
         }
     }
-    
+
     void OnMouseDown()
     {
         SetMoveData();
 
-        if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
-            SetLinkMove(this);
+        if (Input.GetKey(KeyCode.A))
+        {
+            parentComponent = new GameObject();
+            parentComponent.name = "parent";
+            parentComponent.transform.position = transform.position;
+            SetLinkMove(this, parentComponent);
+        }
         else if (Input.GetKey(KeyCode.LeftControl))
             SetArcballData();
     }
@@ -237,20 +249,37 @@ public abstract class MyParts : MonoBehaviour
     {
         onDrag = true;
 
-        if (Input.GetKey(KeyCode.LeftControl))
-            ArcballMove();
-        else if (Input.GetKey(KeyCode.A))
-            LinkMove(this);
-        else if (tEnter)
-            VerticalMove();
-        else
-            MouseMove();
+        // GetKey Section
+        {
+            if (Input.GetKey(KeyCode.LeftControl))
+                ArcballMove();
+            else if (Input.GetKey(KeyCode.A) && parentComponent != null)
+                LinkMove(this);
+            else if (tEnter)
+                VerticalMove();
+            else
+                MouseMove();
+        }
+
+        // GetKeyUp Section
+        {
+            if (Input.GetKeyUp(KeyCode.A) && parentComponent != null)
+            {
+                QuitLinkMove(this);
+                Destroy(parentComponent);
+            }
+        }
         
     }
 
     void OnMouseUp()
     {
         onDrag = false;
+        if (Input.GetKey(KeyCode.A) && parentComponent!= null)
+        {
+            QuitLinkMove(this);
+            Destroy(parentComponent);
+        }
         Destroy(sphere);
     }
 

@@ -27,6 +27,7 @@ public class MyGear : MyParts
     void OnTriggerEnter(Collider other)
     {
         Debug.Log("Hi!");
+
         if (other.tag == "Gear")
         {
             //LinkParts.Add(other.gameObject);
@@ -35,6 +36,7 @@ public class MyGear : MyParts
 
     void OnTriggerExit(Collider other)
     {
+        Debug.Log("Bye!");
         if (other.tag == "Gear")
         {
             //LinkParts.Remove(other.gameObject);
