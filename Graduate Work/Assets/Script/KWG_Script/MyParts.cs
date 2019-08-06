@@ -289,23 +289,26 @@ public abstract class MyParts : MonoBehaviour
 
 public class PowerData
 {
-    private float force;       // force for movement
-    private float velocity;    // velocity for movement
+    private float force;        // force for movement
+    private float velocity;     // velocity for movement
     private bool RD;            // Rotation Direction of component
                                 // if RD == true, then rotate Clock Wise
                                 // if RD == false, then rotate Counter Clock Wise
 
+    private Vector3 AngVel;     // Angular Velocity of Parent Component
 
     public PowerData()
     {
         force = 1;
         velocity = 1 / force;
         RD = true;
+        AngVel = new Vector3(0, 0, 1);
     }
-    public PowerData(float force, float velocity, bool RD)
+    public PowerData(float force, float velocity, Vector3 AngVel, bool RD)
     {
         this.force = force;
         this.velocity = velocity;
+        this.AngVel = AngVel;
         this.RD = RD;
     }
 
@@ -327,4 +330,9 @@ public class PowerData
         set { RD = value; }
     }
 
+    public Vector3 AngularVelocity
+    {
+        get { return AngVel; }
+        set { AngVel = value; }
+    }
 }

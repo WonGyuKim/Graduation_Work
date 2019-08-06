@@ -15,22 +15,23 @@ public class MyMotor : MyParts
     void Update()
     {
         if (action)
-            EnableRotation(new PowerData(0.1f, 0.1f, true));
+            EnableRotation(new PowerData(0.1f, 0.1f, GetComponent<Rigidbody>().angularVelocity, true));
     }
 
     public void EnableRotation(PowerData power)
     {
-        /*
+        
         if (power.RotationDirection == true)
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
         else // power.RotationDirection == false 
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
-            */
+            
+            /*
         if (power.RotationDirection == true)
-            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity);
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity, ForceMode.Acceleration);
         else
-            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1);
-
+            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1, ForceMode.Acceleration);
+            */
         foreach (MyParts parts in LinkParts)
         {
             parts.LinkRotation(this, power);
@@ -39,17 +40,18 @@ public class MyMotor : MyParts
 
     public override void LinkRotation(MyParts parent, PowerData power)
     {
-        /*
+        
         if (power.RotationDirection == true)
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);
         else // power.RotationDirection == false
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
-            */
+        
+        /*
         if (power.RotationDirection == true)
-            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity);
+            GetComponent<Rigidbody>().AddTorque(power.AngularVelocity * power.Velocity);
         else
-            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1);
-
+            GetComponent<Rigidbody>().AddTorque(power.AngularVelocity * power.Velocity * -1);
+            */
         foreach (MyParts parts in LinkParts)
         {
             if (!parts.Equals(parent))
