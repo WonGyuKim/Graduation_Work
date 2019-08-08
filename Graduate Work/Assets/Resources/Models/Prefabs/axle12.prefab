@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2780184109751270376}
   - component: {fileID: 5483053523705398538}
   - component: {fileID: 5741959302778195992}
-  - component: {fileID: 5591344552650623321}
   m_Layer: 0
   m_Name: axle12
   m_TagString: Axle
@@ -101,10 +100,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4946228309988320624}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: bdc935e2c4733934db0ceabdcf316285, type: 3}
 --- !u!114 &5741959302778195992
@@ -119,19 +118,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7ac8ca0a115c942b3b2fad9562e1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &5591344552650623321
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4946228309988320624}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1

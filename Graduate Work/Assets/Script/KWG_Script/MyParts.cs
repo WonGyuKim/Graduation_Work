@@ -230,6 +230,8 @@ public abstract class MyParts : MonoBehaviour
         }
     }
 
+    protected void OnMouseDragOverride() { }
+
     void OnMouseDown()
     {
         SetMoveData();
@@ -269,6 +271,8 @@ public abstract class MyParts : MonoBehaviour
                 Destroy(parentComponent);
             }
         }
+
+        OnMouseDragOverride();
         
     }
 
@@ -303,6 +307,12 @@ public class PowerData
         velocity = 1 / force;
         RD = true;
         AngVel = new Vector3(0, 0, 1);
+    }
+    public PowerData(float force, float velocity, bool RD)
+    {
+        this.force = force;
+        this.velocity = velocity;
+        this.RD = RD;
     }
     public PowerData(float force, float velocity, Vector3 AngVel, bool RD)
     {

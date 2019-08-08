@@ -26,38 +26,42 @@ public class MyHole : MonoBehaviour
             (transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) ||
             (transform.tag == "Axle_Hole" && other.tag == "Axle"))
         {
-            Debug.Log("Hi!");
             target = other.transform.gameObject;
             targetParts = target.GetComponent<MyParts>();
-            Debug.Log("body Object is : " + bodyParts);
-            Debug.Log("child Object is : " + targetParts);
 
-            //if (bodyParts.tag == "Motor")
-            {
-                targetParts.Link(bodyParts);
-                bodyParts.Link(targetParts);
-            }
-            /*else
-            {
-                bodyParts.parent = targetParts;
-                targetParts.Link(bodyParts);
-                
-            }*/
+            Debug.Log("body Parts : " + bodyParts);
+            Debug.Log("target Parts : " + targetParts);
 
-            if (targetParts.child.Count != 0)
+            /*
+            if (targetParts.child.Count > 0)
             {
-                //bodyParts.transform.rotation = new Quaternion(target.transform.rotation.x, target.transform.rotation.y, target.transform.rotation.z, target.transform.rotation.w);
                 bodyParts.transform.rotation = target.transform.rotation;
                 bodyParts.transform.position = target.transform.position;
+            }
+            else if (bodyParts.child.Count > 0 && targetParts.child.Count == 0)
+            {
+                targetParts.transform.rotation = bodyParts.transform.rotation;
+                targetParts.transform.position = bodyParts.transform.position;
             }
             else
             {
                 targetParts.transform.rotation = bodyParts.transform.rotation;
                 targetParts.transform.position = bodyParts.transform.position;
-                
+            }
+            */
+            if (bodyParts.child.Count > 0 && targetParts.child.Count == 0)
+            {
+                targetParts.transform.rotation = bodyParts.transform.rotation;
+                targetParts.transform.position = bodyParts.transform.position;
+            }
+            else
+            {
+                bodyParts.transform.rotation = target.transform.rotation;
+                bodyParts.transform.position = target.transform.position;
             }
 
-
+            targetParts.Link(bodyParts);
+            bodyParts.Link(targetParts);
 
             connecting = true;
 
@@ -68,23 +72,10 @@ public class MyHole : MonoBehaviour
     {
         if (connecting && other.gameObject.Equals(target))
         {
-            Debug.Log("Bye!");
-            /*if (targetParts.parent == bodyParts)
-            {
-                targetParts.parent = null;
-                bodyParts.LinkExit(targetParts);
-            }
-            else
-            {
-                bodyParts.parent = null;
-                targetParts.LinkExit(bodyParts);
-            }*/
-
             bodyParts.LinkExit(targetParts);
             targetParts.LinkExit(bodyParts);
             target = null;
             connecting = false;
-
         }
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8524337846419611099}
   - component: {fileID: 9186018151470829546}
   - component: {fileID: 8912372007283067507}
-  - component: {fileID: 6538401510362079263}
+  - component: {fileID: 9080612799476925541}
   m_Layer: 0
   m_Name: gear40
   m_TagString: Gear
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b32fa912c129240ad9f10b332b9149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &6538401510362079263
+--- !u!54 &9080612799476925541
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,14 +128,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842816156443351971}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 0.01
+  m_Drag: 0.5
+  m_AngularDrag: 0.5
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!1 &6179299497931889988
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,8 @@ public class MyMotor : MyParts
     void Update()
     {
         if (action)
-            EnableRotation(new PowerData(0.1f, 0.1f, GetComponent<Rigidbody>().angularVelocity, true));
+            //EnableRotation(new PowerData(0.1f, 0.1f, GetComponent<Rigidbody>().angularVelocity, true));
+            EnableRotation(new PowerData(1, 1, true));
     }
 
     public void EnableRotation(PowerData power)

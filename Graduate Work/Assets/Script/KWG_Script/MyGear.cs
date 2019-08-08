@@ -33,10 +33,26 @@ public class MyGear : MyParts
         }
     }
 
+    protected void OnMouseDragOverride()
+    {
+        if (Input.GetMouseButton(1))
+        {
+            MyParts gear;
+            foreach(MyParts parts in LinkParts)
+            {
+                if(parts.tag == "Gear")
+                {
+                    gear = parts;
+                    break;
+                }
+            }
+
+            Debug.Log("Right Button Confirmed");
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Hi!");
-
         if (other.tag == "Gear")
         {
             //LinkParts.Add(other.gameObject.GetComponent<MyParts>());
@@ -47,7 +63,6 @@ public class MyGear : MyParts
 
     void OnTriggerExit(Collider other)
     {
-        Debug.Log("Bye!");
         if (other.tag == "Gear")
         {
             //LinkParts.Remove(other.gameObject);
