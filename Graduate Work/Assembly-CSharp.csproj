@@ -73,6 +73,9 @@
     <Compile Include="Assets\Script\Interface.cs" />
     <Compile Include="Assets\Script\KWG_Script\BasicParts.cs" />
     <Compile Include="Assets\Script\KWG_Script\MyGear.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear24.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear40.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear8.cs" />
     <Compile Include="Assets\Script\KWG_Script\MyHole.cs" />
     <Compile Include="Assets\Script\KWG_Script\MyMotor.cs" />
     <Compile Include="Assets\Script\KWG_Script\MyParts.cs" />

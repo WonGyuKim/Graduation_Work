@@ -33,9 +33,13 @@ public abstract class MyParts : MonoBehaviour
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
         onDrag = false;
         tEnter = false;
+
+        StartOverride();
     }
 
-    private void Update()
+    protected abstract void StartOverride();
+
+    void Update()
     {
 
     }
@@ -230,8 +234,6 @@ public abstract class MyParts : MonoBehaviour
         }
     }
 
-    protected void OnMouseDragOverride() { }
-
     void OnMouseDown()
     {
         SetMoveData();
@@ -272,8 +274,6 @@ public abstract class MyParts : MonoBehaviour
             }
         }
 
-        OnMouseDragOverride();
-        
     }
 
     void OnMouseUp()

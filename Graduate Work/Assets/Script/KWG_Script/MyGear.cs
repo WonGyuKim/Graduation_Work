@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class MyGear : MyParts
 {
+    protected int gearTeeth;
+    protected override void StartOverride()
+    {
+        gearTeeth = InitGearTeeth();
+    }
+
+    public int GearTeeth { get { return gearTeeth; } }
+    protected virtual int InitGearTeeth() { return 1; }
+
     public override void LinkRotation(MyParts parent, PowerData power)
     {
         if (power.RotationDirection == true)
@@ -25,32 +34,18 @@ public class MyGear : MyParts
             if (!parts.Equals(parent))
             {
                 if (parts.tag == "Gear")
-                    parts.LinkRotation(this, new PowerData(power.Force, power.Velocity, power.AngularVelocity, !power.RotationDirection));
+                {
+                    float TeethRatio = (float)GearTeeth / (float)((MyGear)parts).GearTeeth;
+                    parts.LinkRotation(this, new PowerData(power.Force / TeethRatio, power.Velocity * TeethRatio, power.AngularVelocity, !power.RotationDirection));
+
+                }
                 else
                     parts.LinkRotation(this, power);
             }
             
         }
     }
-
-    protected void OnMouseDragOverride()
-    {
-        if (Input.GetMouseButton(1))
-        {
-            MyParts gear;
-            foreach(MyParts parts in LinkParts)
-            {
-                if(parts.tag == "Gear")
-                {
-                    gear = parts;
-                    break;
-                }
-            }
-
-            Debug.Log("Right Button Confirmed");
-        }
-    }
-
+    
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Gear")

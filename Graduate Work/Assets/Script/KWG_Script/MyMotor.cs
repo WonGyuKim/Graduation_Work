@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MyMotor : MyParts
 {
+    protected override void StartOverride()
+    {
+
+    }
     private bool action = true;
     // Start is called before the first frame update
     /*void Start()

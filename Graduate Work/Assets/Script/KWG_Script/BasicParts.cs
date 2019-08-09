@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BasicParts : MyParts
 {
+    protected override void StartOverride()
+    {
+    }
+
     public override void LinkRotation(MyParts parent, PowerData power)
     {
         

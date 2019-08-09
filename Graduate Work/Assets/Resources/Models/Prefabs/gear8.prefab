@@ -99,9 +99,10 @@ GameObject:
   - component: {fileID: 4212986246030206313}
   - component: {fileID: 5976563085137002120}
   - component: {fileID: 8464870205134579377}
+  - component: {fileID: 3108450364015075852}
   - component: {fileID: 69014982870876315}
-  - component: {fileID: 1979690568072911396}
   - component: {fileID: 1490704175964831920}
+  - component: {fileID: 4367966271752445078}
   m_Layer: 0
   m_Name: gear8
   m_TagString: Gear
@@ -169,21 +170,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &69014982870876315
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7754331799839694094}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: b13ece5b23d1fae4d9a983c2d6b89ad9, type: 3}
---- !u!114 &1979690568072911396
+--- !u!114 &3108450364015075852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,13 +179,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7754331799839694094}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd14758347c237d48bd19147a243fb6f, type: 3}
+  m_Script: {fileID: 11500000, guid: e98104e39e3e40d4dab4bd85d4680f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  search: 0
-  emptyObject: {fileID: 0}
-  Parent: {fileID: 0}
-  AllList: []
+--- !u!64 &69014982870876315
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7754331799839694094}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: b13ece5b23d1fae4d9a983c2d6b89ad9, type: 3}
 --- !u!114 &1490704175964831920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,3 +208,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b32fa912c129240ad9f10b332b9149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &4367966271752445078
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7754331799839694094}
+  serializedVersion: 2
+  m_Mass: 0.01
+  m_Drag: 0.5
+  m_AngularDrag: 0.5
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
