@@ -34,6 +34,7 @@ public class Hole : MonoBehaviour
             }
             else if (colIParts.OnDragCheck)
             {
+
                 colIParts.LinkMove(this.transform, Parent);
             }
 

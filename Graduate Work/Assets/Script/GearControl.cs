@@ -23,25 +23,22 @@ public class GearControl : MonoBehaviour
         GameObject g2 = gear2.gameObj;
         //Quaternion g1Rot = g1.transform.rotation;
         //Quaternion g2Rot = g2.transform.rotation;
-        Vector3 g1Vec = g1.transform.forward;
-        Vector3 g2Vec = g2.transform.forward;
+        Vector3 g1Vec = g1.transform.TransformDirection(g1.transform.forward);
+        Vector3 g2Vec = g2.transform.TransformDirection(g2.transform.forward);
         Vector3 v = g1Vec - g2Vec;
         float angle = Mathf.Abs(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);
-
-        if ((g1.tag == "Gear" || g1.tag == "BevelGear") && (g2.tag == "Gear" || g2.tag == "BevelGear"))
+        
+        if ((g1.tag == "Gear" || g1.tag == "BevelGear") && (g2.tag == "Gear" || g2.tag == "BevelGear") && angle < 45)
         {
-            if (angle < 45)
-                link.type = MotorLink.LinkType.Gear;
+            link.type = MotorLink.LinkType.Gear;
         }
-        else if (g1.tag == "BevelGear" && g2.tag == "BevelGear")
+        else if (g1.tag == "BevelGear" && g2.tag == "BevelGear" && angle >= 45)
         {
-            if (angle >= 45)
-                link.type = MotorLink.LinkType.Bevel;
+            link.type = MotorLink.LinkType.Bevel;
         }
         else if ((g1.tag == "WormGear" && g2.tag == "Gear") || (g1.tag == "Gear" && g2.tag == "WormGear"))
         {
-            if (angle < 45)
-                link.type = MotorLink.LinkType.Worm;
+            link.type = MotorLink.LinkType.Worm;
         }
         else if ((g1.tag == "RackGear" && g2.tag == "Gear") || (g1.tag == "Gear" && g2.tag == "RackGear"))
         {

@@ -51,9 +51,12 @@ public class Gear : MonoBehaviour, IGear
         this.transform.rotation = otherTrans.rotation;
         befoMouse = Input.mousePosition;
         dst = otherTrans.position - hole.position;
-        Vector3 zAxis = otherTrans.TransformDirection(otherTrans.forward).normalized;
-        zAxis = Vector3.Dot(zAxis, dst) * zAxis;
+        Vector3 zAxis = otherTrans.forward;
+        zAxis = Vector3.Project(dst, zAxis);
         this.transform.position = this.transform.position - zAxis + dst;
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
     }
 
     public void LinkExit(Transform hole, Transform otherTrans)
@@ -67,15 +70,23 @@ public class Gear : MonoBehaviour, IGear
 
     public void VerticalMove()
     {
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        if (speed > 0.01f)
-            speed = 0.01f;
-        if (speed < -0.01f)
-            speed = -0.01f;
+        speed /= 300f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
+
+        float x = Input.mousePosition.x - scrSpace.x;
+        float y = Input.mousePosition.y - scrSpace.y;
+
+        float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
+        if (r > 30)
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
+            tEnter = false;
+        }
     }
 
     public void MouseMove()
@@ -151,6 +162,10 @@ public class Gear : MonoBehaviour, IGear
                 {
                     lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
                 }
+                else if(link.type == MotorLink.LinkType.Worm)
+                {
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
+                }
             }
         }
     }
@@ -177,73 +192,74 @@ public class Gear : MonoBehaviour, IGear
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
+        befoMouse = Input.mousePosition;
+        //if (Input.GetKey(KeyCode.LeftControl))
+        //{
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayhit;
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //    RaycastHit rayhit;
 
-            if (Physics.Raycast(ray, out rayhit))
-            {
-                float round = 0;
-                float InPro, nearOrtho;
-                Vector3 far = new Vector3(rayhit.point.x, rayhit.point.y, rayhit.point.z);
-                Vector3 asspnt;
+        //    if (Physics.Raycast(ray, out rayhit))
+        //    {
+        //        float round = 0;
+        //        float InPro, nearOrtho;
+        //        Vector3 far = new Vector3(rayhit.point.x, rayhit.point.y, rayhit.point.z);
+        //        Vector3 asspnt;
 
-                MeshCollider mesh = rayhit.collider as MeshCollider;
+        //        MeshCollider mesh = rayhit.collider as MeshCollider;
 
-                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
-                {
-                    if (((transform.rotation * vertex + transform.position) - rayhit.point).magnitude > (far - rayhit.point).magnitude)
-                    {
-                        far = (transform.rotation * vertex + transform.position);
-                    }
-                }
-                nearOrtho = far.x * far.x + far.y * far.y + far.z * far.z;
-                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
-                {
-                    asspnt = (transform.rotation * vertex + transform.position);
-                    InPro = far.x * asspnt.x + far.y * asspnt.y + far.z * asspnt.z;
-                    if (round < Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude) && Mathf.Abs(InPro) < Mathf.Abs(nearOrtho))
-                    {
-                        round = Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude);
-                        nearOrtho = InPro;
-                    }
-                }
+        //        foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+        //        {
+        //            if (((transform.rotation * vertex + transform.position) - rayhit.point).magnitude > (far - rayhit.point).magnitude)
+        //            {
+        //                far = (transform.rotation * vertex + transform.position);
+        //            }
+        //        }
+        //        nearOrtho = far.x * far.x + far.y * far.y + far.z * far.z;
+        //        foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+        //        {
+        //            asspnt = (transform.rotation * vertex + transform.position);
+        //            InPro = far.x * asspnt.x + far.y * asspnt.y + far.z * asspnt.z;
+        //            if (round < Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude) && Mathf.Abs(InPro) < Mathf.Abs(nearOrtho))
+        //            {
+        //                round = Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude);
+        //                nearOrtho = InPro;
+        //            }
+        //        }
 
-                sphere = new GameObject("Sphere Collider");
-                sphere.transform.position = transform.position;
-                sphere.transform.parent = transform;
-                sphere.transform.rotation = transform.rotation;
+        //        sphere = new GameObject("Sphere Collider");
+        //        sphere.transform.position = transform.position;
+        //        sphere.transform.parent = transform;
+        //        sphere.transform.rotation = transform.rotation;
 
-                SphereCollider temp = sphere.AddComponent<SphereCollider>();
-                temp.radius = round / 2;
-                temp_rotate = transform.rotation;
-
-
+        //        SphereCollider temp = sphere.AddComponent<SphereCollider>();
+        //        temp.radius = round / 2;
+        //        temp_rotate = transform.rotation;
 
 
-                //MeshCollider mesh = rayhit.collider as MeshCollider;
-                //origin = rayhit.point - transform.position;
 
-                //sphere = new GameObject("Sphere Collider");
-                //sphere.transform.position = transform.position;
-                //sphere.transform.parent = transform;
-                //sphere.transform.rotation = transform.rotation;
 
-                //SphereCollider temp = sphere.AddComponent<SphereCollider>();
-                //temp.radius = origin.magnitude;
-                //temp_rotate = transform.rotation;
+        //        //MeshCollider mesh = rayhit.collider as MeshCollider;
+        //        //origin = rayhit.point - transform.position;
 
-                ///*foreach (Vector3 vertex in mesh.sharedMesh.vertices)
-                //    Debug.Log(vertex);*/
-            }
+        //        //sphere = new GameObject("Sphere Collider");
+        //        //sphere.transform.position = transform.position;
+        //        //sphere.transform.parent = transform;
+        //        //sphere.transform.rotation = transform.rotation;
 
-            if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
-            {
-                origin = rayhit.point - transform.position;
-            }
-        }
+        //        //SphereCollider temp = sphere.AddComponent<SphereCollider>();
+        //        //temp.radius = origin.magnitude;
+        //        //temp_rotate = transform.rotation;
+
+        //        ///*foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+        //        //    Debug.Log(vertex);*/
+        //    }
+
+        //    if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+        //    {
+        //        origin = rayhit.point - transform.position;
+        //    }
+        //}
 
         if (Input.GetKey(KeyCode.A))//A키를 누른 상태에서 마우스 클릭
         {
@@ -310,7 +326,11 @@ public class Gear : MonoBehaviour, IGear
     {
         if(Input.GetKey(KeyCode.LeftControl))
         {
-            ArcballMove();
+            //ArcballMove();
+            float rotate_spd = 300.0f;
+            float temp_x_axis = Input.GetAxis("Mouse X") * rotate_spd * Time.deltaTime;
+            float temp_y_axis = Input.GetAxis("Mouse Y") * rotate_spd * Time.deltaTime;
+            transform.Rotate(temp_y_axis, -temp_x_axis, 0, Space.World);
         }
         else if (Input.GetKey(KeyCode.A))
         {

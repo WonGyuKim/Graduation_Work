@@ -32,6 +32,7 @@ public class Beam : MonoBehaviour, IParts
         Node = transform.gameObject.GetComponent<MotorNode>();
         Node.parts = this;
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
+        Debug.Log(GetComponent<Renderer>().bounds.size);
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -45,9 +46,12 @@ public class Beam : MonoBehaviour, IParts
         this.transform.rotation = otherTrans.rotation;
         befoMouse = Input.mousePosition;
         dst = otherTrans.position - hole.position;
-        Vector3 zAxis = otherTrans.TransformDirection(otherTrans.forward).normalized;
-        zAxis = Vector3.Dot(zAxis, dst) * zAxis;
+        Vector3 zAxis = otherTrans.forward;
+        zAxis = Vector3.Project(dst, zAxis);
         this.transform.position = this.transform.position - zAxis + dst;
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
     }
 
     public void LinkExit(Transform hole, Transform otherTrans)
@@ -61,15 +65,23 @@ public class Beam : MonoBehaviour, IParts
 
     public void VerticalMove()
     {
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        if (speed > 0.01f)
-            speed = 0.01f;
-        if (speed < -0.01f)
-            speed = -0.01f;
+        speed /= 300f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
+
+        float x = Input.mousePosition.x - scrSpace.x;
+        float y = Input.mousePosition.y - scrSpace.y;
+
+        float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
+        if (r > 30)
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
+            tEnter = false;
+        }
     }
 
     public void MouseMove()
@@ -153,6 +165,7 @@ public class Beam : MonoBehaviour, IParts
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
+        befoMouse = Input.mousePosition;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -197,7 +210,11 @@ public class Beam : MonoBehaviour, IParts
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            ArcballMove();
+            //ArcballMove();
+            float rotate_spd = 300.0f;
+            float temp_x_axis = Input.GetAxis("Mouse X") * rotate_spd * Time.deltaTime;
+            float temp_y_axis = Input.GetAxis("Mouse Y") * rotate_spd * Time.deltaTime;
+            transform.Rotate(temp_y_axis, -temp_x_axis, 0, Space.World);
         }
         else if (Input.GetKey(KeyCode.A))
         {

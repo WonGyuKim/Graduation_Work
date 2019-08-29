@@ -76,6 +76,7 @@
     <Compile Include="Assets\Script\MotorLink.cs" />
     <Compile Include="Assets\Script\MotorNode.cs" />
     <Compile Include="Assets\Script\Object.cs" />
+    <Compile Include="Assets\Script\ObjectRotate.cs" />
     <Compile Include="Assets\Script\Player.cs" />
     <Compile Include="Assets\Script\RotateMotor.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\brick.cs" />

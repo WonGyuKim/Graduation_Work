@@ -12,7 +12,6 @@ public class Connector : MonoBehaviour, IParts
     private float xf;
     private float yf;
     private List<GameObject> LinkParts = new List<GameObject>();
-
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
@@ -43,10 +42,13 @@ public class Connector : MonoBehaviour, IParts
     {
         this.transform.rotation = hole.rotation;
         befoMouse = Input.mousePosition;
-        Vector3 zAxis = transform.TransformDirection(transform.forward).normalized;
+        Vector3 zAxis = transform.forward;
         Vector3 dis = hole.position - transform.position;
-        zAxis = Vector3.Dot(zAxis, dis) * zAxis;
+        zAxis = Vector3.Project(dis, zAxis);
         this.transform.position = this.transform.position + (dis - zAxis);
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
     }
 
     public void LinkExit(Transform hole, Transform otherTrans)
@@ -60,15 +62,23 @@ public class Connector : MonoBehaviour, IParts
 
     public void VerticalMove()
     {
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        if (speed > 0.01f)
-            speed = 0.01f;
-        if (speed < -0.01f)
-            speed = -0.01f;
+        speed /= 300f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
+
+        float x = Input.mousePosition.x - scrSpace.x;
+        float y = Input.mousePosition.y - scrSpace.y;
+
+        float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
+        if (r > 30)
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
+            tEnter = false;
+        }
     }
 
     public void MouseMove()
@@ -79,7 +89,7 @@ public class Connector : MonoBehaviour, IParts
 
     public void ArcballMove()
     {
-        
+
     }
 
     public void MotoringMove(Vector3 point, Vector3 axis, float speed)
@@ -92,17 +102,20 @@ public class Connector : MonoBehaviour, IParts
             foreach (MotorLink link in Node.lList)
             {
                 IParts lparts;
-                if(link.left.gameObj == this.gameObj)
+                if (link.left.gameObj == this.gameObj)
                     lparts = link.right;
                 else
                     lparts = link.left;
+
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     lparts.MotoringMove(point, axis, speed);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    if (point.x != transform.position.x && point.y != transform.position.y && point.z != transform.position.z)
+                    Vector3 tVector = (transform.position - point);
+                    tVector = tVector.normalized;
+                    if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
                         lparts.MotoringMove(point, axis, speed);
                 }
             }
@@ -153,6 +166,7 @@ public class Connector : MonoBehaviour, IParts
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
+        befoMouse = Input.mousePosition;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -161,19 +175,6 @@ public class Connector : MonoBehaviour, IParts
             {
                 gobj.transform.parent = Parent.transform;
             }
-        }
-    }
-
-    public MotorNode node
-    {
-        get
-        {
-            return Node;
-        }
-
-        set
-        {
-            Node = value;
         }
     }
 
@@ -193,11 +194,28 @@ public class Connector : MonoBehaviour, IParts
         }
     }
 
+    public MotorNode node
+    {
+        get
+        {
+            return Node;
+        }
+
+        set
+        {
+            Node = value;
+        }
+    }
+
     void OnMouseDrag()
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            ArcballMove();
+            //ArcballMove();
+            float rotate_spd = 300.0f;
+            float temp_x_axis = Input.GetAxis("Mouse X") * rotate_spd * Time.deltaTime;
+            float temp_y_axis = Input.GetAxis("Mouse Y") * rotate_spd * Time.deltaTime;
+            transform.Rotate(temp_y_axis, -temp_x_axis, 0, Space.World);
         }
         else if (Input.GetKey(KeyCode.A))
         {

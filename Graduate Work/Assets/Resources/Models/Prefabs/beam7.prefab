@@ -44,7 +44,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &1609287314605911453
 GameObject:
@@ -134,7 +135,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -179,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &3092758077105588098
 GameObject:
@@ -368,7 +370,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -413,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &5883146145924563692
 GameObject:
@@ -458,7 +461,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -503,6 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &5931568071610871728
 GameObject:
@@ -548,7 +552,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -593,6 +597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &7280379271078052307
 GameObject:
@@ -638,7 +643,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -683,6 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &9206047247566147577
 GameObject:
@@ -728,7 +734,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -773,4 +779,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0

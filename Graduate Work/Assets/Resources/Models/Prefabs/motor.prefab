@@ -173,7 +173,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &5264559417720908941
 GameObject:
@@ -263,7 +264,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -308,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &5575641209565616712
 GameObject:
@@ -353,7 +355,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -398,6 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &6155877992971360484
 GameObject:
@@ -427,7 +430,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6155877992971360484}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.12, z: 0}
+  m_LocalPosition: {x: 0, y: 0.128, z: 0}
   m_LocalScale: {x: 1.0562, y: 1.0562, z: 1}
   m_Children: []
   m_Father: {fileID: 5129893022360926874}
@@ -443,7 +446,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.04
+  m_Radius: 0.045
   m_Height: 0.3
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
@@ -488,6 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
 --- !u!1 &7626968598524915670
 GameObject:
@@ -578,4 +582,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0
