@@ -20,13 +20,13 @@ public abstract class MyParts : MonoBehaviour
     private Vector3 Vec;
    
     protected GameObject parentComponent;
-    protected List<MyParts> LinkParts;
+    protected List<Link> LinkParts;
 
     void Start()
     {
         origin = new Vector3();
         plane = GameObject.Find("Plane");
-        LinkParts = new List<MyParts>();
+        LinkParts = new List<Link>();
         parentComponent = null;
 
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
@@ -186,34 +186,34 @@ public abstract class MyParts : MonoBehaviour
         }
     }
     */
-    public List<MyParts> child
+    public List<Link> child
     {
         get { return LinkParts; }
     }
-
-    public void Link(MyParts input)
+    
+    public void Link(Link input)
     {
         LinkParts.Add(input);
         tEnter = true;
     }
 
-    public void LinkExit(MyParts input)
+    public void LinkExit(Link input)
     {
         LinkParts.Remove(input);
-        if (LinkParts.Count == 0 && parentComponent == null)
+        if (LinkParts.Count == 0)
             tEnter = false;
     }
-
+    
     public abstract void LinkRotation(MyParts parent, PowerData power);
 
-    public void SetLinkMove(MyParts parent, GameObject head)
+    public void SetLinkMove(Link parent, GameObject head)
     {
         transform.parent = head.transform;
 
-        foreach(MyParts parts in LinkParts)
+        foreach(Link link in LinkParts)
         {
-            if (!parts.Equals(parent))
-                parts.SetLinkMove(this, head);
+            if (!link.Equals(parent))
+                link.SetLinkMove(this, head);
         }
     }
 
@@ -223,17 +223,17 @@ public abstract class MyParts : MonoBehaviour
         parentComponent.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
     }
     
-    public void QuitLinkMove(MyParts parent)
+    public void QuitLinkMove(Link parent)
     {
         transform.parent = null;
 
-        foreach(MyParts parts in LinkParts)
+        foreach(Link link in LinkParts)
         {
-            if (!parts.Equals(parent))
-                parts.QuitLinkMove(this);
+            if (!link.Equals(parent))
+                link.QuitLinkMove(this);
         }
     }
-
+    
     void OnMouseDown()
     {
         SetMoveData();
@@ -243,7 +243,7 @@ public abstract class MyParts : MonoBehaviour
             parentComponent = new GameObject();
             parentComponent.name = "parent";
             parentComponent.transform.position = transform.position;
-            SetLinkMove(this, parentComponent);
+            SetLinkMove(null, parentComponent);
         }
         else if (Input.GetKey(KeyCode.LeftControl))
             SetArcballData();
@@ -269,7 +269,7 @@ public abstract class MyParts : MonoBehaviour
         {
             if (Input.GetKeyUp(KeyCode.A) && parentComponent != null)
             {
-                QuitLinkMove(this);
+                QuitLinkMove(null);
                 Destroy(parentComponent);
             }
         }
@@ -281,7 +281,7 @@ public abstract class MyParts : MonoBehaviour
         onDrag = false;
         if (Input.GetKey(KeyCode.A) && parentComponent!= null)
         {
-            QuitLinkMove(this);
+            QuitLinkMove(null);
             Destroy(parentComponent);
         }
         Destroy(sphere);

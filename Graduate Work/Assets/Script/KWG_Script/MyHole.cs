@@ -32,6 +32,8 @@ public class MyHole : MonoBehaviour
             Debug.Log("body Parts : " + bodyParts);
             Debug.Log("target Parts : " + targetParts);
 
+            Link link = new Link();
+
             /*
             if (targetParts.child.Count > 0)
             {
@@ -60,8 +62,9 @@ public class MyHole : MonoBehaviour
                 bodyParts.transform.position = target.transform.position;
             }
 
-            targetParts.Link(bodyParts);
-            bodyParts.Link(targetParts);
+            targetParts.Link(link);
+            bodyParts.Link(link);
+            link.Connect(bodyParts, targetParts);
 
             connecting = true;
 
@@ -72,8 +75,8 @@ public class MyHole : MonoBehaviour
     {
         if (connecting && other.gameObject.Equals(target))
         {
-            bodyParts.LinkExit(targetParts);
-            targetParts.LinkExit(bodyParts);
+            //bodyParts.LinkExit(targetParts);
+            //targetParts.LinkExit(bodyParts);
             target = null;
             connecting = false;
         }

@@ -16,13 +16,7 @@ public class BasicParts : MyParts
         else // power.RotationDirection == false
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
         
-        /*
-        if (power.RotationDirection == true)
-            GetComponent<Rigidbody>().AddTorque(power.AngularVelocity * power.Velocity, ForceMode.Acceleration);
-        else
-            GetComponent<Rigidbody>().AddTorque(power.AngularVelocity * power.Velocity * -1, ForceMode.Acceleration);
-            */
-        foreach (MyParts parts in LinkParts)
+        foreach (Link parts in LinkParts)
         {
             if (!parts.Equals(parent))
                 parts.LinkRotation(this, power);

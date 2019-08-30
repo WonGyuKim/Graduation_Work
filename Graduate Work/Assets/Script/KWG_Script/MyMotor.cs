@@ -19,7 +19,6 @@ public class MyMotor : MyParts
     void Update()
     {
         if (action)
-            //EnableRotation(new PowerData(0.1f, 0.1f, GetComponent<Rigidbody>().angularVelocity, true));
             EnableRotation(new PowerData(1, 1, true));
     }
 
@@ -31,13 +30,7 @@ public class MyMotor : MyParts
         else // power.RotationDirection == false 
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
             
-            /*
-        if (power.RotationDirection == true)
-            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity, ForceMode.Acceleration);
-        else
-            GetComponent<Rigidbody>().AddTorque(new Vector3(0, 0, 1) * power.Velocity * -1, ForceMode.Acceleration);
-            */
-        foreach (MyParts parts in LinkParts)
+        foreach (Link parts in LinkParts)
         {
             parts.LinkRotation(this, power);
         }
@@ -51,13 +44,7 @@ public class MyMotor : MyParts
         else // power.RotationDirection == false
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity);
         
-        /*
-        if (power.RotationDirection == true)
-            GetComponent<Rigidbody>().AddTorque(power.AngularVelocity * power.Velocity);
-        else
-            GetComponent<Rigidbody>().AddTorque(power.AngularVelocity * power.Velocity * -1);
-            */
-        foreach (MyParts parts in LinkParts)
+        foreach (Link parts in LinkParts)
         {
             if (!parts.Equals(parent))
                 parts.LinkRotation(this, power);

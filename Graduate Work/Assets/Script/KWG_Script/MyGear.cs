@@ -28,7 +28,7 @@ public class MyGear : MyParts
 
         Debug.Log("Gear Angular Velocity : " + GetComponent<Rigidbody>().angularVelocity);
         */
-
+        /*
         foreach (MyParts parts in LinkParts)
         {
             if (!parts.Equals(parent))
@@ -44,6 +44,7 @@ public class MyGear : MyParts
             }
             
         }
+        */
     }
     
     void OnTriggerEnter(Collider other)
@@ -52,7 +53,7 @@ public class MyGear : MyParts
         {
             //LinkParts.Add(other.gameObject.GetComponent<MyParts>());
 
-            Link(other.gameObject.GetComponent<MyParts>());
+            //Link(other.gameObject.GetComponent<MyParts>());
         }
     }
 
@@ -61,7 +62,7 @@ public class MyGear : MyParts
         if (other.tag == "Gear")
         {
             //LinkParts.Remove(other.gameObject);
-            LinkExit(other.gameObject.GetComponent<MyParts>());
+            //LinkExit(other.gameObject.GetComponent<MyParts>());
         }
     }
 
