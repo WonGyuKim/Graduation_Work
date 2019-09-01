@@ -36,7 +36,7 @@ public class MyMotor : MyParts
         }
     }
 
-    public override void LinkRotation(MyParts parent, PowerData power)
+    public override void LinkRotation(Link parent, PowerData power)
     {
         
         if (power.RotationDirection == true)

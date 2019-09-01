@@ -13,7 +13,7 @@ public class MyGear : MyParts
     public int GearTeeth { get { return gearTeeth; } }
     protected virtual int InitGearTeeth() { return 1; }
 
-    public override void LinkRotation(MyParts parent, PowerData power)
+    public override void LinkRotation(Link parent, PowerData power)
     {
         if (power.RotationDirection == true)
             transform.Rotate(new Vector3(0, 0, 1), power.Velocity * -1);

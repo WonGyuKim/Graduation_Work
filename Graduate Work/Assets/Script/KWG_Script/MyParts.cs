@@ -204,7 +204,7 @@ public abstract class MyParts : MonoBehaviour
             tEnter = false;
     }
     
-    public abstract void LinkRotation(MyParts parent, PowerData power);
+    public abstract void LinkRotation(Link parent, PowerData power);
 
     public void SetLinkMove(Link parent, GameObject head)
     {

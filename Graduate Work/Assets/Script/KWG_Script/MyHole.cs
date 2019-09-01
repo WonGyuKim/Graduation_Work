@@ -32,7 +32,7 @@ public class MyHole : MonoBehaviour
             Debug.Log("body Parts : " + bodyParts);
             Debug.Log("target Parts : " + targetParts);
 
-            Link link = new Link();
+            Link link = new TightLink();
 
             /*
             if (targetParts.child.Count > 0)

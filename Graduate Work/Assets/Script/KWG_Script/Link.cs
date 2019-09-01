@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Link //: MonoBehaviour
 {
-    List<MyParts> linking;
+    protected List<MyParts> linking;
 
     public Link()
     {
