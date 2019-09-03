@@ -18,10 +18,14 @@ public class TightLink : Link
 
     public override void LinkRotation(MyParts parent, PowerData power)
     {
-        foreach (MyParts parts in linking)
+        /*foreach (MyParts parts in linking)
         {
             if (!parts.Equals(parent))
                 parts.LinkRotation(this, power);
-        }
+        }*/
+        if (!left.Equals(parent))
+            left.LinkRotation(this, power);
+        else if (!right.Equals(parent))
+            right.LinkRotation(this, power);
     }
 }

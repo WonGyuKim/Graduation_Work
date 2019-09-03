@@ -4,62 +4,51 @@ using UnityEngine;
 
 public class Link //: MonoBehaviour
 {
-    protected List<MyParts> linking;
+    protected MyParts left;
+    protected MyParts right;
 
     public Link()
     {
-        linking = new List<MyParts>();
     }
 
     public void Connect(MyParts left, MyParts right)
     {
+        left.Link(this);
+        right.Link(this);
+
         Debug.Log(left);
         Debug.Log(right);
-
-        linking.Add(left);
-        linking.Add(right);
+        
+        this.left = left;
+        this.right = right;
     }
 
     public void Disconnect()
     {
+        left.LinkExit(this);
+        right.LinkExit(this);
 
+        left = null;
+        right = null;
     }
 
     public virtual void LinkRotation(MyParts parent, PowerData power) { }
 
     public void SetLinkMove(MyParts parent, GameObject head)
     {
-        foreach(MyParts parts in linking)
-        {
-            if (!parts.Equals(parent))
-                parts.SetLinkMove(this, head);
-        }
-
+        if (!left.Equals(parent))
+            left.SetLinkMove(this, head);
+        else if (!right.Equals(parent))
+            right.SetLinkMove(this, head);
     }
 
     public void QuitLinkMove(MyParts parent)
     {
-        foreach(MyParts parts in linking)
-        {
-            if (!parts.Equals(parent))
-                parts.QuitLinkMove(this);
-        }
+        
+        if (!left.Equals(parent))
+            left.QuitLinkMove(this);
+        else if (!right.Equals(parent))
+            right.QuitLinkMove(this);
     }
-
-    /*
-     * 동력이 왼쪽에서 오는지 어떻게 아는가?
-     * Parent가 판단
-     */
-     /*
-    public MyParts Left
-    {
-        get { return left; }
-        set { left = value; }
-    }
-    public MyParts Right
-    {
-        get { return right; }
-        set { right = value; }
-    }
-    */
+    
 }

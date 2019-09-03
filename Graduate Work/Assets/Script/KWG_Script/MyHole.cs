@@ -9,6 +9,7 @@ public class MyHole : MonoBehaviour
     private MyParts bodyParts;
     private MyParts targetParts;
     private bool connecting;
+    private Link link;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,14 @@ public class MyHole : MonoBehaviour
         connecting = false;
     }
     
+    private Link LinkFactory(string hole, string enter)
+    {
+        if (hole == "Conn_Hole" && enter == "Axle")
+            return new LooseLink();
+        else
+            return new TightLink();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!connecting &&
@@ -32,25 +41,11 @@ public class MyHole : MonoBehaviour
             Debug.Log("body Parts : " + bodyParts);
             Debug.Log("target Parts : " + targetParts);
 
-            Link link = new TightLink();
+            link = LinkFactory(tag, other.tag);
 
-            /*
-            if (targetParts.child.Count > 0)
-            {
-                bodyParts.transform.rotation = target.transform.rotation;
-                bodyParts.transform.position = target.transform.position;
-            }
-            else if (bodyParts.child.Count > 0 && targetParts.child.Count == 0)
-            {
-                targetParts.transform.rotation = bodyParts.transform.rotation;
-                targetParts.transform.position = bodyParts.transform.position;
-            }
-            else
-            {
-                targetParts.transform.rotation = bodyParts.transform.rotation;
-                targetParts.transform.position = bodyParts.transform.position;
-            }
-            */
+            Debug.Log(bodyParts.child);
+            Debug.Log(targetParts.child);
+
             if (bodyParts.child.Count > 0 && targetParts.child.Count == 0)
             {
                 targetParts.transform.rotation = bodyParts.transform.rotation;
@@ -61,9 +56,10 @@ public class MyHole : MonoBehaviour
                 bodyParts.transform.rotation = target.transform.rotation;
                 bodyParts.transform.position = target.transform.position;
             }
-
+            /*
             targetParts.Link(link);
             bodyParts.Link(link);
+            */
             link.Connect(bodyParts, targetParts);
 
             connecting = true;
@@ -77,8 +73,12 @@ public class MyHole : MonoBehaviour
         {
             //bodyParts.LinkExit(targetParts);
             //targetParts.LinkExit(bodyParts);
+            link.Disconnect();
             target = null;
+            targetParts = null;
             connecting = false;
         }
     }
+
+    
 }
