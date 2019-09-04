@@ -18,11 +18,11 @@ public class LooseLink : Link
 
     public override void LinkRotation(MyParts parent, PowerData power)
     {
-        if (!left.Equals(parent))
+        //if (!left.Equals(parent))
             //left.LinkRotation(this, power);
-            left.transform.RotateAround(parent.transform.position, new Vector3(0, 0, 1), power.Velocity * -1);
-        else if (!right.Equals(parent))
+            //left.transform.RotateAround(parent.transform.position, new Vector3(0, 0, 1), power.Velocity * -1);
+        //else if (!right.Equals(parent))
             //right.LinkRotation(this, power);
-            right.transform.RotateAround(parent.transform.position, new Vector3(0, 0, 1), power.Velocity * -1);
+            //right.transform.RotateAround(parent.transform.position, new Vector3(0, 0, 1), power.Velocity * -1);
     }
 }

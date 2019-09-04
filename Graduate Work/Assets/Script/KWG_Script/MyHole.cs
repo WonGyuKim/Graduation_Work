@@ -22,7 +22,10 @@ public class MyHole : MonoBehaviour
     
     private Link LinkFactory(string hole, string enter)
     {
-        if (hole == "Conn_Hole" && enter == "Axle")
+        Debug.Log(tag);
+        Debug.Log(enter);
+
+        if (hole.Equals("Conn_Hole") && enter.Equals("Axle"))
             return new LooseLink();
         else
             return new TightLink();
@@ -38,18 +41,18 @@ public class MyHole : MonoBehaviour
             target = other.transform.gameObject;
             targetParts = target.GetComponent<MyParts>();
 
-            Debug.Log("body Parts : " + bodyParts);
-            Debug.Log("target Parts : " + targetParts);
+            //Debug.Log("body Parts : " + bodyParts);
+            //Debug.Log("target Parts : " + targetParts);
 
             link = LinkFactory(tag, other.tag);
-
-            Debug.Log(bodyParts.child);
-            Debug.Log(targetParts.child);
+            Debug.Log(link);
+            //Debug.Log(bodyParts.child);
+            //Debug.Log(targetParts.child);
 
             if (bodyParts.child.Count > 0 && targetParts.child.Count == 0)
             {
                 targetParts.transform.rotation = bodyParts.transform.rotation;
-                targetParts.transform.position = bodyParts.transform.position;
+                targetParts.transform.position = transform.position;
             }
             else
             {
