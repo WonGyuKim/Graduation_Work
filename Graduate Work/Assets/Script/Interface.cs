@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Interface : MonoBehaviour
 {
-    
+
 }
 
 public interface IParts
@@ -28,6 +28,8 @@ public interface IParts
     List<GameObject> LinkSearch();//연결된 파츠들을 탐색
 
     void SearchReset();//검색된 결과 리셋
+
+    void HoleInput(Transform hole);
 
     bool OnDragCheck
     {

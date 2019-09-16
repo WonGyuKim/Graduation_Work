@@ -27,7 +27,7 @@ public class GearControl : MonoBehaviour
         Vector3 g2Vec = g2.transform.TransformDirection(g2.transform.forward);
         Vector3 v = g1Vec - g2Vec;
         float angle = Mathf.Abs(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);
-        
+
         if ((g1.tag == "Gear" || g1.tag == "BevelGear") && (g2.tag == "Gear" || g2.tag == "BevelGear") && angle < 45)
         {
             link.type = MotorLink.LinkType.Gear;
@@ -52,11 +52,11 @@ public class GearControl : MonoBehaviour
 
     public void deLinkGear(IGear gear1, IGear gear2)
     {
-        foreach(MotorLink link1 in gear1.node.lList)
+        foreach (MotorLink link1 in gear1.node.lList)
         {
-            foreach(MotorLink link2 in gear2.node.lList)
+            foreach (MotorLink link2 in gear2.node.lList)
             {
-                if(link1 == link2)
+                if (link1 == link2)
                 {
                     gear1.node.lList.Remove(link1);
                     gear2.node.lList.Remove(link2);

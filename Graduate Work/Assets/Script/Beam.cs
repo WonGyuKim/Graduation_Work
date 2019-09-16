@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Beam : MonoBehaviour, IParts
@@ -20,6 +21,12 @@ public class Beam : MonoBehaviour, IParts
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
     private MotorNode Node;
     public RotateMotor rotM;
+    public Transform hole;
+
+    public void HoleInput(Transform hole)
+    {
+        this.hole = hole;
+    }
 
     void Start()
     {
@@ -32,18 +39,19 @@ public class Beam : MonoBehaviour, IParts
         Node = transform.gameObject.GetComponent<MotorNode>();
         Node.parts = this;
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
-        Debug.Log(GetComponent<Renderer>().bounds.size);
+        hole = null;
     }
 
     public void Link(Transform hole, Transform otherTrans)
     {
         LinkParts.Add(otherTrans.gameObject);
+        LinkParts = LinkParts.Distinct().ToList();
         tEnter = true;
     }
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        this.transform.rotation = otherTrans.rotation;
+        this.transform.eulerAngles = new Vector3(otherTrans.eulerAngles.x, otherTrans.eulerAngles.y, this.transform.eulerAngles.z);
         befoMouse = Input.mousePosition;
         dst = otherTrans.position - hole.position;
         Vector3 zAxis = otherTrans.forward;
@@ -105,7 +113,7 @@ public class Beam : MonoBehaviour, IParts
             foreach (MotorLink link in Node.lList)
             {
                 IParts lparts;
-                if(link.left.gameObj == this.gameObj)
+                if (link.left.gameObj == this.gameObj)
                     lparts = link.right;
                 else
                     lparts = link.left;
@@ -192,7 +200,12 @@ public class Beam : MonoBehaviour, IParts
 
     void OnMouseUp()
     {
-        onDrag = false;
+        if (hole != null)
+        {
+            Hole h = hole.gameObject.GetComponent<Hole>();
+
+            h.HoleLink();
+        }
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -204,6 +217,8 @@ public class Beam : MonoBehaviour, IParts
             AllList.Clear();
             Destroy(Parent);
         }
+        hole = null;
+        onDrag = false;
     }
 
     void OnMouseDrag()

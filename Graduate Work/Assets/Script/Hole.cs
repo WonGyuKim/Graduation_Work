@@ -18,54 +18,66 @@ public class Hole : MonoBehaviour
         close = false;
     }
 
+    public void HoleLink()
+    {
+        iparts.Link(this.transform, DokObj);
+        colIParts.Link(this.transform, Parent);
+        close = true;
+
+        if (iparts.OnDragCheck)
+        {
+            iparts.LinkMove(this.transform, DokObj);
+        }
+        else if (colIParts.OnDragCheck)
+        {
+            colIParts.LinkMove(this.transform, Parent);
+        }
+
+        link = transform.gameObject.GetComponent<MotorLink>();
+        link.linkObject = this.gameObject;
+        link.left = iparts;
+        link.right = colIParts;
+
+        if (this.tag == "Axle_Hole" && DokObj.tag == "Axle")
+        {
+            link.type = MotorLink.LinkType.Tight;
+        }
+
+        else if (this.tag == "Conn_Hole" && DokObj.tag == "Connector")
+        {
+            link.type = MotorLink.LinkType.Tight;
+        }
+
+        else if (this.tag == "Conn_Hole" && DokObj.tag == "Axle")
+        {
+            link.type = MotorLink.LinkType.Loose;
+        }
+
+        link.left.node.AddLink(link);
+        link.right.node.AddLink(link);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (!close && !other.gameObject.Equals(Parent.gameObject) && ((transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) || (transform.tag == "Axle_Hole" && other.tag == "Axle")))
         {
             DokObj = other.transform;
-            iparts.Link(this.transform, DokObj);
             colIParts = DokObj.gameObject.GetComponent<IParts>();
-            colIParts.Link(this.transform, Parent);
-            close = true;
 
             if (iparts.OnDragCheck)
             {
-                iparts.LinkMove(this.transform, DokObj);
+                iparts.HoleInput(transform);
             }
             else if (colIParts.OnDragCheck)
             {
-
-                colIParts.LinkMove(this.transform, Parent);
+                colIParts.HoleInput(transform);
             }
-
-            link = transform.gameObject.GetComponent<MotorLink>();
-            link.linkObject = this.gameObject;
-            link.left = iparts;
-            link.right = colIParts;
-
-            if (this.tag == "Axle_Hole" && other.tag == "Axle")
-            {
-                link.type = MotorLink.LinkType.Tight;
-            }
-
-            else if(this.tag == "Conn_Hole" && other.tag == "Connector")
-            {
-                link.type = MotorLink.LinkType.Tight;
-            }
-
-            else if (this.tag == "Conn_Hole" && other.tag == "Axle")
-            {
-                link.type = MotorLink.LinkType.Loose;
-            }
-
-            link.left.node.AddLink(link);
-            link.right.node.AddLink(link);
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if(close && other.gameObject.Equals(DokObj.gameObject))
+        if (close && other.gameObject.Equals(DokObj.gameObject))
         {
             iparts.LinkExit(this.transform, DokObj);
             colIParts.LinkExit(this.transform, Parent);

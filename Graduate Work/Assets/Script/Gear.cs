@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Gear : MonoBehaviour, IGear
@@ -24,6 +25,12 @@ public class Gear : MonoBehaviour, IGear
     private MotorNode Node;
     public GearControl gearControl;
     public RotateMotor rotM;
+    public Transform hole;
+
+    public void HoleInput(Transform hole)
+    {
+        this.hole = hole;
+    }
 
     void Start()
     {
@@ -38,11 +45,13 @@ public class Gear : MonoBehaviour, IGear
         gearControl = GameObject.Find("snapControl").GetComponent<GearControl>();
         gearControl.AddGearList(this);
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
+        hole = null;
     }
 
     public void Link(Transform hole, Transform otherTrans)
     {
         LinkParts.Add(otherTrans.gameObject);
+        LinkParts = LinkParts.Distinct().ToList();
         tEnter = true;
     }
 
@@ -162,7 +171,7 @@ public class Gear : MonoBehaviour, IGear
                 {
                     lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
                 }
-                else if(link.type == MotorLink.LinkType.Worm)
+                else if (link.type == MotorLink.LinkType.Worm)
                 {
                     lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
                 }
@@ -309,10 +318,15 @@ public class Gear : MonoBehaviour, IGear
 
     void OnMouseUp()
     {
-        onDrag = false;
-        if(Input.GetKey(KeyCode.A))
+        if (hole != null)
         {
-            foreach(GameObject gobj in AllList)
+            Hole h = hole.gameObject.GetComponent<Hole>();
+
+            h.HoleLink();
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            foreach (GameObject gobj in AllList)
             {
                 gobj.transform.parent = null;
                 gobj.GetComponent<IParts>().SearchReset();
@@ -320,11 +334,13 @@ public class Gear : MonoBehaviour, IGear
             AllList.Clear();
             Destroy(Parent);
         }
+        hole = null;
+        onDrag = false;
     }
 
     void OnMouseDrag()
     {
-        if(Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();
             float rotate_spd = 300.0f;
@@ -336,7 +352,7 @@ public class Gear : MonoBehaviour, IGear
         {
             LinkAllMove();
         }
-        else if(Input.GetKeyUp(KeyCode.A))
+        else if (Input.GetKeyUp(KeyCode.A))
         {
             foreach (GameObject gobj in AllList)
             {
@@ -372,7 +388,7 @@ public class Gear : MonoBehaviour, IGear
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
+        if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
             if (onDrag)

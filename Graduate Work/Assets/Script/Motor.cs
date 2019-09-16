@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Motor : MonoBehaviour, IParts
@@ -19,7 +20,12 @@ public class Motor : MonoBehaviour, IParts
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
     private MotorNode Node;
     public RotateMotor rotM;
+    public Transform hole;
 
+    public void HoleInput(Transform hole)
+    {
+        this.hole = hole;
+    }
 
     void Start()
     {
@@ -33,11 +39,13 @@ public class Motor : MonoBehaviour, IParts
         Node.parts = this;
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         rotM.motorList.Add(this);
+        hole = null;
     }
 
     public void Link(Transform hole, Transform otherTrans)
     {
         LinkParts.Add(otherTrans.gameObject);
+        LinkParts = LinkParts.Distinct().ToList();
         tEnter = true;
     }
 
@@ -180,7 +188,12 @@ public class Motor : MonoBehaviour, IParts
 
     void OnMouseUp()
     {
-        onDrag = false;
+        if (hole != null)
+        {
+            Hole h = hole.gameObject.GetComponent<Hole>();
+
+            h.HoleLink();
+        }
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -192,6 +205,8 @@ public class Motor : MonoBehaviour, IParts
             AllList.Clear();
             Destroy(Parent);
         }
+        hole = null;
+        onDrag = false;
     }
 
     void OnMouseDrag()

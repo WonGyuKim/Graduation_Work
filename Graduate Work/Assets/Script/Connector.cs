@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Connector : MonoBehaviour, IParts
@@ -18,6 +19,12 @@ public class Connector : MonoBehaviour, IParts
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
     private MotorNode Node;
     public RotateMotor rotM;
+    public Transform hole;
+
+    public void HoleInput(Transform hole)
+    {
+        this.hole = hole;
+    }
 
     void Start()
     {
@@ -30,11 +37,13 @@ public class Connector : MonoBehaviour, IParts
         Node = transform.gameObject.GetComponent<MotorNode>();
         Node.parts = this;
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
+        hole = null;
     }
 
     public void Link(Transform hole, Transform otherTrans)
     {
         LinkParts.Add(otherTrans.gameObject);
+        LinkParts = LinkParts.Distinct().ToList();
         tEnter = true;
     }
 
@@ -115,7 +124,10 @@ public class Connector : MonoBehaviour, IParts
                 {
                     Vector3 tVector = (transform.position - point);
                     tVector = tVector.normalized;
-                    if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
+
+                    if (tVector.x == 0 && tVector.y == 0 && tVector.z == 0)
+                        lparts.MotoringMove(point, axis, speed);
+                    else if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
                         lparts.MotoringMove(point, axis, speed);
                 }
             }
@@ -180,7 +192,12 @@ public class Connector : MonoBehaviour, IParts
 
     void OnMouseUp()
     {
-        onDrag = false;
+        if (hole != null)
+        {
+            Hole h = hole.gameObject.GetComponent<Hole>();
+
+            h.HoleLink();
+        }
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -192,6 +209,8 @@ public class Connector : MonoBehaviour, IParts
             AllList.Clear();
             Destroy(Parent);
         }
+        hole = null;
+        onDrag = false;
     }
 
     public MotorNode node
