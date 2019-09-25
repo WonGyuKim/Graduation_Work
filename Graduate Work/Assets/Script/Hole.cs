@@ -10,6 +10,7 @@ public class Hole : MonoBehaviour
     private IParts colIParts;
     private Transform DokObj;
     public MotorLink link;
+    public Transform parts;
 
     void Start()
     {
@@ -20,17 +21,31 @@ public class Hole : MonoBehaviour
 
     public void HoleLink()
     {
+        close = true;
         iparts.Link(this.transform, DokObj);
         colIParts.Link(this.transform, Parent);
-        close = true;
-
+  
         if (iparts.OnDragCheck)
         {
-            iparts.LinkMove(this.transform, DokObj);
+            if (DokObj.childCount == 0)
+            {
+                iparts.LinkMove(this.transform, DokObj);
+            }
+            else
+            {
+                iparts.LinkMove(this.transform, parts);
+            }
         }
         else if (colIParts.OnDragCheck)
         {
-            colIParts.LinkMove(this.transform, Parent);
+            if (DokObj.childCount == 0)
+            {
+                colIParts.LinkMove(this.transform, Parent);
+            }
+            else
+            {
+                colIParts.LinkMove(this.transform, parts);
+            }
         }
 
         link = transform.gameObject.GetComponent<MotorLink>();
@@ -38,17 +53,28 @@ public class Hole : MonoBehaviour
         link.left = iparts;
         link.right = colIParts;
 
-        if (this.tag == "Axle_Hole" && DokObj.tag == "Axle")
+        Transform tmpObj;
+
+        if(DokObj.childCount == 0)
+        {
+            tmpObj = DokObj;
+        }
+        else
+        {
+            tmpObj = parts;
+        }
+
+        if (this.tag == "Axle_Hole" && tmpObj.tag == "Axle")
         {
             link.type = MotorLink.LinkType.Tight;
         }
 
-        else if (this.tag == "Conn_Hole" && DokObj.tag == "Connector")
+        else if (this.tag == "Conn_Hole" && tmpObj.tag == "Connector")
         {
             link.type = MotorLink.LinkType.Tight;
         }
 
-        else if (this.tag == "Conn_Hole" && DokObj.tag == "Axle")
+        else if (this.tag == "Conn_Hole" && tmpObj.tag == "Axle")
         {
             link.type = MotorLink.LinkType.Loose;
         }
@@ -61,30 +87,71 @@ public class Hole : MonoBehaviour
     {
         if (!close && !other.gameObject.Equals(Parent.gameObject) && ((transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) || (transform.tag == "Axle_Hole" && other.tag == "Axle")))
         {
-            DokObj = other.transform;
-            colIParts = DokObj.gameObject.GetComponent<IParts>();
+            Vector3 cross = Vector3.Cross(other.transform.forward, transform.forward);
+            if (cross == Vector3.zero)
+            {
+                if (other.transform.parent != null)
+                {
+                    DokObj = other.transform.parent;
+                    parts = other.transform;
+                }
+                else
+                {
+                    DokObj = other.transform;
+                }
+                colIParts = DokObj.gameObject.GetComponent<IParts>();
 
-            if (iparts.OnDragCheck)
-            {
-                iparts.HoleInput(transform);
-            }
-            else if (colIParts.OnDragCheck)
-            {
-                colIParts.HoleInput(transform);
+                if (iparts.OnDragCheck)
+                {
+                    iparts.HoleInput(transform, DokObj);
+                }
+                else if (colIParts.OnDragCheck)
+                {
+                    colIParts.HoleInput(transform, Parent);
+                }
             }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (close && other.gameObject.Equals(DokObj.gameObject))
+        Transform otherTrans;
+
+        if((other.tag == "Axle" || other.tag == "Connector"))
         {
-            iparts.LinkExit(this.transform, DokObj);
-            colIParts.LinkExit(this.transform, Parent);
-            close = false;
-            DokObj = null;
-            iparts.node.lList.Remove(link);
-            colIParts.node.lList.Remove(link);
+            if (colIParts == null)
+            {
+                return;
+            }
+
+            if (other.transform.parent != null)
+            {
+                otherTrans = other.transform.parent;
+            }
+            else
+            {
+                otherTrans = other.transform;
+            }
+            
+            if (iparts.OnDragCheck)
+            {
+                iparts.HoleOut(transform, DokObj);
+            }
+            else if (colIParts.OnDragCheck)
+            {
+                colIParts.HoleOut(transform, Parent);
+            }
+
+            if (close && otherTrans.gameObject.Equals(DokObj.gameObject))
+            {
+                iparts.LinkExit(this.transform, DokObj);
+                colIParts.LinkExit(this.transform, Parent);
+                iparts.node.lList.Remove(link);
+                colIParts.node.lList.Remove(link);
+                colIParts = null;
+                DokObj = null;
+                close = false;
+            }
         }
     }
 }

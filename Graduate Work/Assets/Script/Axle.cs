@@ -20,10 +20,20 @@ public class Axle : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
+    public List<Transform> holeList = new List<Transform>();
+    public float dis;
 
-    public void HoleInput(Transform hole)
+    public void HoleInput(Transform hole, Transform other)
     {
-        this.hole = hole;
+        holeList.Add(hole);
+        //this.hole = hole;
+    }
+    public void HoleOut(Transform hole, Transform other)
+    {
+        if(holeList.Remove(hole))
+        {
+
+        }
     }
 
     void Start()
@@ -60,14 +70,14 @@ public class Axle : MonoBehaviour, IParts
 
     public void Link(Transform hole, Transform otherTrans)
     {
+        tEnter = true;
         LinkParts.Add(otherTrans.gameObject);
         LinkParts = LinkParts.Distinct().ToList();
-        tEnter = true;
     }
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        this.transform.rotation = hole.rotation;
+        //this.transform.rotation = hole.rotation;
         Vector3 zAxis = transform.forward;
         Vector3 dis = hole.position - transform.position;
         zAxis = Vector3.Project(dis, zAxis);
@@ -98,7 +108,7 @@ public class Axle : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        speed /= 300f;
+        speed /= 500f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
@@ -106,8 +116,8 @@ public class Axle : MonoBehaviour, IParts
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-
-        if (r > 30)
+        
+        if (r > 60)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -198,11 +208,40 @@ public class Axle : MonoBehaviour, IParts
 
     void OnMouseUp()
     {
-        if (hole != null)
+        if (holeList.Count != 0)
         {
+            for(int i = 0; i < holeList.Count; i++)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+                if(i == 0)
+                {
+                    Dis = holeList[0].position - transform.position;
+                    zAxis = Vector3.Project(Dis, transform.forward);
+                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                    dis = tmpDis;
+                    hole = holeList[0];
+                }
+                else
+                {
+                    Dis = holeList[i].position - transform.position;
+                    zAxis = Vector3.Project(Dis, transform.forward);
+                    Dis = Dis - zAxis;
+                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                    if (tmpDis <= dis)
+                    {
+                        dis = tmpDis;
+                        hole = holeList[i];
+                    }
+                }
+            }
+
             Hole h = hole.gameObject.GetComponent<Hole>();
 
             h.HoleLink();
+            holeList.Clear();
+            dis = 0;
         }
 
         if (Input.GetKey(KeyCode.A))

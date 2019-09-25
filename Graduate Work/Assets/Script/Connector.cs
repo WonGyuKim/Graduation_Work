@@ -20,10 +20,20 @@ public class Connector : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
+    public List<Transform> holeList = new List<Transform>();
+    public float dis;
 
-    public void HoleInput(Transform hole)
+    public void HoleInput(Transform hole, Transform other)
     {
-        this.hole = hole;
+        holeList.Add(hole);
+        //this.hole = hole;
+    }
+    public void HoleOut(Transform hole, Transform other)
+    {
+        if (holeList.Remove(hole))
+        {
+
+        }
     }
 
     void Start()
@@ -49,7 +59,7 @@ public class Connector : MonoBehaviour, IParts
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        this.transform.rotation = hole.rotation;
+        //this.transform.rotation = hole.rotation;
         befoMouse = Input.mousePosition;
         Vector3 zAxis = transform.forward;
         Vector3 dis = hole.position - transform.position;
@@ -83,7 +93,7 @@ public class Connector : MonoBehaviour, IParts
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 30)
+        if (r > 60)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -192,11 +202,40 @@ public class Connector : MonoBehaviour, IParts
 
     void OnMouseUp()
     {
-        if (hole != null)
+        if (holeList.Count != 0)
         {
+            for (int i = 0; i < holeList.Count; i++)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+                if (i == 0)
+                {
+                    Dis = holeList[0].position - transform.position;
+                    zAxis = Vector3.Project(Dis, transform.forward);
+                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                    dis = tmpDis;
+                    hole = holeList[0];
+                }
+                else
+                {
+                    Dis = holeList[i].position - transform.position;
+                    zAxis = Vector3.Project(Dis, transform.forward);
+                    Dis = Dis - zAxis;
+                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                    if (tmpDis <= dis)
+                    {
+                        dis = tmpDis;
+                        hole = holeList[i];
+                    }
+                }
+            }
+
             Hole h = hole.gameObject.GetComponent<Hole>();
 
             h.HoleLink();
+            holeList.Clear();
+            dis = 0;
         }
 
         if (Input.GetKey(KeyCode.A))

@@ -67,7 +67,10 @@
     <Compile Include="Assets\Script\Beam.cs" />
     <Compile Include="Assets\Script\CameraOrbit.cs" />
     <Compile Include="Assets\Script\Collide.cs" />
+    <Compile Include="Assets\Script\ComBeam.cs" />
     <Compile Include="Assets\Script\Connector.cs" />
+    <Compile Include="Assets\Script\ConWithAxle.cs" />
+    <Compile Include="Assets\Script\CrossBeam.cs" />
     <Compile Include="Assets\Script\Gear.cs" />
     <Compile Include="Assets\Script\GearControl.cs" />
     <Compile Include="Assets\Script\Hole.cs" />

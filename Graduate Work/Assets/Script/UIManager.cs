@@ -38,7 +38,19 @@ public class UIManager : MonoBehaviour
         gear40,
         motor,
         rackGear,
-        wormGear
+        wormGear,
+        angular_beam_2x4,
+        angular_block_0,
+        angular_block_90,
+        angular_block_180,
+        angular_connector_peg,
+        cross_block,
+        cross_block2,
+        cross_block3,
+        cross_block_fork,
+        double_connector_peg,
+        double_cross_block,
+        triangle_beam_half
     };
 
     public void Start()
@@ -142,6 +154,42 @@ public class UIManager : MonoBehaviour
                 break;
             case Object.wormGear:
                 ObjectName = Object.wormGear.ToString();
+                break;
+            case Object.angular_beam_2x4:
+                ObjectName = Object.angular_beam_2x4.ToString();
+                break;
+            case Object.angular_block_0:
+                ObjectName = Object.angular_block_0.ToString();
+                break;
+            case Object.angular_block_90:
+                ObjectName = Object.angular_block_90.ToString();
+                break;
+            case Object.angular_block_180:
+                ObjectName = Object.angular_block_180.ToString();
+                break;
+            case Object.angular_connector_peg:
+                ObjectName = Object.angular_connector_peg.ToString();
+                break;
+            case Object.cross_block:
+                ObjectName = Object.cross_block.ToString();
+                break;
+            case Object.cross_block2:
+                ObjectName = Object.cross_block2.ToString();
+                break;
+            case Object.cross_block3:
+                ObjectName = Object.cross_block3.ToString();
+                break;
+            case Object.cross_block_fork:
+                ObjectName = Object.cross_block_fork.ToString();
+                break;
+            case Object.double_connector_peg:
+                ObjectName = Object.double_connector_peg.ToString();
+                break;
+            case Object.double_cross_block:
+                ObjectName = Object.double_cross_block.ToString();
+                break;
+            case Object.triangle_beam_half:
+                ObjectName = Object.triangle_beam_half.ToString();
                 break;
         }
 

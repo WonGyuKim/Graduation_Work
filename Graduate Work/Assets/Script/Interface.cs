@@ -29,8 +29,8 @@ public interface IParts
 
     void SearchReset();//검색된 결과 리셋
 
-    void HoleInput(Transform hole);
-
+    void HoleInput(Transform hole, Transform other);
+    void HoleOut(Transform hole, Transform other);
     bool OnDragCheck
     {
         get;

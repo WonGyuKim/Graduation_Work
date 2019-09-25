@@ -116,6 +116,10 @@ MonoBehaviour:
   Parent: {fileID: 0}
   AllList: []
   rotM: {fileID: 0}
+  hole: {fileID: 0}
+  holeList: []
+  otherList: []
+  dis: 0
 --- !u!114 &7844706537034430207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +161,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062491405137458638}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.126, y: 0, z: 0}
+  m_LocalPosition: {x: -0.13, y: 0, z: 0}
   m_LocalScale: {x: 1.0562, y: 1.0562, z: 1}
   m_Children: []
   m_Father: {fileID: 5129893022360926874}
@@ -206,6 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &4673042065275949695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &7457907297275869182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,7 +345,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5575641209565616712}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.127, y: 0, z: 0}
+  m_LocalPosition: {x: 0.13, y: 0, z: 0}
   m_LocalScale: {x: 1.0562, y: 1.0562, z: 1}
   m_Children: []
   m_Father: {fileID: 5129893022360926874}
@@ -388,6 +394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &2482314540040303927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,7 +437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6155877992971360484}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.128, z: 0}
+  m_LocalPosition: {x: 0, y: 0.13, z: 0}
   m_LocalScale: {x: 1.0562, y: 1.0562, z: 1}
   m_Children: []
   m_Father: {fileID: 5129893022360926874}
@@ -479,6 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &553777821750913711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,6 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &1882378971033173457
 MonoBehaviour:
   m_ObjectHideFlags: 0

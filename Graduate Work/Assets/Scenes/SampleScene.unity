@@ -1336,6 +1336,30 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: wormGear
       m_Image: {fileID: 0}
+    - m_Text: angular_beam_2x4
+      m_Image: {fileID: 0}
+    - m_Text: angular_block 0
+      m_Image: {fileID: 0}
+    - m_Text: angular_block_90
+      m_Image: {fileID: 0}
+    - m_Text: angular_block_180
+      m_Image: {fileID: 0}
+    - m_Text: angular_connector_peg
+      m_Image: {fileID: 0}
+    - m_Text: cross_block
+      m_Image: {fileID: 0}
+    - m_Text: cross_block2
+      m_Image: {fileID: 0}
+    - m_Text: cross_block3
+      m_Image: {fileID: 0}
+    - m_Text: cross_block_fork
+      m_Image: {fileID: 0}
+    - m_Text: double_connector_peg
+      m_Image: {fileID: 0}
+    - m_Text: double_cross_block
+      m_Image: {fileID: 0}
+    - m_Text: triangle_beam_half
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
