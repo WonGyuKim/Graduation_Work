@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class __2Dcollider_Axle : MonoBehaviour
 {
-    private GameObject target;
+    private GameObject target = null;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +35,9 @@ public class __2Dcollider_Axle : MonoBehaviour
 
     public void RayLook(GameObject clicked_one, Ray ray, RaycastHit hit)
     {
-        GameObject hitten_one;
+        GameObject hitten_one = null;
+
+        //Vector3 hittenPlace = null;
 
         if (true == (Physics.Raycast(target.transform.position, ray.direction * 10, out hit)))
         {
@@ -45,11 +47,11 @@ public class __2Dcollider_Axle : MonoBehaviour
 
             if (hitten_one.transform.tag == "Conn_Hole" || hitten_one.transform.tag == "Axle_Hole")
             {
-                Debug.Log("NOPE");
-
+                //Debug.Log("NOPE");
                 Debug.DrawRay(ray.origin, ray.direction * 10f, Color.green, 0.5f);
 
-                target.transform.position = hitten_one.transform.position;
+                //target.transform.position = hitten_one.transform.position;
+                target.transform.position = hit.point;
             }
         }
     }
