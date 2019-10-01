@@ -62,6 +62,7 @@ public class Gear : MonoBehaviour, IGear
         gearControl.AddGearList(this);
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
+        dis = int.MaxValue;
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -336,43 +337,50 @@ public class Gear : MonoBehaviour, IGear
     {
         if (otherList.Count != 0 && holeList.Count != 0)
         {
+            Transform other = null;
             for (int i = 0; i < otherList.Count; i++)
             {
                 Vector3 Dis;
                 Vector3 zAxis;
                 float tmpDis;
 
-                if (i == 0)
+                Dis = otherList[i].position - holeList[i].position;
+                zAxis = Vector3.Project(Dis, otherList[i].forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if (tmpDis <= dis)
                 {
-                    Dis = otherList[0].position - holeList[0].position;
-                    zAxis = Vector3.Project(Dis, otherList[0].forward);
-                    Dis = Dis - zAxis;
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
                     dis = tmpDis;
-                    hole = holeList[0];
-                    continue;
+                    hole = holeList[i];
+                    other = otherList[i];
                 }
-                else
-                {
-                    Dis = otherList[i].position - holeList[i].position;
-                    zAxis = Vector3.Project(Dis, otherList[i].forward);
-                    Dis = Dis - zAxis;
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                    if (tmpDis <= dis)
-                    {
-                        dis = tmpDis;
-                        hole = holeList[i];
-                    }
-                }
-
             }
 
             Hole h = hole.gameObject.GetComponent<Hole>();
 
-            h.HoleLink();
+            h.HoleLink(h);
+            holeList.Remove(hole);
+            otherList.Remove(other);
+            for (int i = 0; i < otherList.Count; i++)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+
+                Dis = otherList[i].position - holeList[i].position;
+                zAxis = Vector3.Project(Dis, otherList[i].forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+
+                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                {
+                    Hole newHo = holeList[i].gameObject.GetComponent<Hole>();
+                    newHo.HoleLink(h);
+                }
+            }
             holeList.Clear();
             otherList.Clear();
-            dis = 0;
+            dis = int.MaxValue;
         }
 
         if (Input.GetKey(KeyCode.A))

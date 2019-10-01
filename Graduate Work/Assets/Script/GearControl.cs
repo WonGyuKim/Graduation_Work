@@ -28,22 +28,22 @@ public class GearControl : MonoBehaviour
         Vector3 v = g1Vec - g2Vec;
         float angle = Mathf.Abs(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);
 
-        if ((g1.tag == "Gear" || g1.tag == "BevelGear") && (g2.tag == "Gear" || g2.tag == "BevelGear") && angle < 45)
-        {
-            link.type = MotorLink.LinkType.Gear;
-        }
-        else if (g1.tag == "BevelGear" && g2.tag == "BevelGear" && angle >= 45)
+        if (g1.tag == "BevelGear" && g2.tag == "BevelGear" && angle >= 45)
         {
             link.type = MotorLink.LinkType.Bevel;
         }
-        else if ((g1.tag == "WormGear" && g2.tag == "Gear") || (g1.tag == "Gear" && g2.tag == "WormGear"))
+        else if ((g1.tag == "WormGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "WormGear"))
         {
             link.type = MotorLink.LinkType.Worm;
         }
-        else if ((g1.tag == "RackGear" && g2.tag == "Gear") || (g1.tag == "Gear" && g2.tag == "RackGear"))
+        else if ((g1.tag == "RackGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "RackGear"))
         {
             if (angle < 45)
                 link.type = MotorLink.LinkType.Rack;
+        }
+        else
+        {
+            link.type = MotorLink.LinkType.Gear;
         }
 
         gear1.node.AddLink(link);

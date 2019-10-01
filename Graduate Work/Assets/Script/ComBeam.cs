@@ -56,6 +56,7 @@ public class ComBeam : MonoBehaviour, IParts
         Node.parts = this;
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
+        dis = int.MaxValue;
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -72,13 +73,23 @@ public class ComBeam : MonoBehaviour, IParts
         //float zR = hole.eulerAngles.z - otherTrans.eulerAngles.z;
 
         //this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x + xR, this.transform.eulerAngles.y + yR, this.transform.eulerAngles.z);
-        //befoMouse = Input.mousePosition;
+        befoMouse = Input.mousePosition;
         //dst = otherTrans.position - hole.position;
         //Vector3 zAxis = otherTrans.forward;
         //zAxis = Vector3.Project(dst, zAxis);
         //this.transform.position = this.transform.position - zAxis + dst;
-        Vector3 dis = hole.position - otherTrans.position;
-        this.transform.position = this.transform.position + dis;
+        if(otherTrans.parent != null && this.transform.gameObject.Equals(otherTrans.parent.gameObject))
+        {
+            Vector3 dis = hole.position - otherTrans.position;
+            this.transform.position = this.transform.position + dis;
+        }
+        else
+        {
+            dst = otherTrans.position - hole.position;
+            Vector3 zAxis = otherTrans.forward;
+            zAxis = Vector3.Project(dst, zAxis);
+            this.transform.position = this.transform.position - zAxis + dst;
+        }
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -224,43 +235,50 @@ public class ComBeam : MonoBehaviour, IParts
     {
         if (otherList.Count != 0 && holeList.Count != 0)
         {
+            Transform other = null;
             for (int i = 0; i < otherList.Count; i++)
             {
                 Vector3 Dis;
                 Vector3 zAxis;
                 float tmpDis;
 
-                if (i == 0)
+                Dis = otherList[i].position - holeList[i].position;
+                zAxis = Vector3.Project(Dis, otherList[i].forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if (tmpDis <= dis)
                 {
-                    Dis = otherList[0].position - holeList[0].position;
-                    zAxis = Vector3.Project(Dis, otherList[0].forward);
-                    Dis = Dis - zAxis;
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
                     dis = tmpDis;
-                    hole = holeList[0];
-                    continue;
+                    hole = holeList[i];
+                    other = otherList[i];
                 }
-                else
-                {
-                    Dis = otherList[i].position - holeList[i].position;
-                    zAxis = Vector3.Project(Dis, otherList[i].forward);
-                    Dis = Dis - zAxis;
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                    if (tmpDis <= dis)
-                    {
-                        dis = tmpDis;
-                        hole = holeList[i];
-                    }
-                }
-
             }
 
             Hole h = hole.gameObject.GetComponent<Hole>();
 
-            h.HoleLink();
+            h.HoleLink(h);
+            holeList.Remove(hole);
+            otherList.Remove(other);
+            for (int i = 0; i < otherList.Count; i++)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+
+                Dis = otherList[i].position - holeList[i].position;
+                zAxis = Vector3.Project(Dis, otherList[i].forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+
+                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                {
+                    Hole newHo = holeList[i].gameObject.GetComponent<Hole>();
+                    newHo.HoleLink(h);
+                }
+            }
             holeList.Clear();
             otherList.Clear();
-            dis = 0;
+            dis = int.MaxValue;
         }
 
         if (Input.GetKey(KeyCode.A))

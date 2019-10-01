@@ -52,6 +52,7 @@ public class ConWithAxle : MonoBehaviour, IParts
         hole = null;
         axle = transform.Find("AxlePart");
         conn = transform.Find("ConnPart");
+        dis = int.MaxValue;
     }
 
     void OnMouseDown()
@@ -221,33 +222,40 @@ public class ConWithAxle : MonoBehaviour, IParts
                 Vector3 Dis;
                 Vector3 zAxis;
                 float tmpDis;
-                if (i == 0)
+
+                Dis = holeList[i].position - transform.position;
+                zAxis = Vector3.Project(Dis, transform.forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if (tmpDis < dis)
                 {
-                    Dis = holeList[0].position - transform.position;
-                    zAxis = Vector3.Project(Dis, transform.forward);
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
                     dis = tmpDis;
-                    hole = holeList[0];
-                }
-                else
-                {
-                    Dis = holeList[i].position - transform.position;
-                    zAxis = Vector3.Project(Dis, transform.forward);
-                    Dis = Dis - zAxis;
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                    if (tmpDis <= dis)
-                    {
-                        dis = tmpDis;
-                        hole = holeList[i];
-                    }
+                    hole = holeList[i];
                 }
             }
 
             Hole h = hole.gameObject.GetComponent<Hole>();
 
-            h.HoleLink();
+            h.HoleLink(h);
+            holeList.Remove(hole);
+            foreach (Transform ho in holeList)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+
+                Dis = ho.position - transform.position;
+                zAxis = Vector3.Project(Dis, transform.forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                {
+                    Hole newHo = ho.gameObject.GetComponent<Hole>();
+                    newHo.HoleLink(h);
+                }
+            }
             holeList.Clear();
-            dis = 0;
+            dis = int.MaxValue;
         }
 
         if (Input.GetKey(KeyCode.A))

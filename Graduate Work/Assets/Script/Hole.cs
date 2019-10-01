@@ -10,7 +10,7 @@ public class Hole : MonoBehaviour
     private IParts colIParts;
     private Transform DokObj;
     public MotorLink link;
-    public Transform parts;
+    public Transform parts; 
 
     void Start()
     {
@@ -19,12 +19,54 @@ public class Hole : MonoBehaviour
         close = false;
     }
 
-    public void HoleLink()
+    public void HoleLink(Hole h)
     {
         close = true;
         iparts.Link(this.transform, DokObj);
         colIParts.Link(this.transform, Parent);
-  
+
+        link = transform.gameObject.GetComponent<MotorLink>();
+        link.linkObject = this.gameObject;
+        link.left = iparts;
+        link.right = colIParts;
+
+        Transform tmpObj;
+
+        if (DokObj.childCount == 0)
+        {
+            tmpObj = DokObj;
+        }
+        else
+        {
+            tmpObj = parts;
+        }
+
+        if (this.tag == "Axle_Hole" && tmpObj.tag == "Axle")
+        {
+            link.type = MotorLink.LinkType.Tight;
+        }
+
+        else if (this.tag == "Conn_Hole" && tmpObj.tag == "Connector")
+        {
+            link.type = MotorLink.LinkType.Loose;
+        }
+
+        else if (this.tag == "Conn_Hole" && tmpObj.tag == "Axle")
+        {
+            link.type = MotorLink.LinkType.Loose;
+        }
+ 
+        link.left.node.AddLink(link);
+        link.right.node.AddLink(link);
+
+        if (h.gameObject.Equals(transform.gameObject))
+        {
+            MoveControl();
+        }
+    }
+
+    void MoveControl()
+    {
         if (iparts.OnDragCheck)
         {
             if (DokObj.childCount == 0)
@@ -47,40 +89,6 @@ public class Hole : MonoBehaviour
                 colIParts.LinkMove(this.transform, parts);
             }
         }
-
-        link = transform.gameObject.GetComponent<MotorLink>();
-        link.linkObject = this.gameObject;
-        link.left = iparts;
-        link.right = colIParts;
-
-        Transform tmpObj;
-
-        if(DokObj.childCount == 0)
-        {
-            tmpObj = DokObj;
-        }
-        else
-        {
-            tmpObj = parts;
-        }
-
-        if (this.tag == "Axle_Hole" && tmpObj.tag == "Axle")
-        {
-            link.type = MotorLink.LinkType.Tight;
-        }
-
-        else if (this.tag == "Conn_Hole" && tmpObj.tag == "Connector")
-        {
-            link.type = MotorLink.LinkType.Tight;
-        }
-
-        else if (this.tag == "Conn_Hole" && tmpObj.tag == "Axle")
-        {
-            link.type = MotorLink.LinkType.Loose;
-        }
-
-        link.left.node.AddLink(link);
-        link.right.node.AddLink(link);
     }
 
     void OnTriggerEnter(Collider other)
@@ -100,7 +108,7 @@ public class Hole : MonoBehaviour
                     DokObj = other.transform;
                 }
                 colIParts = DokObj.gameObject.GetComponent<IParts>();
-
+                
                 if (iparts.OnDragCheck)
                 {
                     iparts.HoleInput(transform, DokObj);

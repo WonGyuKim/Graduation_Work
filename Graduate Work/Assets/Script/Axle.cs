@@ -48,6 +48,7 @@ public class Axle : MonoBehaviour, IParts
         Node.parts = this;
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
+        dis = int.MaxValue;
     }
 
     void OnMouseDown()
@@ -77,7 +78,6 @@ public class Axle : MonoBehaviour, IParts
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        //this.transform.rotation = hole.rotation;
         Vector3 zAxis = transform.forward;
         Vector3 dis = hole.position - transform.position;
         zAxis = Vector3.Project(dis, zAxis);
@@ -160,9 +160,15 @@ public class Axle : MonoBehaviour, IParts
                     tVector = tVector.normalized;
 
                     if (tVector.x == 0 && tVector.y == 0 && tVector.z == 0)
+                    {
                         lparts.MotoringMove(point, axis, speed);
-                    else if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
+                    }
+                    else if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f) 
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f) 
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
                         lparts.MotoringMove(point, axis, speed);
+                    }
                 }
             }
         }
@@ -215,33 +221,40 @@ public class Axle : MonoBehaviour, IParts
                 Vector3 Dis;
                 Vector3 zAxis;
                 float tmpDis;
-                if(i == 0)
+
+                Dis = holeList[i].position - transform.position;
+                zAxis = Vector3.Project(Dis, transform.forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if (tmpDis < dis)
                 {
-                    Dis = holeList[0].position - transform.position;
-                    zAxis = Vector3.Project(Dis, transform.forward);
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
                     dis = tmpDis;
-                    hole = holeList[0];
-                }
-                else
-                {
-                    Dis = holeList[i].position - transform.position;
-                    zAxis = Vector3.Project(Dis, transform.forward);
-                    Dis = Dis - zAxis;
-                    tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                    if (tmpDis <= dis)
-                    {
-                        dis = tmpDis;
-                        hole = holeList[i];
-                    }
+                    hole = holeList[i];
                 }
             }
 
             Hole h = hole.gameObject.GetComponent<Hole>();
 
-            h.HoleLink();
+            h.HoleLink(h);
+            holeList.Remove(hole);
+            foreach(Transform ho in holeList)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+
+                Dis = ho.position - transform.position;
+                zAxis = Vector3.Project(Dis, transform.forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                {
+                    Hole newHo = ho.gameObject.GetComponent<Hole>();
+                    newHo.HoleLink(h);
+                }
+            }
             holeList.Clear();
-            dis = 0;
+            dis = int.MaxValue;
         }
 
         if (Input.GetKey(KeyCode.A))
