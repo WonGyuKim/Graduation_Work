@@ -38,8 +38,7 @@ public class GearControl : MonoBehaviour
         }
         else if ((g1.tag == "RackGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "RackGear"))
         {
-            if (angle < 45)
-                link.type = MotorLink.LinkType.Rack;
+            link.type = MotorLink.LinkType.Rack;
         }
         else
         {

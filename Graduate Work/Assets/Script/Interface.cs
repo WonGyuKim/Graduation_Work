@@ -21,7 +21,7 @@ public interface IParts
 
     void ArcballMove();
 
-    void MotoringMove(Vector3 point, Vector3 axis, float speed);
+    void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType);
 
     void LinkAllMove();//연결된 파츠들과 같이 움직임
 

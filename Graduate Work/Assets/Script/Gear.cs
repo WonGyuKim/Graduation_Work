@@ -29,6 +29,7 @@ public class Gear : MonoBehaviour, IGear
     public List<Transform> holeList = new List<Transform>();
     public List<Transform> otherList = new List<Transform>();
     public float dis;
+    public float rad;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -63,6 +64,7 @@ public class Gear : MonoBehaviour, IGear
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
         dis = int.MaxValue;
+        rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -104,11 +106,14 @@ public class Gear : MonoBehaviour, IGear
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
+        Vector3 camDis = Camera.main.transform.position - transform.position;
+        float cm = Mathf.Sqrt(camDis.x * camDis.x + camDis.y * camDis.y + camDis.z * camDis.z);
+
         float x = Input.mousePosition.x - scrSpace.x;
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 50)
+        if (r > 300 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -157,11 +162,10 @@ public class Gear : MonoBehaviour, IGear
         }
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
     {
         if (!search)
         {
-            transform.RotateAround(point, axis, speed);
             search = true;
             rotM.nodeList.Add(Node);
             foreach (MotorLink link in Node.lList)
@@ -174,24 +178,47 @@ public class Gear : MonoBehaviour, IGear
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed);
+                    rad = this.rad;
+                    lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    lparts.MotoringMove(point, axis, speed);
+                    rad = this.rad;
+                    lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Gear)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
+                    float ratio = rad / this.rad;
+                    speed *= ratio;
+                    rad = this.rad;
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
+                    float ratio = rad / this.rad;
+                    speed *= ratio;
+                    rad = this.rad;
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
                 }
+                else if(link.type == MotorLink.LinkType.Rack)
+                {
+                    float moveSpeed = speed * Time.deltaTime;
+                    Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 10;
+                    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
+                }
+            }
+            if(moveType == 0)
+            {
+                Debug.Log(transform.gameObject.ToString() + " " + speed);
+                transform.RotateAround(point, axis, speed);
+            }
+            else
+            {
+                transform.Translate(axis);
             }
         }
     }

@@ -82,7 +82,7 @@ public class ConWithAxle : MonoBehaviour, IParts
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        this.transform.rotation = hole.rotation;
+        //this.transform.rotation = hole.rotation;
         //Vector3 zAxis = transform.forward;
         //Vector3 dis = hole.position - transform.position;
         //zAxis = Vector3.Project(dis, zAxis);
@@ -119,12 +119,14 @@ public class ConWithAxle : MonoBehaviour, IParts
         //transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
+        Vector3 camDis = Camera.main.transform.position - transform.position;
+        float cm = Mathf.Sqrt(camDis.x * camDis.x + camDis.y * camDis.y + camDis.z * camDis.z);
+
         float x = Input.mousePosition.x - scrSpace.x;
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-
-        if (r > 60)
+        if (r > 300 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -142,11 +144,10 @@ public class ConWithAxle : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
     {
         if (!search)
         {
-            transform.RotateAround(point, axis, speed);
             search = true;
             rotM.nodeList.Add(Node);
             foreach (MotorLink link in Node.lList)
@@ -159,7 +160,7 @@ public class ConWithAxle : MonoBehaviour, IParts
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed);
+                    lparts.MotoringMove(point, axis, speed, rad, 0);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
@@ -167,10 +168,18 @@ public class ConWithAxle : MonoBehaviour, IParts
                     tVector = tVector.normalized;
 
                     if (tVector.x == 0 && tVector.y == 0 && tVector.z == 0)
-                        lparts.MotoringMove(point, axis, speed);
+                        lparts.MotoringMove(point, axis, speed, rad, moveType);
                     else if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
-                        lparts.MotoringMove(point, axis, speed);
+                        lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
+            }
+            if (moveType == 0)
+            {
+                transform.RotateAround(point, axis, speed);
+            }
+            else
+            {
+                transform.Translate(axis);
             }
         }
     }

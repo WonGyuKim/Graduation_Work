@@ -112,12 +112,15 @@ public class Axle : MonoBehaviour, IParts
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
+        Vector3 camDis = Camera.main.transform.position - transform.position;
+        float cm = Mathf.Sqrt(camDis.x * camDis.x + camDis.y * camDis.y + camDis.z * camDis.z);
+
         float x = Input.mousePosition.x - scrSpace.x;
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
         
-        if (r > 60)
+        if (r > 300 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -135,11 +138,10 @@ public class Axle : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
     {
         if (!search)
         {
-            transform.RotateAround(point, axis, speed);
             search = true;
             rotM.nodeList.Add(Node);
             foreach (MotorLink link in Node.lList)
@@ -152,24 +154,32 @@ public class Axle : MonoBehaviour, IParts
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed);
+                    lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
                     Vector3 tVector = (transform.position - point);
-                    tVector = tVector.normalized;
-
-                    if (tVector.x == 0 && tVector.y == 0 && tVector.z == 0)
+                    if(tVector == Vector3.zero)
                     {
-                        lparts.MotoringMove(point, axis, speed);
+                        tVector = transform.forward;
                     }
-                    else if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f) 
+                    tVector = tVector.normalized;
+                   
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f) 
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f) 
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(point, axis, speed);
+                        lparts.MotoringMove(point, axis, speed, rad, moveType);
                     }
                 }
+            }
+            if (moveType == 0)
+            {
+                transform.RotateAround(point, axis, speed);
+            }
+            else
+            {
+                transform.Translate(axis);
             }
         }
     }

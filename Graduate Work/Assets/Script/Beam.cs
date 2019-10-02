@@ -98,11 +98,14 @@ public class Beam : MonoBehaviour, IParts
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
+        Vector3 camDis = Camera.main.transform.position - transform.position;
+        float cm = Mathf.Sqrt(camDis.x * camDis.x + camDis.y * camDis.y + camDis.z * camDis.z);
+
         float x = Input.mousePosition.x - scrSpace.x;
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 50)
+        if (r > 300 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -120,11 +123,10 @@ public class Beam : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
     {
         if (!search)
         {
-            transform.RotateAround(point, axis, speed);
             search = true;
             rotM.nodeList.Add(Node);
             foreach (MotorLink link in Node.lList)
@@ -136,12 +138,20 @@ public class Beam : MonoBehaviour, IParts
                     lparts = link.left;
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed);
+                    lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    lparts.MotoringMove(point, axis, speed);
+                    lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
+            }
+            if (moveType == 0)
+            {
+                transform.RotateAround(point, axis, speed);
+            }
+            else
+            {
+                transform.Translate(axis);
             }
         }
     }

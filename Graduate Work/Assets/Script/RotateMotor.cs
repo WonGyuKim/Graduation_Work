@@ -26,7 +26,19 @@ public class RotateMotor : MonoBehaviour
         {
             foreach (Motor motor in motorList)
             {
-                motor.MotoringMove(motor.transform.position, motor.transform.forward, 20);
+                motor.MotoringMove(motor.transform.position, motor.transform.forward, 5, 0, 0);
+                foreach (MotorNode node in nodeList)
+                {
+                    node.parts.SearchReset();
+                }
+                nodeList.Clear();
+            }
+        }
+        else if (Input.GetKey(KeyCode.N))
+        {
+            foreach (Motor motor in motorList)
+            {
+                motor.MotoringMove(motor.transform.position, motor.transform.forward, -5, 0, 0);
                 foreach (MotorNode node in nodeList)
                 {
                     node.parts.SearchReset();

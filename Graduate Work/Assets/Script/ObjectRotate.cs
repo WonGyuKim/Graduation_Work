@@ -36,5 +36,14 @@ public class ObjectRotate : MonoBehaviour
         {
             CurrentTouch.transform.Rotate(-90, 0, 0, Space.World);
         }
+        
+        //if(Input.GetKeyDown(KeyCode.D))
+        //{
+        //    Destroy(CurrentTouch);
+        //}
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            CurrentTouch.transform.rotation = Quaternion.identity;
+        }
     }
 }
