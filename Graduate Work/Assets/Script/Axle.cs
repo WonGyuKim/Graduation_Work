@@ -171,6 +171,10 @@ public class Axle : MonoBehaviour, IParts
                     {
                         lparts.MotoringMove(point, axis, speed, rad, moveType);
                     }
+                    if(moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
                 }
             }
             if (moveType == 0)
