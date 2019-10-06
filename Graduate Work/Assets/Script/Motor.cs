@@ -105,7 +105,7 @@ public class Motor : MonoBehaviour, IParts
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 300 / cm)
+        if (r > 230 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -146,7 +146,14 @@ public class Motor : MonoBehaviour, IParts
                     lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
             }
-            transform.RotateAround(point, axis, speed);
+            if (moveType == 0)
+            {
+                transform.RotateAround(point, axis, speed);
+            }
+            else
+            {
+                transform.Translate(axis);
+            }
         }
     }
 

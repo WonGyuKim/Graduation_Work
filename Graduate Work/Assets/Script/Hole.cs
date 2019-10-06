@@ -31,7 +31,7 @@ public class Hole : MonoBehaviour
         link.right = colIParts;
 
         Transform tmpObj;
-
+        
         if (DokObj.childCount == 0)
         {
             tmpObj = DokObj;

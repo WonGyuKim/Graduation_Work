@@ -113,7 +113,7 @@ public class Gear : MonoBehaviour, IGear
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 300 / cm)
+        if (r > 230 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -188,15 +188,21 @@ public class Gear : MonoBehaviour, IGear
                 }
                 else if (link.type == MotorLink.LinkType.Gear)
                 {
-                    float ratio = rad / this.rad;
-                    speed *= ratio;
+                    if (rad != 0)
+                    {
+                        float ratio = rad / this.rad;
+                        speed *= ratio;
+                    }
                     rad = this.rad;
                     lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
-                    float ratio = rad / this.rad;
-                    speed *= ratio;
+                    if (rad != 0)
+                    {
+                        float ratio = rad / this.rad;
+                        speed *= ratio;
+                    }
                     rad = this.rad;
                     lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
                 }
@@ -213,7 +219,6 @@ public class Gear : MonoBehaviour, IGear
             }
             if(moveType == 0)
             {
-                Debug.Log(transform.gameObject.ToString() + " " + speed);
                 transform.RotateAround(point, axis, speed);
             }
             else

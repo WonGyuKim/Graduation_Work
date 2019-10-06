@@ -97,7 +97,7 @@ public class Connector : MonoBehaviour, IParts
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 300 / cm)
+        if (r > 230 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -131,26 +131,34 @@ public class Connector : MonoBehaviour, IParts
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
-                }
-                else if (link.type == MotorLink.LinkType.Loose)
-                {
-                    Vector3 tVector = (transform.position - point);
-                    if (tVector == Vector3.zero)
-                    {
-                        tVector = transform.forward;
-                    }
-                    tVector = tVector.normalized;
-
-                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
-                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
-                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
-                    {
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
-                    }
                     if (moveType == 1)
                     {
                         lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
+                    else
+                        lparts.MotoringMove(point, axis, speed, rad, moveType);
+                }
+                else if (link.type == MotorLink.LinkType.Loose)
+                {
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
+                    else
+                    {
+                        Vector3 tVector = (transform.position - point);
+                        if (tVector == Vector3.zero)
+                        {
+                            tVector = transform.forward;
+                        }
+                        tVector = tVector.normalized;
+
+                        if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                            && Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                            && Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                        {
+                            lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        }
                     }
                 }
             }

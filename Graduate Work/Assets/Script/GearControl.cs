@@ -40,9 +40,13 @@ public class GearControl : MonoBehaviour
         {
             link.type = MotorLink.LinkType.Rack;
         }
-        else
+        else if((g1.tag == "Gear" && g2.tag == "Gear" && angle < 45))
         {
             link.type = MotorLink.LinkType.Gear;
+        }
+        else
+        {
+            link.type = MotorLink.LinkType.None;
         }
 
         gear1.node.AddLink(link);
