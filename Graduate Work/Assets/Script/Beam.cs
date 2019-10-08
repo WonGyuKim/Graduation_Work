@@ -25,6 +25,10 @@ public class Beam : MonoBehaviour, IParts
     public List<Transform> holeList = new List<Transform>();
     public List<Transform> otherList = new List<Transform>();
     public float dis;
+    private Vector3 point;
+    private Vector3 axis;
+    private float moveSpeed;
+    private int moveType;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -57,6 +61,7 @@ public class Beam : MonoBehaviour, IParts
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
         dis = int.MaxValue;
+        ResetValue();
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -146,15 +151,31 @@ public class Beam : MonoBehaviour, IParts
                     lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
             }
-            if (moveType == 0)
-            {
-                transform.RotateAround(point, axis, speed);
-            }
-            else
-            {
-                transform.Translate(axis);
-            }
+            this.point = point;
+            this.axis = axis;
+            this.moveSpeed = speed;
+            this.moveType = moveType;
         }
+    }
+
+    public void MotorRotate()
+    {
+        if (this.moveType == 0)
+        {
+            transform.RotateAround(point, axis, moveSpeed);
+        }
+        else
+        {
+            transform.Translate(axis);
+        }
+    }
+
+    public void ResetValue()
+    {
+        point = Vector3.zero;
+        axis = Vector3.zero;
+        moveSpeed = 0;
+        moveType = 0;
     }
 
     public bool OnDragCheck

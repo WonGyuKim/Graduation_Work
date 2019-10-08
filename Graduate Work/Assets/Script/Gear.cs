@@ -30,6 +30,10 @@ public class Gear : MonoBehaviour, IGear
     public List<Transform> otherList = new List<Transform>();
     public float dis;
     public float rad;
+    private Vector3 point;
+    private Vector3 axis;
+    private float moveSpeed;
+    private int moveType;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -65,6 +69,7 @@ public class Gear : MonoBehaviour, IGear
         hole = null;
         dis = int.MaxValue;
         rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
+        ResetValue();
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -217,15 +222,32 @@ public class Gear : MonoBehaviour, IGear
                     lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
                 }
             }
-            if(moveType == 0)
-            {
-                transform.RotateAround(point, axis, speed);
-            }
-            else
-            {
-                transform.Translate(axis);
-            }
+            this.point = point;
+            this.axis = axis;
+            this.moveSpeed = speed;
+            this.moveType = moveType;
         }
+    }
+
+    public void MotorRotate()
+    {
+        if (this.moveType == 0)
+        {
+            //Debug.Log("Gear : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
+            transform.RotateAround(point, axis, moveSpeed);
+        }
+        else
+        {
+            transform.Translate(axis);
+        }
+    }
+
+    public void ResetValue()
+    {
+        point = Vector3.zero;
+        axis = Vector3.zero;
+        moveSpeed = 0;
+        moveType = 0;
     }
 
     public bool OnDragCheck

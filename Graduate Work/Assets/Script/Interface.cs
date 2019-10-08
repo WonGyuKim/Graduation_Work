@@ -23,6 +23,10 @@ public interface IParts
 
     void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType);
 
+    void MotorRotate();
+
+    void ResetValue();
+
     void LinkAllMove();//연결된 파츠들과 같이 움직임
 
     List<GameObject> LinkSearch();//연결된 파츠들을 탐색

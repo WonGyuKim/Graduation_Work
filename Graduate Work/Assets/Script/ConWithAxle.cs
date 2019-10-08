@@ -24,6 +24,10 @@ public class ConWithAxle : MonoBehaviour, IParts
     public float dis;
     public Transform axle;
     public Transform conn;
+    private Vector3 point;
+    private Vector3 axis;
+    private float moveSpeed;
+    private int moveType;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -53,6 +57,7 @@ public class ConWithAxle : MonoBehaviour, IParts
         axle = transform.Find("AxlePart");
         conn = transform.Find("ConnPart");
         dis = int.MaxValue;
+        ResetValue();
     }
 
     void OnMouseDown()
@@ -173,15 +178,31 @@ public class ConWithAxle : MonoBehaviour, IParts
                         lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
             }
-            if (moveType == 0)
-            {
-                transform.RotateAround(point, axis, speed);
-            }
-            else
-            {
-                transform.Translate(axis);
-            }
+            this.point = point;
+            this.axis = axis;
+            this.moveSpeed = speed;
+            this.moveType = moveType;
         }
+    }
+
+    public void MotorRotate()
+    {
+        if (this.moveType == 0)
+        {
+            transform.RotateAround(point, axis, moveSpeed);
+        }
+        else
+        {
+            transform.Translate(axis);
+        }
+    }
+
+    public void ResetValue()
+    {
+        point = Vector3.zero;
+        axis = Vector3.zero;
+        moveSpeed = 0;
+        moveType = 0;
     }
 
     public bool OnDragCheck
