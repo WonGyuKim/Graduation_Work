@@ -174,6 +174,10 @@ public class Beam : MonoBehaviour, IParts
 
         foreach (MotorLink link in Node.lList)
         {
+            if(link.type == MotorLink.LinkType.Tight)
+            {
+                return;
+            }
             if (link.type == MotorLink.LinkType.Loose)
             {
                 count++;
