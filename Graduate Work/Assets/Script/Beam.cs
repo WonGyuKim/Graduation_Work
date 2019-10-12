@@ -168,6 +168,29 @@ public class Beam : MonoBehaviour, IParts
         {
             transform.Translate(axis);
         }
+
+        int count = 0;
+        GameObject obj = null;
+
+        foreach (MotorLink link in Node.lList)
+        {
+            if (link.type == MotorLink.LinkType.Loose)
+            {
+                count++;
+                if (this.gameObject.Equals(link.right.gameObj))
+                {
+                    obj = link.left.gameObj;
+                }
+                else
+                {
+                    obj = link.right.gameObj;
+                }
+            }
+        }
+        if (count == 1)
+        {
+            transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+        }
     }
 
     public void ResetValue()

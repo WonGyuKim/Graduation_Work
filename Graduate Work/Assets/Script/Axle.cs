@@ -182,10 +182,9 @@ public class Axle : MonoBehaviour, IParts
                             tVector = transform.forward;
                         }
                         tVector = tVector.normalized;
-
                         if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
-                            && Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
-                            && Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                            || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                            || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                         {
                             lparts.MotoringMove(point, axis, speed, rad, moveType);
                         }
