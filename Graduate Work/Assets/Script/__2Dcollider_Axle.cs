@@ -9,7 +9,7 @@ public class __2Dcollider_Axle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class __2Dcollider_Axle : MonoBehaviour
             {
                 if (true == (Physics.Raycast(_ray.origin, _ray.direction * 10, out hit)))
                 {
-                    target = hit.collider.gameObject;                    
+                    target = hit.collider.gameObject;
                 }
 
                 RayLook(target, _ray, hit);

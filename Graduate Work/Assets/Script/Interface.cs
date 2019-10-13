@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Interface : MonoBehaviour
 {
-    
+
 }
 
 public interface IParts
@@ -21,14 +21,52 @@ public interface IParts
 
     void ArcballMove();
 
+    void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType);
+
+    void MotorRotate();
+
+    void ResetValue();
+
     void LinkAllMove();//연결된 파츠들과 같이 움직임
 
     List<GameObject> LinkSearch();//연결된 파츠들을 탐색
 
     void SearchReset();//검색된 결과 리셋
 
+    void HoleInput(Transform hole, Transform other);
+
+    void HoleOut(Transform hole, Transform other);
+
     bool OnDragCheck
     {
         get;
     }
+
+    GameObject gameObj
+    {
+        get;
+    }
+
+    MotorNode node
+    {
+        get;
+        set;
+    }
+
+    string Kind
+    {
+        get;
+        set;
+    }
+
+    bool Loaded
+    {
+        set;
+        get;
+    }
+}
+
+public interface IGear : IParts
+{
+    void GearMove();
 }

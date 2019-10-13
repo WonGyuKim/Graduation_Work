@@ -6,15 +6,18 @@ public class MotorLink : MonoBehaviour
 {
     public enum LinkType
     {
-        Tight = 0,
+        None = 0,
+        Tight,
         Loose,
         Gear,
         Bevel,
-        Rack,
+        Worm,
+        Rack
     }
+    public GameObject linkObject;
 
     public LinkType type;
 
-    public MotorNode left;
-    public MotorNode right;
+    public IParts left;
+    public IParts right;
 }

@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class MotorNode : MonoBehaviour
 {
-    public GameObject parts;
+    public IParts parts;
     public List<MotorLink> lList;
+
+    void Start()
+    {
+        lList = new List<MotorLink>();
+    }
+
+    public void AddLink(MotorLink link)
+    {
+        lList.Add(link);
+    }
 }

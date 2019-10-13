@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6650587951877563014}
   - component: {fileID: 3223625429284823481}
   - component: {fileID: 4114647724402707346}
+  - component: {fileID: 1835224751982475496}
   m_Layer: 0
   m_Name: axle3
   m_TagString: Axle
@@ -96,6 +97,7 @@ MonoBehaviour:
   emptyObject: {fileID: 0}
   Parent: {fileID: 0}
   AllList: []
+  rotM: {fileID: 0}
 --- !u!64 &3223625429284823481
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -122,3 +124,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7ac8ca0a115c942b3b2fad9562e1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1835224751982475496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4077268900183751424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff13c87cc3c5342b26d871c400a399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lList: []

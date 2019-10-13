@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7811473595313075196}
   - component: {fileID: 799945180571742844}
   - component: {fileID: 3103555367711297167}
-  - component: {fileID: 7130006549456740318}
+  - component: {fileID: 2007489849941650501}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Axle_Hole
@@ -76,7 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8476f0f22b1912e468aabb330e70bcd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7130006549456740318
+  link: {fileID: 0}
+--- !u!114 &2007489849941650501
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,9 +86,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4885165979863178895}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab34b10364375e4c907326861b73b2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
 --- !u!1 &7754331799839694094
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,10 +101,11 @@ GameObject:
   - component: {fileID: 4212986246030206313}
   - component: {fileID: 5976563085137002120}
   - component: {fileID: 8464870205134579377}
-  - component: {fileID: 3108450364015075852}
+  - component: {fileID: 1979690568072911396}
   - component: {fileID: 69014982870876315}
   - component: {fileID: 1490704175964831920}
-  - component: {fileID: 4367966271752445078}
+  - component: {fileID: 4845620373200513327}
+  - component: {fileID: 2634828647648709255}
   m_Layer: 0
   m_Name: gear8
   m_TagString: Gear
@@ -170,7 +173,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3108450364015075852
+--- !u!114 &1979690568072911396
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,9 +182,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7754331799839694094}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e98104e39e3e40d4dab4bd85d4680f53, type: 3}
+  m_Script: {fileID: 11500000, guid: fd14758347c237d48bd19147a243fb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  search: 0
+  emptyObject: {fileID: 0}
+  Parent: {fileID: 0}
+  AllList: []
+  gearControl: {fileID: 6540625491775438622, guid: a78d0992cec3fce42b0cfec147f4db1d,
+    type: 3}
+  rotM: {fileID: 0}
 --- !u!64 &69014982870876315
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -208,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b32fa912c129240ad9f10b332b9149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!54 &4367966271752445078
+--- !u!54 &4845620373200513327
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,11 +226,24 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7754331799839694094}
   serializedVersion: 2
-  m_Mass: 0.01
-  m_Drag: 0.5
-  m_AngularDrag: 0.5
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &2634828647648709255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7754331799839694094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfff13c87cc3c5342b26d871c400a399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lList: []

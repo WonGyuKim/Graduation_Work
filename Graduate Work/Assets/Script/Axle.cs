@@ -1,14 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Axle : MonoBehaviour, IParts
 {
-    Vector3 origin;
-    GameObject plane;
-    GameObject sphere;
-    Quaternion temp_rotate;
-
     private bool onDrag;
     private bool tEnter;
     private float speed;
@@ -21,40 +17,110 @@ public class Axle : MonoBehaviour, IParts
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
     public List<GameObject> AllList;//연결된 모든 파츠 리스트
+    private MotorNode Node;
+    public RotateMotor rotM;
+    public Transform hole;
+    public List<Transform> holeList = new List<Transform>();
+    public float dis;
+    private Vector3 point;
+    private Vector3 axis;
+    private float moveSpeed;
+    private int moveType;
+    private string kind;
+    private bool loaded;
+
+    public void HoleInput(Transform hole, Transform other)
+    {
+        holeList.Add(hole);
+        //this.hole = hole;
+    }
+    public void HoleOut(Transform hole, Transform other)
+    {
+        if(holeList.Remove(hole))
+        {
+
+        }
+    }
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+    public bool Loaded
+    {
+        set { loaded = value; }
+        get { return loaded; }
+    }
 
     void Start()
     {
-        origin = new Vector3();
-        plane = GameObject.Find("Plane");
-
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        if (!loaded)
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
         search = false;
+        Node = transform.gameObject.GetComponent<MotorNode>();
+        Node.parts = this;
+        rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
+        hole = null;
+        dis = int.MaxValue;
+        ResetValue();
+    }
+
+    //void Update()
+    //{
+    //    Debug.Log(holeList.Count);
+    //}
+
+    void OnMouseDown()
+    {
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
+        onDrag = true;
+        befoMouse = Input.mousePosition;
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            AllList = LinkSearch();
+            Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
+            foreach (GameObject gobj in AllList)
+            {
+                gobj.transform.parent = Parent.transform;
+            }
+        }
+
     }
 
     public void Link(Transform hole, Transform otherTrans)
     {
-        LinkParts.Add(otherTrans.gameObject);
         tEnter = true;
+        LinkParts.Add(otherTrans.gameObject);
+        LinkParts = LinkParts.Distinct().ToList();
     }
 
     public void LinkMove(Transform hole, Transform otherTrans)
     {
-        this.transform.rotation = hole.rotation;
-        befoMouse = Input.mousePosition;
-        Vector3 zAxis = transform.TransformDirection(transform.forward).normalized;
+        Vector3 zAxis = transform.forward;
         Vector3 dis = hole.position - transform.position;
-        zAxis = Vector3.Dot(zAxis, dis) * zAxis;
+        zAxis = Vector3.Project(dis, zAxis);
         this.transform.position = this.transform.position + (dis - zAxis);
+        befoMouse = Input.mousePosition;
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
     }
 
     public void LinkExit(Transform hole, Transform otherTrans)
     {
         LinkParts.Remove(otherTrans.gameObject);
-        if(LinkParts.Count == 0)
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
+        xf = Input.mousePosition.x - scrSpace.x;
+        yf = Input.mousePosition.y - scrSpace.y;
+        if (LinkParts.Count == 0)
         {
             tEnter = false;
         }
@@ -62,15 +128,29 @@ public class Axle : MonoBehaviour, IParts
 
     public void VerticalMove()
     {
+        Vector3 cDis = Camera.main.transform.position - transform.position;
+        float dis = Mathf.Sqrt(cDis.x * cDis.x + cDis.y * cDis.y + cDis.z * cDis.z);
+        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        if (speed > 0.01f)
-            speed = 0.01f;
-        if (speed < -0.01f)
-            speed = -0.01f;
+        speed /= 500f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
+
+        Vector3 camDis = Camera.main.transform.position - transform.position;
+        float cm = Mathf.Sqrt(camDis.x * camDis.x + camDis.y * camDis.y + camDis.z * camDis.z);
+
+        float x = Input.mousePosition.x - scrSpace.x;
+        float y = Input.mousePosition.y - scrSpace.y;
+
+        float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
+        
+        if (r > 230 / cm)
+        {
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
+            tEnter = false;
+        }
     }
 
     public void MouseMove()
@@ -81,49 +161,99 @@ public class Axle : MonoBehaviour, IParts
 
     public void ArcballMove()
     {
-        Vector3 click;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit rayhit;
 
-        if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+    }
+
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    {
+        if (!search)
         {
-            click = rayhit.point - transform.position;
+            search = true;
+            rotM.nodeList.Add(Node);
+            foreach (MotorLink link in Node.lList)
+            {
+                IParts lparts;
+                if (link.left.gameObj == this.gameObj)
+                    lparts = link.right;
+                else
+                    lparts = link.left;
 
-            // arcball rotation
-            // Step_1. 
-            //float Scale = click.magnitude / origin.magnitude;
-            click = Vector3.Normalize(click);
-            origin = Vector3.Normalize(origin);
+                if (link.type == MotorLink.LinkType.Tight)
+                {
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
+                    else
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    }
+                }
+                else if (link.type == MotorLink.LinkType.Loose)
+                {
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
+                    else
+                    {
+                        Vector3 tVector = (transform.position - point);
+                        if (tVector == Vector3.zero)
+                        {
+                            tVector = transform.forward;
+                        }
+                        tVector = tVector.normalized;
 
-            // Step_2.
-            //Inner Product
-            float InPro = origin.x * click.x + origin.y * click.y + origin.z * click.z;
-            //InPro /= V1 * V2;
-            float angle = Mathf.Acos(InPro) / 2;
-
-            // Step_3.
-            // Cross Product
-            Vector3 CroPro = new Vector3(
-                origin.y * click.z - origin.z * click.y,
-                origin.z * click.x - origin.x * click.z,
-                origin.x * click.y - origin.y * click.x);
-
-            // Step_4. Now We can make conclusion Rotation by Quaternion
-            Quaternion result = new Quaternion(Mathf.Sin(angle) * CroPro.x, Mathf.Sin(angle) * CroPro.y, Mathf.Sin(angle) * CroPro.z, Mathf.Cos(angle));
-            transform.rotation = result * temp_rotate;
+                        if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                            && Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                            && Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                        {
+                            lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        }
+                    }
+                }
+            }
+            this.point = point;
+            this.axis = axis;
+            this.moveSpeed = speed;
+            this.moveType = moveType;
         }
     }
 
-    public void MotoringMove()
+    public void MotorRotate()
     {
+        if (this.moveType == 0)
+        {
+            //Debug.Log("Axle : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
+            transform.RotateAround(point, axis, moveSpeed);
+        }
+        else
+        {
+            transform.Translate(axis);
+        }
+    }
 
+    public void ResetValue()
+    {
+        point = Vector3.zero;
+        axis = Vector3.zero;
+        moveSpeed = 0;
+        moveType = 0;
     }
 
     public bool OnDragCheck
-    { 
+    {
         get
         {
             return onDrag;
+        }
+    }
+
+    public GameObject gameObj
+    {
+        get
+        {
+            return this.gameObject;
         }
     }
 
@@ -149,76 +279,51 @@ public class Axle : MonoBehaviour, IParts
         return list;
     }
 
-    void OnMouseDown()
-    {
-        scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        xf = Input.mousePosition.x - scrSpace.x;
-        yf = Input.mousePosition.y - scrSpace.y;
-        onDrag = true;
-        if (Input.GetKey(KeyCode.A))
-        {
-            AllList = LinkSearch();
-            Parent = MonoBehaviour.Instantiate(emptyObject, transform.position, Quaternion.identity) as GameObject;
-            foreach (GameObject gobj in AllList)
-            {
-                gobj.transform.parent = Parent.transform;
-            }
-        }
-        else if (Input.GetKey(KeyCode.LeftControl))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit rayhit;
-
-            if (Physics.Raycast(ray, out rayhit))
-            {
-                float round = 0;
-                float InPro, nearOrtho;
-                Vector3 far = new Vector3(rayhit.point.x, rayhit.point.y, rayhit.point.z);
-                Vector3 asspnt;
-
-                MeshCollider mesh = rayhit.collider as MeshCollider;
-
-                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
-                {
-                    if (((transform.rotation * vertex + transform.position) - rayhit.point).magnitude > (far - rayhit.point).magnitude)
-                    {
-                        far = (transform.rotation * vertex + transform.position);
-                    }
-                }
-                nearOrtho = far.x * far.x + far.y * far.y + far.z * far.z;
-                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
-                {
-                    asspnt = (transform.rotation * vertex + transform.position);
-                    InPro = far.x * asspnt.x + far.y * asspnt.y + far.z * asspnt.z;
-                    if (round < Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude) && Mathf.Abs(InPro) < Mathf.Abs(nearOrtho))
-                    {
-                        round = Mathf.Sqrt((far - rayhit.point).magnitude * (far - rayhit.point).magnitude + (asspnt - rayhit.point).magnitude * (asspnt - rayhit.point).magnitude);
-                        nearOrtho = InPro;
-                    }
-                }
-
-                sphere = new GameObject("Sphere Collider");
-                sphere.transform.position = transform.position;
-                sphere.transform.parent = transform;
-                sphere.transform.rotation = transform.rotation;
-
-                SphereCollider temp = sphere.AddComponent<SphereCollider>();
-                temp.radius = round / 2;
-                temp_rotate = transform.rotation;
-                
-            }
-
-            if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
-            {
-                origin = rayhit.point - transform.position;
-            }
-        }
-        
-    }
-
     void OnMouseUp()
     {
-        onDrag = false;
+        if (holeList.Count != 0)
+        {
+            for(int i = 0; i < holeList.Count; i++)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+
+                Dis = holeList[i].position - transform.position;
+                zAxis = Vector3.Project(Dis, transform.forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if (tmpDis < dis)
+                {
+                    dis = tmpDis;
+                    hole = holeList[i];
+                }
+            }
+
+            Hole h = hole.gameObject.GetComponent<Hole>();
+
+            h.HoleLink(h);
+            holeList.Remove(hole);
+            foreach(Transform ho in holeList)
+            {
+                Vector3 Dis;
+                Vector3 zAxis;
+                float tmpDis;
+
+                Dis = ho.position - transform.position;
+                zAxis = Vector3.Project(Dis, transform.forward);
+                Dis = Dis - zAxis;
+                tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
+                if((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                {
+                    Hole newHo = ho.gameObject.GetComponent<Hole>();
+                    newHo.HoleLink(h);
+                }
+            }
+            holeList.Clear();
+            dis = int.MaxValue;
+        }
+
         if (Input.GetKey(KeyCode.A))
         {
             foreach (GameObject gobj in AllList)
@@ -229,15 +334,32 @@ public class Axle : MonoBehaviour, IParts
             AllList.Clear();
             Destroy(Parent);
         }
-        Destroy(sphere);
+        hole = null;
+        onDrag = false;
+    }
 
+    public MotorNode node
+    {
+        get
+        {
+            return Node;
+        }
+
+        set
+        {
+            Node = value;
+        }
     }
 
     void OnMouseDrag()
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            ArcballMove();
+            //ArcballMove();
+            float rotate_spd = 300.0f;
+            float temp_x_axis = Input.GetAxis("Mouse X") * rotate_spd * Time.deltaTime;
+            float temp_y_axis = Input.GetAxis("Mouse Y") * rotate_spd * Time.deltaTime;
+            transform.Rotate(temp_y_axis, -temp_x_axis, 0, Space.World);
         }
         else if (Input.GetKey(KeyCode.A))
         {
@@ -256,9 +378,13 @@ public class Axle : MonoBehaviour, IParts
         else
         {
             if (tEnter)
+            {
                 VerticalMove();
+            }
             else
+            {
                 MouseMove();
+            }
         }
     }
 
