@@ -178,37 +178,36 @@ public class ComBeam : MonoBehaviour, IParts
         if (this.moveType == 0)
         {
             transform.RotateAround(point, axis, moveSpeed);
+            int count = 0;
+            GameObject obj = null;
+
+            foreach (MotorLink link in Node.lList)
+            {
+                if (link.type == MotorLink.LinkType.Tight)
+                {
+                    return;
+                }
+                if (link.type == MotorLink.LinkType.Loose)
+                {
+                    count++;
+                    if (this.gameObject.Equals(link.right.gameObj))
+                    {
+                        obj = link.left.gameObj;
+                    }
+                    else
+                    {
+                        obj = link.right.gameObj;
+                    }
+                }
+            }
+            if (count == 1)
+            {
+                transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+            }
         }
         else
         {
             transform.Translate(axis);
-        }
-
-        int count = 0;
-        GameObject obj = null;
-
-        foreach (MotorLink link in Node.lList)
-        {
-            if (link.type == MotorLink.LinkType.Tight)
-            {
-                return;
-            }
-            if (link.type == MotorLink.LinkType.Loose)
-            {
-                count++;
-                if (this.gameObject.Equals(link.right.gameObj))
-                {
-                    obj = link.left.gameObj;
-                }
-                else
-                {
-                    obj = link.right.gameObj;
-                }
-            }
-        }
-        if (count == 1)
-        {
-            transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
         }
     }
 
