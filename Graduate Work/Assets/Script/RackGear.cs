@@ -239,6 +239,32 @@ public class RackGear : MonoBehaviour, IGear
         if (this.moveType == 0)
         {
             transform.RotateAround(point, axis, moveSpeed);
+            int count = 0;
+            GameObject obj = null;
+
+            foreach (MotorLink link in Node.lList)
+            {
+                if (link.type == MotorLink.LinkType.Tight)
+                {
+                    return;
+                }
+                if (link.type == MotorLink.LinkType.Loose)
+                {
+                    count++;
+                    if (this.gameObject.Equals(link.right.gameObj))
+                    {
+                        obj = link.left.gameObj;
+                    }
+                    else
+                    {
+                        obj = link.right.gameObj;
+                    }
+                }
+            }
+            if (count == 1)
+            {
+                transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+            }
         }
         else
         {
@@ -277,6 +303,7 @@ public class RackGear : MonoBehaviour, IGear
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         //if (Input.GetKey(KeyCode.LeftControl))
         //{
 
@@ -508,6 +535,31 @@ public class RackGear : MonoBehaviour, IGear
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
+
+            if (loaded)
+            {
+                foreach (MotorLink lk in Node.lList)
+                {
+                    GameObject g;
+
+                    if (lk.left.gameObj.Equals(this.gameObject))
+                    {
+                        g = lk.right.gameObj;
+                    }
+                    else
+                    {
+                        g = lk.left.gameObj;
+                    }
+
+                    if (g.Equals(other.gameObject))
+                    {
+                        return;
+                    }
+                }
+                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+                gearControl.linkGear(this, linkGear);
+            }
+
             if (onDrag)
             {
                 IGear linkGear = other.transform.gameObject.GetComponent<IGear>();

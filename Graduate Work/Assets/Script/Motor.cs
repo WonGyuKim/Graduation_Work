@@ -237,6 +237,7 @@ public class Motor : MonoBehaviour, IParts
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();

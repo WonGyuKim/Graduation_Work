@@ -212,7 +212,18 @@ public class Gear : MonoBehaviour, IGear
                         speed *= ratio;
                     }
                     rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    }
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
@@ -222,17 +233,50 @@ public class Gear : MonoBehaviour, IGear
                         speed *= ratio;
                     }
                     rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    }
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    }
                 }
-                else if(link.type == MotorLink.LinkType.Rack)
+                else if (link.type == MotorLink.LinkType.Rack)
                 {
                     float moveSpeed = speed * Time.deltaTime;
                     Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 10;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
+                    }
                 }
             }
             this.point = point;
@@ -246,8 +290,33 @@ public class Gear : MonoBehaviour, IGear
     {
         if (this.moveType == 0)
         {
-            //Debug.Log("Gear : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
             transform.RotateAround(point, axis, moveSpeed);
+            int count = 0;
+            GameObject obj = null;
+
+            foreach (MotorLink link in Node.lList)
+            {
+                if (link.type == MotorLink.LinkType.Tight)
+                {
+                    return;
+                }
+                if (link.type == MotorLink.LinkType.Loose)
+                {
+                    count++;
+                    if (this.gameObject.Equals(link.right.gameObj))
+                    {
+                        obj = link.left.gameObj;
+                    }
+                    else
+                    {
+                        obj = link.right.gameObj;
+                    }
+                }
+            }
+            if (count == 1)
+            {
+                transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+            }
         }
         else
         {
@@ -286,6 +355,7 @@ public class Gear : MonoBehaviour, IGear
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         //if (Input.GetKey(KeyCode.LeftControl))
         //{
 
@@ -517,6 +587,30 @@ public class Gear : MonoBehaviour, IGear
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
+            if(loaded)
+            {
+                foreach (MotorLink lk in Node.lList)
+                {
+                    GameObject g;
+
+                    if(lk.left.gameObj.Equals(this.gameObject))
+                    {
+                        g = lk.right.gameObj;
+                    }
+                    else
+                    {
+                        g = lk.left.gameObj;
+                    }
+
+                    if(g.Equals(other.gameObject))
+                    {
+                        return;
+                    }
+                }
+                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+                gearControl.linkGear(this, linkGear);
+            }
+            
             if (onDrag)
             {
                 IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
