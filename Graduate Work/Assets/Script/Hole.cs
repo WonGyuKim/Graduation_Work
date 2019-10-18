@@ -95,7 +95,7 @@ public class Hole : MonoBehaviour
     {
         if (!close && !other.gameObject.Equals(Parent.gameObject) && ((transform.tag == "Conn_Hole" && (other.tag == "Axle" || other.tag == "Connector")) || (transform.tag == "Axle_Hole" && other.tag == "Axle")))
         {
-            if(iparts.Loaded)
+            if (iparts.Loaded)
             {
                 if (other.transform.parent != null)
                 {
@@ -148,6 +148,7 @@ public class Hole : MonoBehaviour
 
                 return;
             }
+
             Vector3 cross = Vector3.Cross(other.transform.forward, transform.forward);
             if (cross == Vector3.zero)
             {
@@ -171,7 +172,6 @@ public class Hole : MonoBehaviour
                 {
                     colIParts.HoleInput(transform, Parent);
                 }
-                
             }
         }
     }

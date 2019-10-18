@@ -268,7 +268,7 @@ public class RackGear : MonoBehaviour, IGear
         }
         else
         {
-            transform.Translate(axis);
+            transform.Translate(axis, Space.World);
         }
     }
 

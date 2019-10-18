@@ -13,6 +13,14 @@ public class GearControl : MonoBehaviour
 
     public void linkGear(IGear gear1, IGear gear2)
     {
+        foreach (MotorLink lk in gear1.node.lList)
+        {
+            if ((lk.left.gameObj.Equals(gear1.gameObj) && lk.right.gameObj.Equals(gear2.gameObj)) || (lk.left.gameObj.Equals(gear2.gameObj) && lk.right.gameObj.Equals(gear1.gameObj)))
+            {
+                return;
+            }
+        }
+
         GameObject gearLink = MonoBehaviour.Instantiate(Resources.Load("Models/Prefabs/GearLink") as GameObject, transform.position, Quaternion.identity) as GameObject;
         MotorLink link = gearLink.GetComponent<MotorLink>();
 
@@ -21,8 +29,7 @@ public class GearControl : MonoBehaviour
         link.linkObject = gearLink;
         GameObject g1 = gear1.gameObj;
         GameObject g2 = gear2.gameObj;
-        //Quaternion g1Rot = g1.transform.rotation;
-        //Quaternion g2Rot = g2.transform.rotation;
+
         Vector3 g1Vec = g1.transform.TransformDirection(g1.transform.forward);
         Vector3 g2Vec = g2.transform.TransformDirection(g2.transform.forward);
         Vector3 v = g1Vec - g2Vec;

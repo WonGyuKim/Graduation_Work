@@ -110,6 +110,7 @@ public class UIManager : MonoBehaviour
                     }
 
                 }
+                selected_all = true;
                 text.text = "Selected : ";
                 if (selected)
                 {

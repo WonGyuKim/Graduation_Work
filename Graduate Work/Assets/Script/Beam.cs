@@ -205,7 +205,7 @@ public class Beam : MonoBehaviour, IParts
         }
         else
         {
-            transform.Translate(axis);
+            transform.Translate(axis, Space.World);
         }
     }
 

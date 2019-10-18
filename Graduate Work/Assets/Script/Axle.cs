@@ -229,7 +229,7 @@ public class Axle : MonoBehaviour, IParts
         }
         else
         {
-            transform.Translate(axis);
+            transform.Translate(axis, Space.World);
         }
     }
 

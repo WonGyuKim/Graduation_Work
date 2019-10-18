@@ -196,7 +196,7 @@ public class Connector : MonoBehaviour, IParts
         }
         else
         {
-            transform.Translate(axis);
+            transform.Translate(axis, Space.World);
         }
     }
 

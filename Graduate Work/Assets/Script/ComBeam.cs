@@ -221,7 +221,7 @@ public class ComBeam : MonoBehaviour, IParts
         }
         else
         {
-            transform.Translate(axis);
+            transform.Translate(axis, Space.World);
         }
     }
 

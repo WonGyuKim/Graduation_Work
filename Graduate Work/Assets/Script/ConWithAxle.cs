@@ -181,17 +181,35 @@ public class ConWithAxle : MonoBehaviour, IParts
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, 0);
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
+                    else
+                        lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    Vector3 tVector = (transform.position - point);
-                    tVector = tVector.normalized;
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                    }
+                    else
+                    {
+                        Vector3 tVector = (transform.position - point);
+                        if (tVector == Vector3.zero)
+                        {
+                            tVector = transform.forward;
+                        }
+                        tVector = tVector.normalized;
 
-                    if (tVector.x == 0 && tVector.y == 0 && tVector.z == 0)
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
-                    else if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                            || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                            || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                        {
+                            lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        }
+                    }
                 }
             }
             this.point = point;
@@ -209,7 +227,7 @@ public class ConWithAxle : MonoBehaviour, IParts
         }
         else
         {
-            transform.Translate(axis);
+            transform.Translate(axis, Space.World);
         }
     }
 
