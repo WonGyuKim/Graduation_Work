@@ -141,12 +141,14 @@ public class Axle : MonoBehaviour, IParts
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         //transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
-        /*
+        
         transPos.x = R_controller.transform.position.x;
         transPos.y = R_controller.transform.position.y;
-        transPos.z = R_controller.transform.position.z;
-        */
-        transform.position = R_controller.transform.position;//컨트롤러 따라가기_kyb
+        transPos.z = R_controller.transform.position.z + 0.1f;
+
+        transform.position = transPos;//컨트롤러 따라가기_kyb
+
+        //transform.position = R_controller.transform.position;
     }
 
     public void ArcballMove()

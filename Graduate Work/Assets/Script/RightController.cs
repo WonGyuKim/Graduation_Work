@@ -25,7 +25,9 @@ public class RightController : MonoBehaviour
         //        if(OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
         if (true == (Physics.Raycast(ray.origin, ray.direction, out hit)))
         {
-            target = hit.collider.gameObject;
+            target = hit.collider.gameObject;//problem is here
+
+            Debug.Log(target);
 
             //if (true == (Physics.Raycast(ray.origin, ray.direction, out hit)))
             if (OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
@@ -39,17 +41,51 @@ public class RightController : MonoBehaviour
                     GameObject.FindWithTag("Create_Button").GetComponent<UIManager>().CreateObject();
                 }
             }
-            if (OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
+            else if (OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
             {
                 ControllDrag();
+                /*
+                switch(true)
+                {
+                    case OVRInput.GetDown(OVRInput.Button.One):
+
+                        break;
+                }
+                */
+            }            
+            else if(OVRInput.GetUp(OVRInput.Button.SecondaryIndexTrigger))
+            {
+                Debug.Log("Up");
+
+                target = null;
+
+                Debug.Log(target);
             }
-        }   
-        /*
-        else if(OVRInput.Get(OVRInput.Button.SecondaryIndexTrigger))
-        {
-            
+
+            if (OVRInput.GetDown(OVRInput.Touch.SecondaryThumbstick))
+            {
+                Vector2 coord = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+
+                var absX = Mathf.Abs(coord.x);
+                var absY = Mathf.Abs(coord.y);
+
+                if (absX > absY)
+                {
+                    if (coord.x > 0)
+                        target.transform.Rotate(0, -90, 0, Space.World);
+                    else
+                        target.transform.Rotate(0, 90, 0, Space.World);
+                }
+                else
+                {
+                    if (coord.y > 0)
+                        target.transform.Rotate(90, 0, 0, Space.World);
+                    else
+                        target.transform.Rotate(-90, 0, 0, Space.World);
+                }
+            }
         }
-        */
+        //target = null;
     }
 
     public void ControllDrag()
@@ -59,6 +95,12 @@ public class RightController : MonoBehaviour
             case "Axle":
                 GameObject.FindWithTag("Axle").GetComponent<Axle>().OnMouseDrag();
                 break;
+            case "Menu_Scroll":
+                Debug.Log("Scroll?");
+                GameObject.FindWithTag("Menu_Scroll").GetComponent<Scroll_Handle>().OnMouseDrag();
+                break;
         }
+
+        target = null;
     }
 }

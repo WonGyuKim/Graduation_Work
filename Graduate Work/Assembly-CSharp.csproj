@@ -77,6 +77,7 @@
      <Compile Include="Assets\Script\RackGear.cs" />
      <Compile Include="Assets\Script\RightController.cs" />
      <Compile Include="Assets\Script\RotateMotor.cs" />
+     <Compile Include="Assets\Script\Scroll_Handle.cs" />
      <Compile Include="Assets\Script\temp1\BeforeProject\brick.cs" />
      <Compile Include="Assets\Script\temp1\BeforeProject\builder.cs" />
      <Compile Include="Assets\Script\temp1\BeforeProject\engine.cs" />
