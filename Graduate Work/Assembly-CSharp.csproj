@@ -89,6 +89,7 @@
     <Compile Include="Assets\Script\Motor.cs" />
     <Compile Include="Assets\Script\MotorLink.cs" />
     <Compile Include="Assets\Script\MotorNode.cs" />
+    <Compile Include="Assets\Script\MoveCell.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\ObjectRotate.cs" />
     <Compile Include="Assets\Script\Player.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Script\temp1\BeforeProject\Saver.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\wheel.cs" />
     <Compile Include="Assets\Script\UIManager.cs" />
+    <None Include="Assets\Material\Shader.shader" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Graduation_Work-master/Graduate Work/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

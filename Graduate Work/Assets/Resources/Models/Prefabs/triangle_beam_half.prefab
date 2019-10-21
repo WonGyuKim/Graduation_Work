@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1024999060728766249}
   - component: {fileID: 8216315828176728266}
   m_Layer: 0
-  m_Name: triangle beam half
+  m_Name: triangle_beam_half
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: abb1fea949b9a13499834f381b19c9c0, type: 3}
+  - {fileID: 2100000, guid: d4f9c966fb523b448aa30423f8102e40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

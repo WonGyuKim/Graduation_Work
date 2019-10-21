@@ -340,8 +340,6 @@ public class UIManager : MonoBehaviour
                 load.GetComponent<IParts>().Loaded = true;
                 
             }
-            
-
 
             fs.Close();
 

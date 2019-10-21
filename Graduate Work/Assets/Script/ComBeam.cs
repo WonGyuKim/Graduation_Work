@@ -12,7 +12,7 @@ public class ComBeam : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     private Vector3 dst;
 
     public bool search; //탐색 확인 변수
@@ -22,8 +22,8 @@ public class ComBeam : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
-    public List<Transform> otherList = new List<Transform>();
+    public List<Transform> holeList;
+    public List<Transform> otherList;
     public float dis;
     private Vector3 point;
     private Vector3 axis;
@@ -31,6 +31,7 @@ public class ComBeam : MonoBehaviour, IParts
     private int moveType;
     private string kind;
     private bool loaded;
+    public List<MoveCell> moveList;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -65,7 +66,10 @@ public class ComBeam : MonoBehaviour, IParts
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         if (!loaded)
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
-        
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        otherList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -180,49 +184,90 @@ public class ComBeam : MonoBehaviour, IParts
                     lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
             }
+           
             this.point = point;
             this.axis = axis;
             this.moveSpeed = speed;
             this.moveType = moveType;
+            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            transform.RotateAround(point, axis, moveSpeed);
-            int count = 0;
-            GameObject obj = null;
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
 
-            foreach (MotorLink link in Node.lList)
-            {
-                if (link.type == MotorLink.LinkType.Tight)
+                int count = 0;
+                GameObject obj = null;
+
+                foreach (MotorLink link in Node.lList)
                 {
-                    return;
+                    if (link.type == MotorLink.LinkType.Tight)
+                    {
+                        return;
+                    }
+                    if (link.type == MotorLink.LinkType.Loose)
+                    {
+                        count++;
+                        if (this.gameObject.Equals(link.right.gameObj))
+                        {
+                            obj = link.left.gameObj;
+                        }
+                        else
+                        {
+                            obj = link.right.gameObj;
+                        }
+                    }
                 }
-                if (link.type == MotorLink.LinkType.Loose)
+                if (count == 1)
                 {
-                    count++;
-                    if (this.gameObject.Equals(link.right.gameObj))
-                    {
-                        obj = link.left.gameObj;
-                    }
-                    else
-                    {
-                        obj = link.right.gameObj;
-                    }
+                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
                 }
             }
-            if (count == 1)
+            else
             {
-                transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+                transform.Translate(cell.Axis, Space.World);
             }
         }
-        else
-        {
-            transform.Translate(axis, Space.World);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //    int count = 0;
+        //    GameObject obj = null;
+
+        //    foreach (MotorLink link in Node.lList)
+        //    {
+        //        if (link.type == MotorLink.LinkType.Tight)
+        //        {
+        //            return;
+        //        }
+        //        if (link.type == MotorLink.LinkType.Loose)
+        //        {
+        //            count++;
+        //            if (this.gameObject.Equals(link.right.gameObj))
+        //            {
+        //                obj = link.left.gameObj;
+        //            }
+        //            else
+        //            {
+        //                obj = link.right.gameObj;
+        //            }
+        //        }
+        //    }
+        //    if (count == 1)
+        //    {
+        //        transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+        //    }
+        //}
+        //else
+        //{
+        //    transform.Translate(axis, Space.World);
+        //}
     }
 
     public void ResetValue()
@@ -231,6 +276,7 @@ public class ComBeam : MonoBehaviour, IParts
         axis = Vector3.zero;
         moveSpeed = 0;
         moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -403,5 +449,22 @@ public class ComBeam : MonoBehaviour, IParts
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
     }
 }
