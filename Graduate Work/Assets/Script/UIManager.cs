@@ -14,7 +14,12 @@ public class UIManager : MonoBehaviour
     public GameObject Gear_Contents;
     public GameObject Connector_Contents;
     public GameObject ExtraBlock_Contents;
+    public Button HideOrUnfold;
+    public GameObject Back;
+    private bool HorU = false;
+    public Text HorUtext;
     private bool ContentsOff = false;
+    private int WhichOn = 0;
 
     // Variables
     private int target;    
@@ -215,7 +220,8 @@ public class UIManager : MonoBehaviour
     {
         Content_view.SetActive(false);
         ContentsOff = true;
-        Axle_Contents.SetActive(true);        
+        Axle_Contents.SetActive(true);
+        WhichOn = 1;
     }
 
     public void BeamContents()
@@ -223,6 +229,7 @@ public class UIManager : MonoBehaviour
         Content_view.SetActive(false);
         ContentsOff = true;
         Beam_Contents.SetActive(true);
+        WhichOn = 2;
     }
 
     public void GearContents()
@@ -230,6 +237,7 @@ public class UIManager : MonoBehaviour
         Content_view.SetActive(false);
         ContentsOff = true;
         Gear_Contents.SetActive(true);
+        WhichOn = 3;
     }
 
     public void ConnectorContents()
@@ -237,6 +245,7 @@ public class UIManager : MonoBehaviour
         Content_view.SetActive(false);
         ContentsOff = true;
         Connector_Contents.SetActive(true);
+        WhichOn = 4;
     }
 
     public void ExtraContents()
@@ -244,6 +253,7 @@ public class UIManager : MonoBehaviour
         Content_view.SetActive(false);
         ContentsOff = true;
         ExtraBlock_Contents.SetActive(true);
+        WhichOn = 5;
     }
 
     public void ContensBack()
@@ -257,6 +267,7 @@ public class UIManager : MonoBehaviour
             Connector_Contents.SetActive(false);
             ExtraBlock_Contents.SetActive(false);
             ContentsOff = false;
+            WhichOn = 0;
         }
     }
 
@@ -517,5 +528,69 @@ public class UIManager : MonoBehaviour
         target = (int)Object.motor;
 
         CreateObject();
+    }
+
+    public void UI_HideOrUnfold()
+    {
+        if(HorU == false)//펼쳐진 상태
+        {
+            Back.SetActive(false);
+            switch(WhichOn)
+            {
+                case 0:
+                    Content_view.SetActive(false);
+                    break;
+                case 1:
+                    Axle_Contents.SetActive(false);
+                    break;
+                case 2:
+                    Beam_Contents.SetActive(false);
+                    break;
+                case 3:
+                    Gear_Contents.SetActive(false);
+                    break;
+                case 4:
+                    Connector_Contents.SetActive(false);
+                    break;
+                case 5:
+                    ExtraBlock_Contents.SetActive(false);
+                    break;
+                default:
+                    break;
+            }
+            HorU = true;
+
+            HorUtext.GetComponent<Text>().text = "펼치기";
+        }
+        else
+        {
+            Back.SetActive(true);
+            switch (WhichOn)
+            {
+                case 0:
+                    Content_view.SetActive(true);
+                    break;
+                case 1:
+                    Axle_Contents.SetActive(true);
+                    break;
+                case 2:
+                    Beam_Contents.SetActive(true);
+                    break;
+                case 3:
+                    Gear_Contents.SetActive(true);
+                    break;
+                case 4:
+                    Connector_Contents.SetActive(true);
+                    break;
+                case 5:
+                    ExtraBlock_Contents.SetActive(true);
+                    break;
+                default:
+                    break;
+            }
+            HorU = false;
+
+            HorUtext.GetComponent<Text>().text = "숨기기";
+        }
     }
 }
