@@ -142,7 +142,7 @@ public class Beam : MonoBehaviour, IParts
 
     public void ArcballMove()
     {
-
+        
     }
 
     public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)

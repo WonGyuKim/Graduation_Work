@@ -87,8 +87,10 @@
     <Compile Include="Assets\Script\KWG_Script\MyParts.cs" />
     <Compile Include="Assets\Script\KWG_Script\TightLink.cs" />
     <Compile Include="Assets\Script\Motor.cs" />
+    <Compile Include="Assets\Script\MotorButton.cs" />
     <Compile Include="Assets\Script\MotorLink.cs" />
     <Compile Include="Assets\Script\MotorNode.cs" />
+    <Compile Include="Assets\Script\MotorText.cs" />
     <Compile Include="Assets\Script\MoveCell.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\ObjectRotate.cs" />

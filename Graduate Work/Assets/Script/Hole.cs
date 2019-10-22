@@ -11,12 +11,14 @@ public class Hole : MonoBehaviour
     private Transform DokObj;
     public MotorLink link;
     public Transform parts;
+    public bool Loaded;
 
     void Start()
     {
         Parent = transform.parent.transform;
         iparts = Parent.gameObject.GetComponent<IParts>();
         close = false;
+        Loaded = iparts.Loaded;
     }
 
     public void HoleLink(Hole h)
@@ -145,14 +147,13 @@ public class Hole : MonoBehaviour
 
                 link.left.node.AddLink(link);
                 link.right.node.AddLink(link);
-
+                Loaded = false;
                 return;
             }
 
             Vector3 cross = Vector3.Cross(other.transform.forward, transform.forward);
             if (cross == Vector3.zero)
             {
-            
                 if (other.transform.parent != null)
                 {
                     DokObj = other.transform.parent;

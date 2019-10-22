@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Motor : MonoBehaviour, IParts
 {
@@ -31,6 +32,9 @@ public class Motor : MonoBehaviour, IParts
     private string kind;
     private bool loaded;
     public List<MoveCell> moveList;
+    public Transform scroll;
+    public GameObject motorText;
+    public float RotateSpeed;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -79,6 +83,11 @@ public class Motor : MonoBehaviour, IParts
         rotM.motorList.Add(this);
         hole = null;
         dis = int.MaxValue;
+        scroll = GameObject.Find("Scroll View").transform.GetChild(0).GetChild(0);
+        motorText = Resources.Load("Models/Prefabs/MotorList") as GameObject;
+        motorText = MonoBehaviour.Instantiate(motorText, transform.position, Quaternion.identity) as GameObject;
+        motorText.transform.parent = scroll;
+        RotateSpeed = 5f;
         ResetValue();
     }
 
@@ -176,7 +185,6 @@ public class Motor : MonoBehaviour, IParts
             this.moveType = moveType;
             moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
         }
-        Debug.Log(moveList.Count);
     }
 
     public void MotorRotate()

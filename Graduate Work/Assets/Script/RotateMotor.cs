@@ -7,7 +7,7 @@ public class RotateMotor : MonoBehaviour
 {
     public List<Motor> motorList;
     public List<MotorNode> nodeList;
-    public float RotateSpeed;
+    public bool buttonClick;
 
     public enum MoveType
     {
@@ -19,7 +19,12 @@ public class RotateMotor : MonoBehaviour
     {
         motorList = new List<Motor>();
         nodeList = new List<MotorNode>();
-        RotateSpeed = 5f;
+        buttonClick = false;
+    }
+
+    void ClickButton()
+    {
+        buttonClick = !buttonClick;
     }
 
     // Update is called once per frame
@@ -30,7 +35,7 @@ public class RotateMotor : MonoBehaviour
             //Debug.Log("Rotate Start");
             foreach (Motor motor in motorList)
             {
-                motor.MotoringMove(motor.transform.position, motor.transform.forward, RotateSpeed * Time.deltaTime * 100, 0, 0);
+                motor.MotoringMove(motor.transform.position, motor.transform.forward, motor.RotateSpeed * Time.deltaTime * 100, 0, 0);
                 nodeList = nodeList.Distinct().ToList();
                 foreach (MotorNode node in nodeList)
                 {
@@ -59,7 +64,7 @@ public class RotateMotor : MonoBehaviour
         {
             foreach (Motor motor in motorList)
             {
-                motor.MotoringMove(motor.transform.position, motor.transform.forward, -RotateSpeed * Time.deltaTime * 100, 0, 0);
+                motor.MotoringMove(motor.transform.position, motor.transform.forward, -motor.RotateSpeed * Time.deltaTime * 100, 0, 0);
                 foreach (MotorNode node in nodeList)
                 {
                     node.parts.SearchReset();

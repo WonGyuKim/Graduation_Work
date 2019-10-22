@@ -176,7 +176,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6544282445373233132
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &3118883412734130626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +269,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2731814185195176116
@@ -301,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &1303155923490862270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,7 +362,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.03
-  m_Height: 0.3
+  m_Height: 0.25
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1647260026088254142
@@ -393,6 +395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &5542155066697864850
 MonoBehaviour:
   m_ObjectHideFlags: 0
