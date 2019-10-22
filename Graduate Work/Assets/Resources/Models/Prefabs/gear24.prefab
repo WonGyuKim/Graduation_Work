@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a58e159d98099cd48b4114fee8878d57, type: 3}
+  - {fileID: 2100000, guid: 659511a6817c205458c58003f1ea83bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,6 +119,11 @@ MonoBehaviour:
   AllList: []
   gearControl: {fileID: 0}
   rotM: {fileID: 0}
+  hole: {fileID: 0}
+  holeList: []
+  otherList: []
+  dis: 0
+  rad: 0
 --- !u!114 &2468873864238856622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &6444728567575940818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,6 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &2864088080408760267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,6 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &7115719965623732945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &357526974582355451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,6 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &6081662652648958838
 MonoBehaviour:
   m_ObjectHideFlags: 0

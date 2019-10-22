@@ -75,9 +75,21 @@
     <Compile Include="Assets\Script\GearControl.cs" />
     <Compile Include="Assets\Script\Hole.cs" />
     <Compile Include="Assets\Script\Interface.cs" />
+    <Compile Include="Assets\Script\KWG_Script\BasicParts.cs" />
+    <Compile Include="Assets\Script\KWG_Script\Link.cs" />
+    <Compile Include="Assets\Script\KWG_Script\LooseLink.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear24.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear40.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyGear8.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyHole.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyMotor.cs" />
+    <Compile Include="Assets\Script\KWG_Script\MyParts.cs" />
+    <Compile Include="Assets\Script\KWG_Script\TightLink.cs" />
     <Compile Include="Assets\Script\Motor.cs" />
     <Compile Include="Assets\Script\MotorLink.cs" />
     <Compile Include="Assets\Script\MotorNode.cs" />
+    <Compile Include="Assets\Script\MoveCell.cs" />
     <Compile Include="Assets\Script\Object.cs" />
     <Compile Include="Assets\Script\ObjectRotate.cs" />
     <Compile Include="Assets\Script\Player.cs" />
@@ -92,20 +104,21 @@
     <Compile Include="Assets\Script\temp1\BeforeProject\Saver.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\wheel.cs" />
     <Compile Include="Assets\Script\UIManager.cs" />
+    <None Include="Assets\Material\Shader.shader" />
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -309,19 +322,19 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Advertisements">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Advertisements.Editor">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.Editor.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>D:/학교/졸업작품/프로젝트/Graduation_Work/Graduate Work/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>D:/Graduation_Work-master/Graduate Work/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

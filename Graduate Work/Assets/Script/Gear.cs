@@ -12,7 +12,7 @@ public class Gear : MonoBehaviour, IGear
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     private Vector3 dst;
     private Vector3 Vec;
     private Vector3 origin;
@@ -26,8 +26,8 @@ public class Gear : MonoBehaviour, IGear
     public GearControl gearControl;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
-    public List<Transform> otherList = new List<Transform>();
+    public List<Transform> holeList;
+    public List<Transform> otherList;
     public float dis;
     public float rad;
     private Vector3 point;
@@ -36,6 +36,7 @@ public class Gear : MonoBehaviour, IGear
     private int moveType;
     private string kind;
     private bool loaded;
+    public List<MoveCell> moveList;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -70,6 +71,10 @@ public class Gear : MonoBehaviour, IGear
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         if (!loaded)
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        otherList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -212,7 +217,18 @@ public class Gear : MonoBehaviour, IGear
                         speed *= ratio;
                     }
                     rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    }
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
@@ -222,37 +238,136 @@ public class Gear : MonoBehaviour, IGear
                         speed *= ratio;
                     }
                     rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    }
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                    }
                 }
-                else if(link.type == MotorLink.LinkType.Rack)
+                else if (link.type == MotorLink.LinkType.Rack)
                 {
                     float moveSpeed = speed * Time.deltaTime;
-                    Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 10;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
+                    Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 20;
+                    Vector3 tVector = (transform.position - point);
+                    if (tVector == Vector3.zero)
+                    {
+                        tVector = transform.forward;
+                    }
+                    tVector = tVector.normalized;
+                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    {
+                        lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
+                    }
                 }
             }
+            
             this.point = point;
             this.axis = axis;
             this.moveSpeed = speed;
             this.moveType = moveType;
+            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            //Debug.Log("Gear : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
-            transform.RotateAround(point, axis, moveSpeed);
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+                int count = 0;
+                GameObject obj = null;
+
+                foreach (MotorLink link in Node.lList)
+                {
+                    if (link.type == MotorLink.LinkType.Tight)
+                    {
+                        return;
+                    }
+                    if (link.type == MotorLink.LinkType.Loose)
+                    {
+                        count++;
+                        if (this.gameObject.Equals(link.right.gameObj))
+                        {
+                            obj = link.left.gameObj;
+                        }
+                        else
+                        {
+                            obj = link.right.gameObj;
+                        }
+                    }
+                }
+                if (count == 1)
+                {
+                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+                }
+            }
+            else
+            {
+                transform.Translate(cell.Axis, Space.World);
+            }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //    int count = 0;
+        //    GameObject obj = null;
+
+        //    foreach (MotorLink link in Node.lList)
+        //    {
+        //        if (link.type == MotorLink.LinkType.Tight)
+        //        {
+        //            return;
+        //        }
+        //        if (link.type == MotorLink.LinkType.Loose)
+        //        {
+        //            count++;
+        //            if (this.gameObject.Equals(link.right.gameObj))
+        //            {
+        //                obj = link.left.gameObj;
+        //            }
+        //            else
+        //            {
+        //                obj = link.right.gameObj;
+        //            }
+        //        }
+        //    }
+        //    if (count == 1)
+        //    {
+        //        transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+        //    }
+        //}
+        //else
+        //{
+        //    transform.Translate(axis, Space.World);
+        //}
     }
 
     public void ResetValue()
@@ -261,6 +376,7 @@ public class Gear : MonoBehaviour, IGear
         axis = Vector3.zero;
         moveSpeed = 0;
         moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -286,6 +402,7 @@ public class Gear : MonoBehaviour, IGear
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         //if (Input.GetKey(KeyCode.LeftControl))
         //{
 
@@ -517,11 +634,8 @@ public class Gear : MonoBehaviour, IGear
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
-            if (onDrag)
-            {
-                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
-                gearControl.linkGear(this, linkGear);
-            }
+            IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+            gearControl.linkGear(this, linkGear);
         }
     }
 
@@ -541,5 +655,22 @@ public class Gear : MonoBehaviour, IGear
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
     }
 }

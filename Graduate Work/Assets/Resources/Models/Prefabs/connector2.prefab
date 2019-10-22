@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5fd7d0bf02478e241adacd74edc1111d, type: 3}
+  - {fileID: 2100000, guid: c43d23dc2283e574a913dd2e3097705d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,6 +97,9 @@ MonoBehaviour:
   Parent: {fileID: 0}
   AllList: []
   rotM: {fileID: 0}
+  hole: {fileID: 0}
+  holeList: []
+  dis: 0
 --- !u!64 &7150254378918907487
 MeshCollider:
   m_ObjectHideFlags: 0

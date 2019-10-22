@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &8937675178286968497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,7 +167,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 705188402dcd4e34487cd4e715de5980, type: 3}
+  - {fileID: 2100000, guid: 659511a6817c205458c58003f1ea83bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -204,6 +205,11 @@ MonoBehaviour:
   AllList: []
   gearControl: {fileID: 0}
   rotM: {fileID: 0}
+  hole: {fileID: 0}
+  holeList: []
+  otherList: []
+  dis: 0
+  rad: 0
 --- !u!64 &9186018151470829546
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -336,6 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &247687338549036868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,6 +434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &1912156013434440858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,6 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &8336778058503174764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -609,6 +618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &7363731238625446739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700,6 +710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &982167209777593050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -791,6 +802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &6949114038260812488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,6 +894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &3332166017520760363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -973,6 +986,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &6866636983032683152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1064,6 +1078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &7080416269327049001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1155,6 +1170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &2847440839096065848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1246,6 +1262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &4014525120858613800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1337,6 +1354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
 --- !u!114 &3689282082079058148
 MonoBehaviour:
   m_ObjectHideFlags: 0

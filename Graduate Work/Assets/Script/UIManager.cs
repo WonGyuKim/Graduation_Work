@@ -110,6 +110,7 @@ public class UIManager : MonoBehaviour
                     }
 
                 }
+                selected_all = true;
                 text.text = "Selected : ";
                 if (selected)
                 {
@@ -339,8 +340,6 @@ public class UIManager : MonoBehaviour
                 load.GetComponent<IParts>().Loaded = true;
                 
             }
-            
-
 
             fs.Close();
 

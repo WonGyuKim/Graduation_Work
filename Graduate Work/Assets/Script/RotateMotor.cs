@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class RotateMotor : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class RotateMotor : MonoBehaviour
             foreach (Motor motor in motorList)
             {
                 motor.MotoringMove(motor.transform.position, motor.transform.forward, RotateSpeed * Time.deltaTime * 100, 0, 0);
+                nodeList = nodeList.Distinct().ToList();
                 foreach (MotorNode node in nodeList)
                 {
                     node.parts.SearchReset();

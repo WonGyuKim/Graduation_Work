@@ -105,7 +105,6 @@ GameObject:
   - component: {fileID: 7109498239617755687}
   - component: {fileID: 4477053306050098918}
   - component: {fileID: 5565599628940554065}
-  - component: {fileID: 524874637774369029}
   - component: {fileID: 1368738931158898159}
   m_Layer: 0
   m_Name: angular_block_0
@@ -155,7 +154,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dc9ab1863f40bf4468e2d3cf256ba3ce, type: 3}
+  - {fileID: 2100000, guid: 236fad9c3e2c27948aefcfd3a0c6282e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -202,27 +201,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lList: []
---- !u!114 &524874637774369029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2234378432998114514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a65beff4b4f06144e8d81c3cc530f514, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  search: 0
-  emptyObject: {fileID: 0}
-  Parent: {fileID: 0}
-  AllList: []
-  rotM: {fileID: 0}
-  hole: {fileID: 0}
-  holeList: []
-  otherList: []
-  dis: 0
 --- !u!114 &1368738931158898159
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class Motor : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     private Vector3 dst;
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
@@ -21,8 +21,8 @@ public class Motor : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
-    public List<Transform> otherList = new List<Transform>();
+    public List<Transform> holeList;
+    public List<Transform> otherList;
     public float dis;
     private Vector3 point;
     private Vector3 axis;
@@ -30,6 +30,7 @@ public class Motor : MonoBehaviour, IParts
     private int moveType;
     private string kind;
     private bool loaded;
+    public List<MoveCell> moveList;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -64,6 +65,10 @@ public class Motor : MonoBehaviour, IParts
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         if (!loaded)
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        otherList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -164,24 +169,39 @@ public class Motor : MonoBehaviour, IParts
                     lparts.MotoringMove(point, axis, speed, rad, moveType);
                 }
             }
+            
             this.point = point;
             this.axis = axis;
             this.moveSpeed = speed;
             this.moveType = moveType;
+            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
         }
+        Debug.Log(moveList.Count);
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            //Debug.Log("Motor : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
-            transform.RotateAround(point, axis, moveSpeed);
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+            }
+            else
+            {
+                transform.Translate(cell.Axis, Space.World);
+            }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    //Debug.Log("Motor : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //}
+        //else
+        //{
+        //    transform.Translate(axis);
+        //}
     }
 
     public void ResetValue()
@@ -190,6 +210,7 @@ public class Motor : MonoBehaviour, IParts
         axis = Vector3.zero;
         moveSpeed = 0;
         moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -237,6 +258,7 @@ public class Motor : MonoBehaviour, IParts
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -362,5 +384,22 @@ public class Motor : MonoBehaviour, IParts
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
     }
 }
