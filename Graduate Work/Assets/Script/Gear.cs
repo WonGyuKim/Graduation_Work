@@ -269,7 +269,7 @@ public class Gear : MonoBehaviour, IGear
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
                     float moveSpeed = speed * Time.deltaTime;
-                    Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 20;
+                    Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 10;
                     Vector3 tVector = (transform.position - point);
                     if (tVector == Vector3.zero)
                     {

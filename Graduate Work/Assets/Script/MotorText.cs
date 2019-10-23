@@ -32,6 +32,11 @@ public class MotorText : MonoBehaviour
 
         if(int.TryParse(inF.text, out chknum))
         {
+            if(chknum > 70)
+            {
+                chknum = 70;
+                inF.text = 70.ToString();
+            }
             motor.RotateSpeed = chknum;
         }
         else

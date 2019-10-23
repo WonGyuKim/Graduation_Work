@@ -14,19 +14,45 @@ public class RackLimit : MonoBehaviour
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
     }
 
-    void OnTriggerEnter(Collider other)
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    if(rotM.motoring)
+    //    {
+    //        foreach (MotorLink link in rack.node.lList)
+    //        {
+    //            if(link.type == MotorLink.LinkType.Rack)
+    //            {
+    //                if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
+    //                {
+    //                    foreach (Motor m in rotM.motorList)
+    //                    {
+    //                        m.RotateSpeed = -m.RotateSpeed;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    void OnTriggerExit(Collider other)
     {
         if(rotM.motoring)
         {
-            foreach (MotorLink link in rack.node.lList)
+            Vector3 gearPos = other.transform.position - transform.position;
+            Vector3 dir = rack.transform.position - transform.position;
+
+            if (Vector3.Dot(gearPos, dir) < 0)
             {
-                if(link.type == MotorLink.LinkType.Rack)
+                foreach (MotorLink link in rack.node.lList)
                 {
-                    if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
+                    if (link.type == MotorLink.LinkType.Rack)
                     {
-                        foreach (Motor m in rotM.motorList)
+                        if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
                         {
-                            m.RotateSpeed = -m.RotateSpeed;
+                            foreach (Motor m in rotM.motorList)
+                            {
+                                m.RotateSpeed = -m.RotateSpeed;
+                            }
                         }
                     }
                 }
