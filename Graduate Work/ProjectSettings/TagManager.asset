@@ -13,6 +13,7 @@ TagManager:
   - RackGear
   - Motor
   - BevelGear
+  - RackGearLimit
   layers:
   - Default
   - TransparentFX

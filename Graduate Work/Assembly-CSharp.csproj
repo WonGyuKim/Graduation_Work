@@ -96,6 +96,7 @@
     <Compile Include="Assets\Script\ObjectRotate.cs" />
     <Compile Include="Assets\Script\Player.cs" />
     <Compile Include="Assets\Script\RackGear.cs" />
+    <Compile Include="Assets\Script\RackLimit.cs" />
     <Compile Include="Assets\Script\RotateMotor.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\brick.cs" />
     <Compile Include="Assets\Script\temp1\BeforeProject\builder.cs" />

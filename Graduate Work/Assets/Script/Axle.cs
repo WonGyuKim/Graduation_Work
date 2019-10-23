@@ -137,7 +137,7 @@ public class Axle : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        speed /= 500f;
+        speed /= 400f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
