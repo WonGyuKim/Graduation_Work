@@ -125,7 +125,7 @@ public class Gear : MonoBehaviour, IGear
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        speed /= 300f;
+        speed /= 500f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
@@ -312,14 +312,17 @@ public class Gear : MonoBehaviour, IGear
                     }
                     if (link.type == MotorLink.LinkType.Loose)
                     {
-                        count++;
-                        if (this.gameObject.Equals(link.right.gameObj))
+                        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
                         {
-                            obj = link.left.gameObj;
-                        }
-                        else
-                        {
-                            obj = link.right.gameObj;
+                            count++;
+                            if (this.gameObject.Equals(link.right.gameObj))
+                            {
+                                obj = link.left.gameObj;
+                            }
+                            else
+                            {
+                                obj = link.right.gameObj;
+                            }
                         }
                     }
                 }

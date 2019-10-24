@@ -126,7 +126,7 @@ public class Motor : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        speed /= 300f;
+        speed /= 500f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 

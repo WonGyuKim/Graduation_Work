@@ -16,11 +16,11 @@ public class RackLimit : MonoBehaviour
 
     //void OnTriggerEnter(Collider other)
     //{
-    //    if(rotM.motoring)
+    //    if (rotM.motoring)
     //    {
     //        foreach (MotorLink link in rack.node.lList)
     //        {
-    //            if(link.type == MotorLink.LinkType.Rack)
+    //            if (link.type == MotorLink.LinkType.Rack)
     //            {
     //                if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
     //                {
@@ -53,6 +53,7 @@ public class RackLimit : MonoBehaviour
                             {
                                 m.RotateSpeed = -m.RotateSpeed;
                             }
+                            return;
                         }
                     }
                 }

@@ -202,14 +202,17 @@ public class CrossBeam : MonoBehaviour, IParts
                     }
                     if (link.type == MotorLink.LinkType.Loose)
                     {
-                        count++;
-                        if (this.gameObject.Equals(link.right.gameObj))
+                        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
                         {
-                            obj = link.left.gameObj;
-                        }
-                        else
-                        {
-                            obj = link.right.gameObj;
+                            count++;
+                            if (this.gameObject.Equals(link.right.gameObj))
+                            {
+                                obj = link.left.gameObj;
+                            }
+                            else
+                            {
+                                obj = link.right.gameObj;
+                            }
                         }
                     }
                 }

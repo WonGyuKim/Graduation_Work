@@ -99,56 +99,60 @@ public class Hole : MonoBehaviour
         {
             if (iparts.Loaded)
             {
-                if (other.transform.parent != null)
+                Vector3 cr = Vector3.Cross(other.transform.forward, transform.forward);
+                if (cr == Vector3.zero)
                 {
-                    DokObj = other.transform.parent;
-                    parts = other.transform;
+                    if (other.transform.parent != null)
+                    {
+                        DokObj = other.transform.parent;
+                        parts = other.transform;
+                    }
+                    else
+                    {
+                        DokObj = other.transform;
+                    }
+                    colIParts = DokObj.gameObject.GetComponent<IParts>();
+
+                    close = true;
+                    iparts.Link(this.transform, DokObj);
+                    colIParts.Link(this.transform, Parent);
+
+                    link = transform.gameObject.GetComponent<MotorLink>();
+                    link.linkObject = this.gameObject;
+                    link.left = iparts;
+                    link.right = colIParts;
+
+                    Transform tmpObj;
+
+                    if (DokObj.childCount == 0)
+                    {
+                        tmpObj = DokObj;
+                    }
+                    else
+                    {
+                        tmpObj = parts;
+                    }
+
+                    if (this.tag == "Axle_Hole" && tmpObj.tag == "Axle")
+                    {
+                        link.type = MotorLink.LinkType.Tight;
+                    }
+
+                    else if (this.tag == "Conn_Hole" && tmpObj.tag == "Connector")
+                    {
+                        link.type = MotorLink.LinkType.Loose;
+                    }
+
+                    else if (this.tag == "Conn_Hole" && tmpObj.tag == "Axle")
+                    {
+                        link.type = MotorLink.LinkType.Loose;
+                    }
+
+                    link.left.node.AddLink(link);
+                    link.right.node.AddLink(link);
+                    Loaded = false;
+                    return;
                 }
-                else
-                {
-                    DokObj = other.transform;
-                }
-                colIParts = DokObj.gameObject.GetComponent<IParts>();
-
-                close = true;
-                iparts.Link(this.transform, DokObj);
-                colIParts.Link(this.transform, Parent);
-
-                link = transform.gameObject.GetComponent<MotorLink>();
-                link.linkObject = this.gameObject;
-                link.left = iparts;
-                link.right = colIParts;
-
-                Transform tmpObj;
-
-                if (DokObj.childCount == 0)
-                {
-                    tmpObj = DokObj;
-                }
-                else
-                {
-                    tmpObj = parts;
-                }
-
-                if (this.tag == "Axle_Hole" && tmpObj.tag == "Axle")
-                {
-                    link.type = MotorLink.LinkType.Tight;
-                }
-
-                else if (this.tag == "Conn_Hole" && tmpObj.tag == "Connector")
-                {
-                    link.type = MotorLink.LinkType.Loose;
-                }
-
-                else if (this.tag == "Conn_Hole" && tmpObj.tag == "Axle")
-                {
-                    link.type = MotorLink.LinkType.Loose;
-                }
-
-                link.left.node.AddLink(link);
-                link.right.node.AddLink(link);
-                Loaded = false;
-                return;
             }
 
             Vector3 cross = Vector3.Cross(other.transform.forward, transform.forward);
