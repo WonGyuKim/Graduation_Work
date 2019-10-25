@@ -8,6 +8,7 @@ public class MotorText : MonoBehaviour
     public Text motorText;
     public Motor motor;
     public InputField input;
+    public Toggle tog;
     public float RotateSpeed;
 
     void Start()
@@ -17,6 +18,7 @@ public class MotorText : MonoBehaviour
         motorText.text = "";
         motorText.text = "Motor" + rotM.motorList.Count.ToString() + " Velocity : ";
         motor = rotM.motorList[rotM.motorList.Count - 1];
+
         Transform childInput = transform.GetChild(0);
 
         input = childInput.gameObject.GetComponent<InputField>();
@@ -25,7 +27,17 @@ public class MotorText : MonoBehaviour
         {
             UpdateInput(input);
         });
+
+        Transform childTog = transform.GetChild(1);
+
+        tog = childTog.gameObject.GetComponent<Toggle>();
+
+        tog.onValueChanged.AddListener(delegate
+        {
+            UpdateTog(tog);
+        });
     }
+
     void UpdateInput(InputField inF)
     {
         int chknum = 0;
@@ -37,11 +49,22 @@ public class MotorText : MonoBehaviour
                 chknum = 70;
                 inF.text = 70.ToString();
             }
-            motor.RotateSpeed = chknum;
+            if(motor.RotateSpeed >= 0)
+                motor.RotateSpeed = chknum;
+            else
+                motor.RotateSpeed = -chknum;
+        }
+    }
+
+    void UpdateTog(Toggle togl)
+    {
+        if(togl.isOn)
+        {
+            motor.on = false;
         }
         else
         {
-
+            motor.on = true;
         }
     }
 }

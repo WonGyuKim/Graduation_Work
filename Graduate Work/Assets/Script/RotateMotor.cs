@@ -129,13 +129,17 @@ public class RotateMotor : MonoBehaviour
         if (buttonClick)
         {
             motoring = true;
+
             foreach (Motor motor in motorList)
             {
-                motor.MotoringMove(motor.transform.position, motor.transform.forward, motor.RotateSpeed * Time.deltaTime * 100, 0, 0);
-                nodeList = nodeList.Distinct().ToList();
-                foreach (MotorNode node in nodeList)
+                if (motor.on)
                 {
-                    node.parts.SearchReset();
+                    motor.MotoringMove(motor.transform.position, motor.transform.forward, motor.RotateSpeed * Time.deltaTime * 100, 0, 0, motor);
+                    nodeList = nodeList.Distinct().ToList();
+                    foreach (MotorNode node in nodeList)
+                    {
+                        node.parts.SearchReset();
+                    }
                 }
             }
             //Debug.Log("Motoring");
@@ -143,7 +147,6 @@ public class RotateMotor : MonoBehaviour
             {
                 node.parts.MotorRotate();
             }
-
             foreach (MotorNode node in nodeList)
             {
                 node.parts.ResetValue();

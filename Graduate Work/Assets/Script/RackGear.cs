@@ -37,6 +37,8 @@ public class RackGear : MonoBehaviour, IGear
     private string kind;
     private bool loaded;
     public List<MoveCell> moveList;
+    public Vector3 lastPos;
+    public Vector3 moveDir;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -87,6 +89,8 @@ public class RackGear : MonoBehaviour, IGear
         hole = null;
         dis = int.MaxValue;
         rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
+        lastPos = transform.position;
+        moveDir = Vector3.zero;
         ResetValue();
     }
 
@@ -185,7 +189,7 @@ public class RackGear : MonoBehaviour, IGear
         }
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -201,43 +205,37 @@ public class RackGear : MonoBehaviour, IGear
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    rad = this.rad;
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    rad = this.rad;
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Gear)
                 {
                     //float ratio = rad / this.rad;
                     //speed *= ratio;
                     //rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
                     //float ratio = rad / this.rad;
                     //speed *= ratio;
                     //rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
             }
-            
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
-            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
+           
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
@@ -279,6 +277,8 @@ public class RackGear : MonoBehaviour, IGear
             else
             {
                 transform.Translate(cell.Axis, Space.World);
+                moveDir = transform.position - lastPos;
+                lastPos = transform.position;
             }
         }
 
@@ -320,10 +320,6 @@ public class RackGear : MonoBehaviour, IGear
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
         moveList.Clear();
     }
 
@@ -648,5 +644,10 @@ public class RackGear : MonoBehaviour, IGear
             }
             AllList.Clear();
         }
+    }
+
+    public void ObjectDestroy()
+    {
+
     }
 }

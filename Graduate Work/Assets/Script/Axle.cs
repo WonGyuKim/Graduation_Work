@@ -167,7 +167,7 @@ public class Axle : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -185,18 +185,18 @@ public class Axle : MonoBehaviour, IParts
                 {
                     if (moveType == 1)
                     {
-                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                        lparts.MotoringMove(point, axis, speed, 0, 1, motor);
                     }
                     else
                     {
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
                     if (moveType == 1)
                     {
-                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                        lparts.MotoringMove(point, axis, speed, 0, 1, motor);
                     }
                     else
                     {
@@ -211,17 +211,13 @@ public class Axle : MonoBehaviour, IParts
                              || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                              || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                         {
-                            lparts.MotoringMove(point, axis, speed, rad, moveType);
+                            lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                         }
                     }
                 }
             }
             
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
-            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
@@ -251,10 +247,6 @@ public class Axle : MonoBehaviour, IParts
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
         moveList.Clear();
     }
 
@@ -425,5 +417,10 @@ public class Axle : MonoBehaviour, IParts
             }
             AllList.Clear();
         }
+    }
+
+    public void ObjectDestroy()
+    {
+
     }
 }

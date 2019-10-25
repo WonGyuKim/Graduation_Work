@@ -8,6 +8,7 @@ public class MoveCell
     public Vector3 Point { get; set; }
     public int MoveType { get; set; }
     public float MoveSpeed { get; set; }
+    public Motor Motor { get; set; }
 
     public MoveCell()
     {
@@ -17,11 +18,12 @@ public class MoveCell
         MoveSpeed = 0;
     }
 
-    public MoveCell(Vector3 point, Vector3 axis, float moveSpeed, int moveType)
+    public MoveCell(Vector3 point, Vector3 axis, float moveSpeed, int moveType, Motor motor)
     {
         Point = point;
         Axis = axis;
         MoveSpeed = moveSpeed;
         MoveType = moveType;
+        Motor = motor;
     }
 }

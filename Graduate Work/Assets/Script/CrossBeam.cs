@@ -152,7 +152,7 @@ public class CrossBeam : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -167,19 +167,14 @@ public class CrossBeam : MonoBehaviour, IParts
                     lparts = link.left;
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
             }
-            
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
-            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
@@ -265,10 +260,6 @@ public class CrossBeam : MonoBehaviour, IParts
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
         moveList.Clear();
     }
 
@@ -459,5 +450,10 @@ public class CrossBeam : MonoBehaviour, IParts
             }
             AllList.Clear();
         }
+    }
+
+    public void ObjectDestroy()
+    {
+
     }
 }

@@ -6,6 +6,7 @@ public class RackLimit : MonoBehaviour
 {
     RackGear rack;
     RotateMotor rotM;
+    public string Name;
 
     void Start()
     {
@@ -14,7 +15,37 @@ public class RackLimit : MonoBehaviour
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
     }
 
-    //void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
+    {
+        if (rotM.motoring)
+        {
+            foreach (MotorLink link in rack.node.lList)
+            {
+                if (link.type == MotorLink.LinkType.Rack)
+                {
+                    if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
+                    {
+                        Vector3 dir = rack.transform.position - transform.position;
+                        //dir = dir.normalized;
+
+                        if (Vector3.Dot(dir, rack.moveDir) > 0)
+                        {
+                            //foreach (MoveCell cell in rack.moveList)
+                            //{
+                            //    cell.Motor.RotateSpeed = -cell.Motor.RotateSpeed;
+                            //}
+                            foreach (Motor m in rotM.motorList)
+                            {
+                                m.RotateSpeed = -m.RotateSpeed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //void OnTriggerExit(Collider other)
     //{
     //    if (rotM.motoring)
     //    {
@@ -24,40 +55,27 @@ public class RackLimit : MonoBehaviour
     //            {
     //                if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
     //                {
-    //                    foreach (Motor m in rotM.motorList)
+    //                    Vector3 dir = rack.transform.position - transform.position;
+    //                    dir = dir.normalized;
+    //                    Vector3 rdir = new Vector3();
+    //                    foreach (MoveCell mc in rack.moveList)
     //                    {
-    //                        m.RotateSpeed = -m.RotateSpeed;
+    //                        rdir = mc.Axis;
+    //                    }
+    //                    rdir = this.transform.TransformPoint(rdir);
+    //                    rdir = rdir.normalized;
+                        
+    //                    if (Vector3.Dot(dir, rdir) > 0)
+    //                    {
+    //                        foreach (Motor m in rotM.motorList)
+    //                        {
+    //                            m.RotateSpeed = -m.RotateSpeed;
+    //                        }
+    //                        return;
     //                    }
     //                }
     //            }
     //        }
     //    }
     //}
-
-    void OnTriggerExit(Collider other)
-    {
-        if(rotM.motoring)
-        {
-            Vector3 gearPos = other.transform.position - transform.position;
-            Vector3 dir = rack.transform.position - transform.position;
-
-            if (Vector3.Dot(gearPos, dir) < 0)
-            {
-                foreach (MotorLink link in rack.node.lList)
-                {
-                    if (link.type == MotorLink.LinkType.Rack)
-                    {
-                        if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
-                        {
-                            foreach (Motor m in rotM.motorList)
-                            {
-                                m.RotateSpeed = -m.RotateSpeed;
-                            }
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

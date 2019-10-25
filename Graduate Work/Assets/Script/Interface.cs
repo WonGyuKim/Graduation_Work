@@ -21,7 +21,7 @@ public interface IParts
 
     void ArcballMove();
 
-    void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType);
+    void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor);
 
     void MotorRotate();
 
@@ -64,6 +64,8 @@ public interface IParts
         set;
         get;
     }
+
+    void ObjectDestroy();
 }
 
 public interface IGear : IParts

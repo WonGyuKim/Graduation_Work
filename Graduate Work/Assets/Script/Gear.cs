@@ -185,12 +185,17 @@ public class Gear : MonoBehaviour, IGear
         }
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
             search = true;
             rotM.nodeList.Add(Node);
+            if (rad != 0)
+            {
+                float ratio = rad / this.rad;
+                speed *= ratio;
+            }
             foreach (MotorLink link in Node.lList)
             {
                 IParts lparts;
@@ -198,25 +203,17 @@ public class Gear : MonoBehaviour, IGear
                     lparts = link.right;
                 else
                     lparts = link.left;
-
+                
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    rad = this.rad;
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    rad = this.rad;
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Gear)
                 {
-                    if (rad != 0)
-                    {
-                        float ratio = rad / this.rad;
-                        speed *= ratio;
-                    }
-                    rad = this.rad;
                     Vector3 tVector = (transform.position - point);
                     if (tVector == Vector3.zero)
                     {
@@ -227,17 +224,11 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
-                    if (rad != 0)
-                    {
-                        float ratio = rad / this.rad;
-                        speed *= ratio;
-                    }
-                    rad = this.rad;
                     Vector3 tVector = (transform.position - point);
                     if (tVector == Vector3.zero)
                     {
@@ -248,7 +239,7 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
@@ -263,7 +254,7 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, moveType);
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
@@ -280,16 +271,11 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, rad, 1);
+                        lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
                     }
                 }
             }
-            
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
-            moveList.Add(new MoveCell(point, axis, moveSpeed, moveType));
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
@@ -375,10 +361,6 @@ public class Gear : MonoBehaviour, IGear
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
         moveList.Clear();
     }
 
@@ -675,5 +657,10 @@ public class Gear : MonoBehaviour, IGear
             }
             AllList.Clear();
         }
+    }
+
+    public void ObjectDestroy()
+    {
+
     }
 }
