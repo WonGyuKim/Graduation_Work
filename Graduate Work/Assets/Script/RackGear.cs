@@ -648,6 +648,45 @@ public class RackGear : MonoBehaviour, IGear
 
     public void ObjectDestroy()
     {
+        //GameObject link;
 
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    link = Node.lList[i].linkObject;
+        //    MotorLink l = link.GetComponent<MotorLink>();
+        //    if (link.tag == "GearLink")
+        //    {
+        //        if (l.left.gameObj.Equals(this.gameObject))
+        //        {
+        //            gearControl.deLinkGear(this, (IGear)Node.lList[i].right);
+        //        }
+        //        else
+        //        {
+        //            gearControl.deLinkGear(this, (IGear)Node.lList[i].left);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Hole h = link.GetComponent<Hole>();
+        //        if (l.left.gameObj.Equals(this.gameObject))
+        //        {
+        //            h.LinkCancel(l.right.gameObj);
+        //        }
+        //        else
+        //        {
+        //            h.LinkCancel(l.left.gameObj);
+        //        }
+        //    }
+        //}
+
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            if (ui.list.Remove(this.gameObject) && gearControl.gearList.Remove(this))
+            {
+                ui.data = null;
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

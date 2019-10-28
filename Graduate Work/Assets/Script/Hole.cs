@@ -183,24 +183,29 @@ public class Hole : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        LinkCancel(other.gameObject);
+    }
+
+    public void LinkCancel(GameObject col)
+    {
         Transform otherTrans;
 
-        if((other.tag == "Axle" || other.tag == "Connector"))
+        if ((col.tag == "Axle" || col.tag == "Connector"))
         {
             if (colIParts == null)
             {
                 return;
             }
 
-            if (other.transform.parent != null)
+            if (col.transform.parent != null)
             {
-                otherTrans = other.transform.parent;
+                otherTrans = col.transform.parent;
             }
             else
             {
-                otherTrans = other.transform;
+                otherTrans = col.transform;
             }
-            
+
             if (iparts.OnDragCheck)
             {
                 iparts.HoleOut(transform, DokObj);

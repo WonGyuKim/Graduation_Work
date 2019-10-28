@@ -11,14 +11,14 @@ public class MotorText : MonoBehaviour
     public Toggle tog;
     public float RotateSpeed;
 
-    void Start()
+    void OnEnable()
     {
         motorText = GetComponent<Text>();
         RotateMotor rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         motorText.text = "";
         motorText.text = "Motor" + rotM.motorList.Count.ToString() + " Velocity : ";
         motor = rotM.motorList[rotM.motorList.Count - 1];
-
+        
         Transform childInput = transform.GetChild(0);
 
         input = childInput.gameObject.GetComponent<InputField>();

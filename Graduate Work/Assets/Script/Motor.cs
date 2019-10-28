@@ -406,6 +406,33 @@ public class Motor : MonoBehaviour, IParts
 
     public void ObjectDestroy()
     {
+        //GameObject hole;
 
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    hole = Node.lList[i].linkObject;
+        //    Hole h = hole.GetComponent<Hole>();
+
+        //    MotorLink l = hole.GetComponent<MotorLink>();
+        //    if (l.left.gameObj.Equals(this.gameObject))
+        //    {
+        //        h.LinkCancel(l.right.gameObj);
+        //    }
+        //    else
+        //    {
+        //        h.LinkCancel(l.left.gameObj);
+        //    }
+        //}
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            
+            if (ui.list.Remove(this.gameObject) && rotM.motorList.Remove(this))
+            {
+                ui.data = null;
+                Destroy(motorText);
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

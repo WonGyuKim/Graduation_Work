@@ -123,6 +123,7 @@ public class Axle : MonoBehaviour, IParts
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
+
         if (LinkParts.Count == 0)
         {
             tEnter = false;
@@ -421,6 +422,22 @@ public class Axle : MonoBehaviour, IParts
 
     public void ObjectDestroy()
     {
+        //GameObject hole;
 
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    hole = Node.lList[i].linkObject;
+        //    Hole h = hole.GetComponent<Hole>();
+        //    h.LinkCancel(this.gameObject);
+        //}
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            if (ui.list.Remove(this.gameObject))
+            {
+                ui.data = null;
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

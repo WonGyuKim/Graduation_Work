@@ -14,6 +14,7 @@ TagManager:
   - Motor
   - BevelGear
   - RackGearLimit
+  - GearLink
   layers:
   - Default
   - TransparentFX

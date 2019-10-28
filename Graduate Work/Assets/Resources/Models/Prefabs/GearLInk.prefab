@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 629462219140379056}
   m_Layer: 0
   m_Name: GearLInk
-  m_TagString: Untagged
+  m_TagString: GearLink
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55be42198c224c8429237eccb8f898da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linkObject: {fileID: 0}
   type: 0

@@ -18,8 +18,8 @@ public class UIManager : MonoBehaviour
 
     // Variables
     private int target;
-    private List<GameObject> list;
-    private IParts data;
+    public List<GameObject> list;
+    public IParts data;
     private bool selected, selected_all;
     string path;
 
@@ -76,7 +76,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonUp(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayhit;
@@ -104,8 +104,6 @@ public class UIManager : MonoBehaviour
                             selected = false;
                             data = null;
                         }
-
-
                         break;
                     }
 
@@ -120,7 +118,6 @@ public class UIManager : MonoBehaviour
                 {
                     text.text += "and connected with it";
                 }
-
             }
 
         }
@@ -300,7 +297,7 @@ public class UIManager : MonoBehaviour
 
                 foreach (GameObject gameobject in data_all)
                 {
-                    Debug.Log(gameobject);
+                    //Debug.Log(gameobject);
                     
                     output.Vector3 = gameobject.transform.position;
                     output.Quaternion = gameobject.transform.rotation;
