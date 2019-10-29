@@ -40,9 +40,9 @@ public class MotorText : MonoBehaviour
 
     void UpdateInput(InputField inF)
     {
-        int chknum = 0;
+        float chknum = 0;
 
-        if(int.TryParse(inF.text, out chknum))
+        if(float.TryParse(inF.text, out chknum))
         {
             if(chknum > 70)
             {

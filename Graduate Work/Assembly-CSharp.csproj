@@ -73,6 +73,7 @@
     <Compile Include="Assets\Script\CrossBeam.cs" />
     <Compile Include="Assets\Script\Gear.cs" />
     <Compile Include="Assets\Script\GearControl.cs" />
+    <Compile Include="Assets\Script\GearLimit.cs" />
     <Compile Include="Assets\Script\Hole.cs" />
     <Compile Include="Assets\Script\Interface.cs" />
     <Compile Include="Assets\Script\KWG_Script\BasicParts.cs" />

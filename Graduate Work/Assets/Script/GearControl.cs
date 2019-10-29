@@ -13,6 +13,24 @@ public class GearControl : MonoBehaviour
 
     public void linkGear(IGear gear1, IGear gear2)
     {
+        GearLimit lim = gear1.gameObj.transform.GetChild(0).GetComponent<GearLimit>();
+        foreach(IGear ge in lim.gList)
+        {
+            if(ge.gameObj.Equals(gear2.gameObj))
+            {
+                return;
+            }
+        }
+
+        lim = gear2.gameObj.transform.GetChild(0).GetComponent<GearLimit>();
+        foreach (IGear ge in lim.gList)
+        {
+            if (ge.gameObj.Equals(gear1.gameObj))
+            {
+                return;
+            }
+        }
+
         foreach (MotorLink lk in gear1.node.lList)
         {
             if ((lk.left.gameObj.Equals(gear1.gameObj) && lk.right.gameObj.Equals(gear2.gameObj)) || (lk.left.gameObj.Equals(gear2.gameObj) && lk.right.gameObj.Equals(gear1.gameObj)))

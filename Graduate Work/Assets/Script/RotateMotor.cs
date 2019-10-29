@@ -141,17 +141,18 @@ public class RotateMotor : MonoBehaviour
                         node.parts.SearchReset();
                     }
                 }
+
+                //Debug.Log("Motoring");
+                foreach (MotorNode node in nodeList)
+                {
+                    node.parts.MotorRotate();
+                }
+                foreach (MotorNode node in nodeList)
+                {
+                    node.parts.ResetValue();
+                }
+                nodeList.Clear();
             }
-            //Debug.Log("Motoring");
-            foreach (MotorNode node in nodeList)
-            {
-                node.parts.MotorRotate();
-            }
-            foreach (MotorNode node in nodeList)
-            {
-                node.parts.ResetValue();
-            }
-            nodeList.Clear();
         }
         else
             motoring = false;

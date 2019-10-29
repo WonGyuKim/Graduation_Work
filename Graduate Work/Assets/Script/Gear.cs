@@ -618,8 +618,8 @@ public class Gear : MonoBehaviour, IGear
     {
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
-            LinkParts.Add(other.gameObject);
             IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+            LinkParts.Add(other.gameObject);
             gearControl.linkGear(this, linkGear);
         }
     }
@@ -628,7 +628,10 @@ public class Gear : MonoBehaviour, IGear
     {
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
-            LinkParts.Remove(other.gameObject);
+            if(LinkParts.Remove(other.gameObject))
+            {
+
+            }
             if (onDrag)
             {
                 IGear linkGear = other.transform.gameObject.GetComponent<IGear>();

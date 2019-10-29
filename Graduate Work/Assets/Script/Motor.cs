@@ -186,10 +186,28 @@ public class Motor : MonoBehaviour, IParts
 
     public void MotorRotate()
     {
+        MoveCell c = new MoveCell();
+        foreach(MoveCell cell in moveList)
+        {
+            if(cell.Motor.Equals(this))
+            {
+                c = cell;
+                moveList.Remove(c);
+                moveList.Insert(0, c);
+                break;
+            }
+        }
+
         foreach (MoveCell cell in moveList)
         {
             if (cell.MoveType == 0)
             {
+                //if (cell.Motor.Equals(this))
+                //{
+                //    transform.Rotate(this.transform.forward, cell.MoveSpeed, Space.World);
+                //}
+                //else
+                //    transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
                 transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
             }
             else

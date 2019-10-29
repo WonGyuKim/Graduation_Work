@@ -186,35 +186,35 @@ public class CrossBeam : MonoBehaviour, IParts
             {
                 transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
 
-                int count = 0;
-                GameObject obj = null;
+                //int count = 0;
+                //GameObject obj = null;
 
-                foreach (MotorLink link in Node.lList)
-                {
-                    if (link.type == MotorLink.LinkType.Tight)
-                    {
-                        return;
-                    }
-                    if (link.type == MotorLink.LinkType.Loose)
-                    {
-                        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
-                        {
-                            count++;
-                            if (this.gameObject.Equals(link.right.gameObj))
-                            {
-                                obj = link.left.gameObj;
-                            }
-                            else
-                            {
-                                obj = link.right.gameObj;
-                            }
-                        }
-                    }
-                }
-                if (count == 1)
-                {
-                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
-                }
+                //foreach (MotorLink link in Node.lList)
+                //{
+                //    if (link.type == MotorLink.LinkType.Tight)
+                //    {
+                //        return;
+                //    }
+                //    if (link.type == MotorLink.LinkType.Loose)
+                //    {
+                //        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
+                //        {
+                //            count++;
+                //            if (this.gameObject.Equals(link.right.gameObj))
+                //            {
+                //                obj = link.left.gameObj;
+                //            }
+                //            else
+                //            {
+                //                obj = link.right.gameObj;
+                //            }
+                //        }
+                //    }
+                //}
+                //if (count == 1)
+                //{
+                //    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+                //}
             }
             else
             {

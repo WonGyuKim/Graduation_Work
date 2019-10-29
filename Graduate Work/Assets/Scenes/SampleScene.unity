@@ -1859,6 +1859,7 @@ MonoBehaviour:
   Save: {fileID: 607257019}
   Load: {fileID: 354035897}
   text: {fileID: 769210787}
+  list: []
 --- !u!1 &1246473094
 GameObject:
   m_ObjectHideFlags: 0
