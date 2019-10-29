@@ -45,7 +45,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.03
-  m_Height: 0.25
+  m_Height: 0.18
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6213854187033957761
@@ -77,6 +77,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &5254278696710300067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +155,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3ae150b9a57ad8a4e8a740883aa2b0a4, type: 3}
+  - {fileID: 2100000, guid: 038b9d756a867104290b19c105468bf4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -221,6 +223,11 @@ MonoBehaviour:
   AllList: []
   gearControl: {fileID: 0}
   rotM: {fileID: 0}
+  hole: {fileID: 0}
+  holeList: []
+  otherList: []
+  dis: 0
+  rad: 0
 --- !u!114 &5409929364992441594
 MonoBehaviour:
   m_ObjectHideFlags: 0

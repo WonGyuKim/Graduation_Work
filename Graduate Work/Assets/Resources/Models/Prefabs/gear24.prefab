@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a58e159d98099cd48b4114fee8878d57, type: 3}
+  - {fileID: 2100000, guid: 659511a6817c205458c58003f1ea83bc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,6 +119,11 @@ MonoBehaviour:
   AllList: []
   gearControl: {fileID: 0}
   rotM: {fileID: 0}
+  hole: {fileID: 0}
+  holeList: []
+  otherList: []
+  dis: 0
+  rad: 0
 --- !u!114 &2468873864238856622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +226,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7374934992088944894
@@ -237,6 +242,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &6444728567575940818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +319,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1842483693639839752
@@ -328,6 +335,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &2864088080408760267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,7 +412,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6378371173878812860
@@ -419,6 +428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &7115719965623732945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,7 +489,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.03
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4067353252455949478
@@ -510,6 +521,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &357526974582355451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,7 +598,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8569255255873409950
@@ -601,6 +614,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &6081662652648958838
 MonoBehaviour:
   m_ObjectHideFlags: 0

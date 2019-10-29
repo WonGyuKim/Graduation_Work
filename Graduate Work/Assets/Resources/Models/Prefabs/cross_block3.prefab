@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d8e774e7963221244b3e5cb24a18cbd3, type: 3}
+  - {fileID: 2100000, guid: 0b61e549da37fe04b875d67c1c30ecca, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -176,7 +176,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.03
-  m_Height: 0.15
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7741056084533592580
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &276529496763210752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,7 +269,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2357693266212337236
@@ -301,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &3960892678749528699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,7 +362,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3489051296218089354
@@ -393,6 +395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &2884298489059298028
 MonoBehaviour:
   m_ObjectHideFlags: 0

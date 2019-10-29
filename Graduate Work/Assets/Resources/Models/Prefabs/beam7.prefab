@@ -45,7 +45,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7242391151861162243
@@ -78,6 +78,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &2392963319576071513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +138,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2260773116036546375
@@ -170,6 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &2588840590983743391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +254,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 147a29c859db92b48ba9a241b706835a, type: 3}
+  - {fileID: 2100000, guid: decc83197f289844189a4ce261ff3af2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -377,7 +379,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3490565702584373275
@@ -410,6 +412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &1157919298332894185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -469,7 +472,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2361569678436674534
@@ -502,6 +505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &6655525693426642505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +565,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1358417991136078458
@@ -594,6 +598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &182904762314187493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,7 +658,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2817336381913071962
@@ -686,6 +691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &1682912873433555093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,7 +751,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.2
+  m_Height: 0.1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &919228645713840366
@@ -778,6 +784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &4427798356266421924
 MonoBehaviour:
   m_ObjectHideFlags: 0

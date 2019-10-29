@@ -12,7 +12,7 @@ public class CrossBeam : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     private Vector3 dst;
 
     public bool search; //탐색 확인 변수
@@ -22,13 +22,16 @@ public class CrossBeam : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
-    public List<Transform> otherList = new List<Transform>();
+    public List<Transform> holeList;
+    public List<Transform> otherList;
     public float dis;
     private Vector3 point;
     private Vector3 axis;
     private float moveSpeed;
     private int moveType;
+    private string kind;
+    private bool loaded;
+    public List<MoveCell> moveList;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -47,11 +50,26 @@ public class CrossBeam : MonoBehaviour, IParts
 
         }
     }
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+    public bool Loaded
+    {
+        set { loaded = value; }
+        get { return loaded; }
+    }
 
     void Start()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        if (!loaded)
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        otherList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -116,7 +134,7 @@ public class CrossBeam : MonoBehaviour, IParts
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 230 / cm)
+        if (r > 150 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -134,7 +152,7 @@ public class CrossBeam : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -149,64 +167,100 @@ public class CrossBeam : MonoBehaviour, IParts
                     lparts = link.left;
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
             }
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            transform.RotateAround(point, axis, moveSpeed);
-            int count = 0;
-            GameObject obj = null;
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
 
-            foreach (MotorLink link in Node.lList)
-            {
-                if (link.type == MotorLink.LinkType.Tight)
+                int count = 0;
+                GameObject obj = null;
+
+                foreach (MotorLink link in Node.lList)
                 {
-                    return;
+                    if (link.type == MotorLink.LinkType.Tight)
+                    {
+                        return;
+                    }
+                    if (link.type == MotorLink.LinkType.Loose)
+                    {
+                        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
+                        {
+                            count++;
+                            if (this.gameObject.Equals(link.right.gameObj))
+                            {
+                                obj = link.left.gameObj;
+                            }
+                            else
+                            {
+                                obj = link.right.gameObj;
+                            }
+                        }
+                    }
                 }
-                if (link.type == MotorLink.LinkType.Loose)
+                if (count == 1)
                 {
-                    count++;
-                    if (this.gameObject.Equals(link.right.gameObj))
-                    {
-                        obj = link.left.gameObj;
-                    }
-                    else
-                    {
-                        obj = link.right.gameObj;
-                    }
+                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
                 }
             }
-            if (count == 1)
+            else
             {
-                transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+                transform.Translate(cell.Axis, Space.World);
             }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //    int count = 0;
+        //    GameObject obj = null;
+
+        //    foreach (MotorLink link in Node.lList)
+        //    {
+        //        if (link.type == MotorLink.LinkType.Tight)
+        //        {
+        //            return;
+        //        }
+        //        if (link.type == MotorLink.LinkType.Loose)
+        //        {
+        //            count++;
+        //            if (this.gameObject.Equals(link.right.gameObj))
+        //            {
+        //                obj = link.left.gameObj;
+        //            }
+        //            else
+        //            {
+        //                obj = link.right.gameObj;
+        //            }
+        //        }
+        //    }
+        //    if (count == 1)
+        //    {
+        //        transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+        //    }
+        //}
+        //else
+        //{
+        //    transform.Translate(axis, Space.World);
+        //}
     }
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -254,6 +308,7 @@ public class CrossBeam : MonoBehaviour, IParts
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -378,5 +433,53 @@ public class CrossBeam : MonoBehaviour, IParts
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
+    }
+
+    public void ObjectDestroy()
+    {
+        //GameObject hole;
+
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    hole = Node.lList[i].linkObject;
+        //    Hole h = hole.GetComponent<Hole>();
+
+        //    MotorLink l = hole.GetComponent<MotorLink>();
+        //    if (l.left.gameObj.Equals(this.gameObject))
+        //    {
+        //        h.LinkCancel(l.right.gameObj);
+        //    }
+        //    else
+        //    {
+        //        h.LinkCancel(l.left.gameObj);
+        //    }
+        //}
+
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            if (ui.list.Remove(this.gameObject))
+            {
+                ui.data = null;
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

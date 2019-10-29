@@ -12,7 +12,7 @@ public class Axle : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
@@ -20,12 +20,15 @@ public class Axle : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
+    public List<Transform> holeList;
     public float dis;
     private Vector3 point;
     private Vector3 axis;
     private float moveSpeed;
     private int moveType;
+    private string kind;
+    private bool loaded;
+    public List<MoveCell> moveList;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -39,11 +42,25 @@ public class Axle : MonoBehaviour, IParts
 
         }
     }
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+    public bool Loaded
+    {
+        set { loaded = value; }
+        get { return loaded; }
+    }
 
     void Start()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        if (!loaded)
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -56,6 +73,11 @@ public class Axle : MonoBehaviour, IParts
         ResetValue();
     }
 
+    //void Update()
+    //{
+    //    Debug.Log(holeList.Count);
+    //}
+
     void OnMouseDown()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
@@ -63,6 +85,7 @@ public class Axle : MonoBehaviour, IParts
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -72,6 +95,7 @@ public class Axle : MonoBehaviour, IParts
                 gobj.transform.parent = Parent.transform;
             }
         }
+
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -99,6 +123,7 @@ public class Axle : MonoBehaviour, IParts
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
+
         if (LinkParts.Count == 0)
         {
             tEnter = false;
@@ -113,7 +138,7 @@ public class Axle : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        speed /= 500f;
+        speed /= 400f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
@@ -143,7 +168,7 @@ public class Axle : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -161,18 +186,18 @@ public class Axle : MonoBehaviour, IParts
                 {
                     if (moveType == 1)
                     {
-                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                        lparts.MotoringMove(point, axis, speed, 0, 1, motor);
                     }
                     else
                     {
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
                     if (moveType == 1)
                     {
-                        lparts.MotoringMove(point, axis, speed, rad, 1);
+                        lparts.MotoringMove(point, axis, speed, 0, 1, motor);
                     }
                     else
                     {
@@ -182,41 +207,48 @@ public class Axle : MonoBehaviour, IParts
                             tVector = transform.forward;
                         }
                         tVector = tVector.normalized;
+
                         if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
-                            || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
-                            || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                             || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                             || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                         {
-                            lparts.MotoringMove(point, axis, speed, rad, moveType);
+                            lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                         }
                     }
                 }
             }
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
+            
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach(MoveCell cell in moveList)
         {
-            //Debug.Log("Axle : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
-            transform.RotateAround(point, axis, moveSpeed);
+            if(cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+            }
+            else
+            {
+                transform.Translate(cell.Axis, Space.World);
+            }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+        //if (this.moveType == 0)
+        //{
+        //    //Debug.Log("Axle : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //}
+        //else
+        //{
+        //    transform.Translate(axis, Space.World);
+        //}
     }
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -369,5 +401,43 @@ public class Axle : MonoBehaviour, IParts
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if(this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach(GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
+    }
+
+    public void ObjectDestroy()
+    {
+        //GameObject hole;
+
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    hole = Node.lList[i].linkObject;
+        //    Hole h = hole.GetComponent<Hole>();
+        //    h.LinkCancel(this.gameObject);
+        //}
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            if (ui.list.Remove(this.gameObject))
+            {
+                ui.data = null;
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ public interface IParts
 
     void ArcballMove();
 
-    void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType);
+    void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor);
 
     void MotorRotate();
 
@@ -34,7 +34,9 @@ public interface IParts
     void SearchReset();//검색된 결과 리셋
 
     void HoleInput(Transform hole, Transform other);
+
     void HoleOut(Transform hole, Transform other);
+
     bool OnDragCheck
     {
         get;
@@ -50,6 +52,20 @@ public interface IParts
         get;
         set;
     }
+
+    string Kind
+    {
+        get;
+        set;
+    }
+
+    bool Loaded
+    {
+        set;
+        get;
+    }
+
+    void ObjectDestroy();
 }
 
 public interface IGear : IParts

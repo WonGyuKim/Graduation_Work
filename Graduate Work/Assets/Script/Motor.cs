@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Motor : MonoBehaviour, IParts
 {
@@ -12,7 +13,7 @@ public class Motor : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     private Vector3 dst;
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
@@ -21,13 +22,20 @@ public class Motor : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
-    public List<Transform> otherList = new List<Transform>();
+    public List<Transform> holeList;
+    public List<Transform> otherList;
     public float dis;
     private Vector3 point;
     private Vector3 axis;
     private float moveSpeed;
     private int moveType;
+    private string kind;
+    private bool loaded;
+    public List<MoveCell> moveList;
+    public Transform scroll;
+    public GameObject motorText;
+    public float RotateSpeed;
+    public bool on;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -46,11 +54,26 @@ public class Motor : MonoBehaviour, IParts
 
         }
     }
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+    public bool Loaded
+    {
+        set { loaded = value; }
+        get { return loaded; }
+    }
 
     void Start()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        if (!loaded)
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        otherList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -61,6 +84,12 @@ public class Motor : MonoBehaviour, IParts
         rotM.motorList.Add(this);
         hole = null;
         dis = int.MaxValue;
+        scroll = GameObject.Find("Scroll View").transform.GetChild(0).GetChild(0);
+        motorText = Resources.Load("Models/Prefabs/MotorList") as GameObject;
+        motorText = MonoBehaviour.Instantiate(motorText, transform.position, Quaternion.identity) as GameObject;
+        motorText.transform.parent = scroll;
+        RotateSpeed = 5f;
+        on = true;
         ResetValue();
     }
 
@@ -99,7 +128,7 @@ public class Motor : MonoBehaviour, IParts
         Vector3 vec = Input.mousePosition - befoMouse;
         Vector3 forW = (Camera.main.WorldToScreenPoint(transform.position) - Camera.main.WorldToScreenPoint(transform.position + transform.forward)).normalized;
         speed = Vector3.Dot(forW, vec);
-        speed /= 300f;
+        speed /= 500f;
         transform.position -= transform.forward * speed;
         befoMouse = Input.mousePosition;
 
@@ -128,7 +157,7 @@ public class Motor : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -144,39 +173,45 @@ public class Motor : MonoBehaviour, IParts
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
             }
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            //Debug.Log("Motor : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
-            transform.RotateAround(point, axis, moveSpeed);
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+            }
+            else
+            {
+                transform.Translate(cell.Axis, Space.World);
+            }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    //Debug.Log("Motor : " + point.ToString() + " " + axis.ToString() + " " + moveSpeed.ToString());
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //}
+        //else
+        //{
+        //    transform.Translate(axis);
+        //}
     }
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -224,6 +259,7 @@ public class Motor : MonoBehaviour, IParts
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -349,5 +385,54 @@ public class Motor : MonoBehaviour, IParts
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
+    }
+
+    public void ObjectDestroy()
+    {
+        //GameObject hole;
+
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    hole = Node.lList[i].linkObject;
+        //    Hole h = hole.GetComponent<Hole>();
+
+        //    MotorLink l = hole.GetComponent<MotorLink>();
+        //    if (l.left.gameObj.Equals(this.gameObject))
+        //    {
+        //        h.LinkCancel(l.right.gameObj);
+        //    }
+        //    else
+        //    {
+        //        h.LinkCancel(l.left.gameObj);
+        //    }
+        //}
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            
+            if (ui.list.Remove(this.gameObject) && rotM.motorList.Remove(this))
+            {
+                ui.data = null;
+                Destroy(motorText);
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

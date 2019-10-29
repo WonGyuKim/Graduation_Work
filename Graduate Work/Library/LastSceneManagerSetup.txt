@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/kyb_UI_Scene.unity
+- path: Assets/Scenes/kyb_UI_Mk3.unity
   isLoaded: 1
   isActive: 1

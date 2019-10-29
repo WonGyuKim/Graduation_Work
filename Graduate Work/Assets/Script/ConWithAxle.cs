@@ -12,7 +12,7 @@ public class ConWithAxle : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
     public GameObject Parent;//부모 개체
@@ -20,7 +20,7 @@ public class ConWithAxle : MonoBehaviour, IParts
     private MotorNode Node;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
+    public List<Transform> holeList;
     public float dis;
     public Transform axle;
     public Transform conn;
@@ -28,12 +28,16 @@ public class ConWithAxle : MonoBehaviour, IParts
     private Vector3 axis;
     private float moveSpeed;
     private int moveType;
+    private string kind;
+    private bool loaded;
+    public List<MoveCell> moveList;
 
     public void HoleInput(Transform hole, Transform other)
     {
         holeList.Add(hole);
         //this.hole = hole;
     }
+
     public void HoleOut(Transform hole, Transform other)
     {
         if (holeList.Remove(hole))
@@ -42,10 +46,26 @@ public class ConWithAxle : MonoBehaviour, IParts
         }
     }
 
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+
+    public bool Loaded
+    {
+        set { loaded = value; }
+        get { return loaded; }
+    }
+
     void Start()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        if (!loaded)
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -131,7 +151,7 @@ public class ConWithAxle : MonoBehaviour, IParts
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 230 / cm)
+        if (r > 150 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -149,7 +169,7 @@ public class ConWithAxle : MonoBehaviour, IParts
 
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -165,44 +185,69 @@ public class ConWithAxle : MonoBehaviour, IParts
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    lparts.MotoringMove(point, axis, speed, rad, 0);
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, 0, 1, motor);
+                    }
+                    else
+                        lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    Vector3 tVector = (transform.position - point);
-                    tVector = tVector.normalized;
+                    if (moveType == 1)
+                    {
+                        lparts.MotoringMove(point, axis, speed, 0, 1, motor);
+                    }
+                    else
+                    {
+                        Vector3 tVector = (transform.position - point);
+                        if (tVector == Vector3.zero)
+                        {
+                            tVector = transform.forward;
+                        }
+                        tVector = tVector.normalized;
 
-                    if (tVector.x == 0 && tVector.y == 0 && tVector.z == 0)
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
-                    else if ((axis.x != tVector.x || axis.x != -tVector.x) && (axis.y != tVector.y || axis.y != -tVector.y) && (axis.z != tVector.z || axis.z != -tVector.z))
-                        lparts.MotoringMove(point, axis, speed, rad, moveType);
+                        if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                            || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                            || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                        {
+                            lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
+                        }
+                    }
                 }
             }
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
+            
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            transform.RotateAround(point, axis, moveSpeed);
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+            }
+            else
+            {
+                transform.Translate(cell.Axis, Space.World);
+            }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //}
+        //else
+        //{
+        //    transform.Translate(axis, Space.World);
+        //}
     }
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -355,6 +400,45 @@ public class ConWithAxle : MonoBehaviour, IParts
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
+    }
+
+    public void ObjectDestroy()
+    {
+        //GameObject hole;
+
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    hole = Node.lList[i].linkObject;
+        //    Hole h = hole.GetComponent<Hole>();
+        //    h.LinkCancel(this.gameObject);
+        //}
+
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            if (ui.list.Remove(this.gameObject))
+            {
+                ui.data = null;
+                Destroy(this.gameObject);
+            }
+        }
     }
 }
 

@@ -12,7 +12,7 @@ public class RackGear : MonoBehaviour, IGear
     private Vector3 befoMouse;
     private float xf;
     private float yf;
-    private List<GameObject> LinkParts = new List<GameObject>();
+    private List<GameObject> LinkParts;
     private Vector3 dst;
     private Vector3 Vec;
     private Vector3 origin;
@@ -26,14 +26,19 @@ public class RackGear : MonoBehaviour, IGear
     public GearControl gearControl;
     public RotateMotor rotM;
     public Transform hole;
-    public List<Transform> holeList = new List<Transform>();
-    public List<Transform> otherList = new List<Transform>();
+    public List<Transform> holeList;
+    public List<Transform> otherList;
     public float dis;
     public float rad;
     private Vector3 point;
     private Vector3 axis;
     private float moveSpeed;
     private int moveType;
+    private string kind;
+    private bool loaded;
+    public List<MoveCell> moveList;
+    public Vector3 lastPos;
+    public Vector3 moveDir;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -52,11 +57,26 @@ public class RackGear : MonoBehaviour, IGear
 
         }
     }
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+    public bool Loaded
+    {
+        set { loaded = value; }
+        get { return loaded; }
+    }
 
     void Start()
     {
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
-        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        if (!loaded)
+            transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
+        LinkParts = new List<GameObject>();
+        holeList = new List<Transform>();
+        otherList = new List<Transform>();
+        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -69,6 +89,8 @@ public class RackGear : MonoBehaviour, IGear
         hole = null;
         dis = int.MaxValue;
         rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
+        lastPos = transform.position;
+        moveDir = Vector3.zero;
         ResetValue();
     }
 
@@ -118,7 +140,7 @@ public class RackGear : MonoBehaviour, IGear
         float y = Input.mousePosition.y - scrSpace.y;
 
         float r = Mathf.Abs(Mathf.Sqrt(xf * xf + yf * yf) - Mathf.Sqrt(x * x + y * y));
-        if (r > 230 / cm)
+        if (r > 150 / cm)
         {
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
             tEnter = false;
@@ -167,7 +189,7 @@ public class RackGear : MonoBehaviour, IGear
         }
     }
 
-    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType)
+    public void MotoringMove(Vector3 point, Vector3 axis, float speed, float rad, int moveType, Motor motor)
     {
         if (!search)
         {
@@ -183,62 +205,122 @@ public class RackGear : MonoBehaviour, IGear
 
                 if (link.type == MotorLink.LinkType.Tight)
                 {
-                    rad = this.rad;
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Loose)
                 {
-                    rad = this.rad;
-                    lparts.MotoringMove(point, axis, speed, rad, moveType);
+                    lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Gear)
                 {
                     //float ratio = rad / this.rad;
                     //speed *= ratio;
                     //rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
                     //float ratio = rad / this.rad;
                     //speed *= ratio;
                     //rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
             }
-            this.point = point;
-            this.axis = axis;
-            this.moveSpeed = speed;
-            this.moveType = moveType;
+           
+            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        if (this.moveType == 0)
+        foreach (MoveCell cell in moveList)
         {
-            transform.RotateAround(point, axis, moveSpeed);
+            if (cell.MoveType == 0)
+            {
+                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+                int count = 0;
+                GameObject obj = null;
+
+                foreach (MotorLink link in Node.lList)
+                {
+                    if (link.type == MotorLink.LinkType.Tight)
+                    {
+                        return;
+                    }
+                    if (link.type == MotorLink.LinkType.Loose)
+                    {
+                        count++;
+                        if (this.gameObject.Equals(link.right.gameObj))
+                        {
+                            obj = link.left.gameObj;
+                        }
+                        else
+                        {
+                            obj = link.right.gameObj;
+                        }
+                    }
+                }
+                if (count == 1)
+                {
+                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+                }
+            }
+            else
+            {
+                transform.Translate(cell.Axis, Space.World);
+                moveDir = transform.position - lastPos;
+                lastPos = transform.position;
+            }
         }
-        else
-        {
-            transform.Translate(axis);
-        }
+
+        //if (this.moveType == 0)
+        //{
+        //    transform.RotateAround(point, axis, moveSpeed);
+        //    int count = 0;
+        //    GameObject obj = null;
+
+        //    foreach (MotorLink link in Node.lList)
+        //    {
+        //        if (link.type == MotorLink.LinkType.Tight)
+        //        {
+        //            return;
+        //        }
+        //        if (link.type == MotorLink.LinkType.Loose)
+        //        {
+        //            count++;
+        //            if (this.gameObject.Equals(link.right.gameObj))
+        //            {
+        //                obj = link.left.gameObj;
+        //            }
+        //            else
+        //            {
+        //                obj = link.right.gameObj;
+        //            }
+        //        }
+        //    }
+        //    if (count == 1)
+        //    {
+        //        transform.RotateAround(obj.transform.position, obj.transform.forward, -moveSpeed);
+        //    }
+        //}
+        //else
+        //{
+        //    transform.Translate(axis, Space.World);
+        //}
     }
 
     public void ResetValue()
     {
-        point = Vector3.zero;
-        axis = Vector3.zero;
-        moveSpeed = 0;
-        moveType = 0;
+        moveList.Clear();
     }
 
     public bool OnDragCheck
@@ -264,6 +346,7 @@ public class RackGear : MonoBehaviour, IGear
         yf = Input.mousePosition.y - scrSpace.y;
         onDrag = true;
         befoMouse = Input.mousePosition;
+        loaded = false;
         //if (Input.GetKey(KeyCode.LeftControl))
         //{
 
@@ -495,6 +578,31 @@ public class RackGear : MonoBehaviour, IGear
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
+
+            if (loaded)
+            {
+                foreach (MotorLink lk in Node.lList)
+                {
+                    GameObject g;
+
+                    if (lk.left.gameObj.Equals(this.gameObject))
+                    {
+                        g = lk.right.gameObj;
+                    }
+                    else
+                    {
+                        g = lk.left.gameObj;
+                    }
+
+                    if (g.Equals(other.gameObject))
+                    {
+                        return;
+                    }
+                }
+                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+                gearControl.linkGear(this, linkGear);
+            }
+
             if (onDrag)
             {
                 IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
@@ -507,7 +615,8 @@ public class RackGear : MonoBehaviour, IGear
     {
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
-            if(LinkParts.Remove(other.gameObject))
+            LinkParts.Remove(other.gameObject);
+            if (onDrag)
             {
                 IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
                 gearControl.deLinkGear(this, linkGear);
@@ -518,5 +627,66 @@ public class RackGear : MonoBehaviour, IGear
     public void SearchReset()
     {
         search = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (this.Loaded)
+        {
+            Loaded = false;
+            AllList = LinkSearch();
+
+            foreach (GameObject g in AllList)
+            {
+                IParts ip = g.GetComponent<IParts>();
+                ip.Loaded = false;
+                ip.SearchReset();
+            }
+            AllList.Clear();
+        }
+    }
+
+    public void ObjectDestroy()
+    {
+        //GameObject link;
+
+        //for (int i = Node.lList.Count - 1; i >= 0; i--)
+        //{
+        //    link = Node.lList[i].linkObject;
+        //    MotorLink l = link.GetComponent<MotorLink>();
+        //    if (link.tag == "GearLink")
+        //    {
+        //        if (l.left.gameObj.Equals(this.gameObject))
+        //        {
+        //            gearControl.deLinkGear(this, (IGear)Node.lList[i].right);
+        //        }
+        //        else
+        //        {
+        //            gearControl.deLinkGear(this, (IGear)Node.lList[i].left);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Hole h = link.GetComponent<Hole>();
+        //        if (l.left.gameObj.Equals(this.gameObject))
+        //        {
+        //            h.LinkCancel(l.right.gameObj);
+        //        }
+        //        else
+        //        {
+        //            h.LinkCancel(l.left.gameObj);
+        //        }
+        //    }
+        //}
+
+        if (Node.lList.Count == 0)
+        {
+            UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
+            if (ui.list.Remove(this.gameObject) && gearControl.gearList.Remove(this))
+            {
+                ui.data = null;
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

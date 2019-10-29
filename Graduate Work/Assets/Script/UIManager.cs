@@ -2,12 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System;
 
 public class UIManager : MonoBehaviour
 {
     // UI Components
     public Button BtnCreate;
     public Dropdown DDLCreate;
+    public Button Save;
+    public Button Load;
+    public Text text;
+
+    // Variables
+    private int target;
+    public List<GameObject> list;
+    public IParts data;
+    private bool selected, selected_all;
+    string path;
+
+    //Contents
     public GameObject Content_view;
     public GameObject Axle_Contents;
     public GameObject Beam_Contents;
@@ -20,9 +36,6 @@ public class UIManager : MonoBehaviour
     public Text HorUtext;
     private bool ContentsOff = false;
     private int WhichOn = 0;
-
-    // Variables
-    private int target;    
 
     enum Object
     {
@@ -65,8 +78,15 @@ public class UIManager : MonoBehaviour
         triangle_beam_half
     };
 
-    public void Start()
+    void Start()
     {
+        list = new List<GameObject>();
+        data = null;
+        selected = false;
+        selected_all = false;
+        path = "Models/Prefabs/";
+        text.text = "Selected : ";
+
         Axle_Contents.SetActive(false);
         Beam_Contents.SetActive(false);
         Gear_Contents.SetActive(false);
@@ -75,11 +95,61 @@ public class UIManager : MonoBehaviour
         ExtraBlock_Contents.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayhit;
+
+            if (Physics.Raycast(ray, out rayhit))
+            {
+                GameObject search = rayhit.collider.gameObject;
+
+                foreach (GameObject gameObject in list)
+                {
+                    if (gameObject.Equals(search))
+                    {
+                        if (data == null || !data.gameObj.Equals(search))
+                        {
+                            data = gameObject.GetComponent<IParts>();
+                            selected = true;
+                            selected_all = true;
+                        }
+                        else if (selected_all)
+                        {
+                            selected_all = false;
+                        }
+                        else
+                        {
+                            selected = false;
+                            data = null;
+                        }
+                        break;
+                    }
+
+                }
+                selected_all = true;
+                text.text = "Selected : ";
+                if (selected)
+                {
+                    text.text += data.ToString();
+                }
+                if (selected_all)
+                {
+                    text.text += "and connected with it";
+                }
+            }
+
+        }
+        
+    }
+
     public void CreateObject()
     {
-        GameObject obj = MakeObject(target);
-
-        Instantiate(obj);
+        string kind = WhatKind(target);
+        GameObject obj = MakeObject(kind);
+        obj.GetComponent<IParts>().Loaded = false;
     }
 
     public void GetObjectValue()
@@ -91,10 +161,10 @@ public class UIManager : MonoBehaviour
      * Get input number and Return appropriate Object
      * You should change this function to adjust for making Objects
      */
-    private GameObject MakeObject(int target)
+
+    private string WhatKind(int target)
     {
-        string path = "Models/Prefabs/";
-        string ObjectName = "";
+        string ObjectName = null;
 
         switch ((Object)target)
         {
@@ -211,9 +281,87 @@ public class UIManager : MonoBehaviour
                 break;
         }
 
-        GameObject obj = Resources.Load(path + ObjectName) as GameObject;
+        return ObjectName;
+    }
+
+    private GameObject MakeObject(string ObjectName)
+    {
+        GameObject obj = Instantiate(Resources.Load(path + ObjectName)) as GameObject;
+        obj.GetComponent<IParts>().Kind = ObjectName;
+        list.Add(obj);
+        return obj;
+    }
+
+    private GameObject MakeObject(SaveData save)
+    {
+        GameObject obj = Instantiate(Resources.Load(path + save.Kind), save.Vector3, save.Quaternion) as GameObject;
+        obj.GetComponent<IParts>().Kind = save.Kind;
+        list.Add(obj);
 
         return obj;
+    }
+
+    public void SaveObject()
+    {
+        string SavePath = EditorUtility.SaveFilePanel("Saving Data...", Application.dataPath, "", "bin");
+
+        if (SavePath.Length != 0 && selected)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream fs = new FileStream(SavePath, FileMode.Create);
+            SaveData output;
+
+            if (selected && selected_all) // save selected object and connected with it
+            {
+                List<GameObject> data_all = data.LinkSearch();
+                output = new SaveData();
+
+                foreach (GameObject gameobject in data_all)
+                {
+                    //Debug.Log(gameobject);
+                    
+                    output.Vector3 = gameobject.transform.position;
+                    output.Quaternion = gameobject.transform.rotation;
+                    output.Kind = gameobject.GetComponent<IParts>().Kind;
+                    bf.Serialize(fs, output);
+                    gameobject.GetComponent<IParts>().SearchReset();
+                }
+
+            }
+            else if (selected)// save only selected object
+            {
+                output = new SaveData(data.gameObj.transform.position, data.gameObj.transform.rotation, data.Kind);
+                
+                bf.Serialize(fs, output);
+            }
+
+            fs.Close();
+        }
+    }
+
+    public void LoadObject()
+    {
+        string LoadPath = EditorUtility.OpenFilePanel("Opening Data...", Application.dataPath, "bin");
+
+        if (LoadPath.Length != 0)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream fs = new FileStream(LoadPath, FileMode.Open);
+            SaveData input;
+            GameObject load;
+            
+            while (fs.Position != fs.Length)
+            {
+                input = bf.Deserialize(fs) as SaveData;
+
+                load = MakeObject(input);
+                load.GetComponent<IParts>().Loaded = true;
+                
+            }
+
+            fs.Close();
+
+        }
     }
 
     public void AxleContents()
@@ -256,9 +404,9 @@ public class UIManager : MonoBehaviour
         WhichOn = 5;
     }
 
-    public void ContensBack()
+    public void ContentsBack()
     {
-        if(ContentsOff)
+        if (ContentsOff)
         {
             Content_view.SetActive(true);
             Axle_Contents.SetActive(false);
@@ -532,10 +680,10 @@ public class UIManager : MonoBehaviour
 
     public void UI_HideOrUnfold()
     {
-        if(HorU == false)//펼쳐진 상태
+        if (HorU == false)//펼쳐진 상태
         {
             Back.SetActive(false);
-            switch(WhichOn)
+            switch (WhichOn)
             {
                 case 0:
                     Content_view.SetActive(false);
@@ -592,5 +740,88 @@ public class UIManager : MonoBehaviour
 
             HorUtext.GetComponent<Text>().text = "숨기기";
         }
+    }
+}
+
+[Serializable]
+class SaveData
+{
+    SVector3 sv3;
+    SQuaternion sq;
+    string kind;
+
+    public SaveData()
+    {
+        sv3 = new SVector3();
+        sq = new SQuaternion();
+        kind = null;
+    }
+
+    public SaveData(Vector3 vector3, Quaternion quaternion, string Kind)
+    {
+        sv3 = new SVector3(vector3);
+        sq = new SQuaternion(quaternion);
+        kind = Kind;
+    }
+
+    public Vector3 Vector3
+    {
+        get { return sv3.Vector3; }
+        set { sv3.Vector3 = value; }
+    }
+
+    public Quaternion Quaternion
+    {
+        get { return sq.Quaternion; }
+        set { sq.Quaternion = value; }
+    }
+
+    public string Kind
+    {
+        get { return kind; }
+        set { kind = value; }
+    }
+
+}
+
+[Serializable]
+class SVector3
+{
+    float x, y, z;
+
+    public SVector3()
+    {
+    }
+
+    public SVector3(Vector3 vector3)
+    {
+        this.Vector3 = vector3;
+    }
+
+    public Vector3 Vector3
+    {
+        get { return new Vector3(x, y, z); }
+        set { x = value.x; y = value.y; z = value.z; }
+    }
+}
+
+[Serializable]
+class SQuaternion
+{
+    float x, y, z, w;
+
+    public SQuaternion()
+    {
+    }
+
+    public SQuaternion(Quaternion quaternion)
+    {
+        this.Quaternion = quaternion;
+    }
+
+    public Quaternion Quaternion
+    {
+        get { return new Quaternion(x, y, z, w); }
+        set { x = value.x; y = value.y; z = value.z; w = value.w; }
     }
 }

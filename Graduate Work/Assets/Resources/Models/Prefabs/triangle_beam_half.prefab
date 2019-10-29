@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1024999060728766249}
   - component: {fileID: 8216315828176728266}
   m_Layer: 0
-  m_Name: triangle beam half
+  m_Name: triangle_beam_half
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: abb1fea949b9a13499834f381b19c9c0, type: 3}
+  - {fileID: 2100000, guid: d4f9c966fb523b448aa30423f8102e40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -180,7 +180,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1638190068557566000
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &5649031545635393134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,7 +273,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.03
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7462325594338874933
@@ -305,6 +306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &8954951279484759933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,7 +366,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6976949151385283777
@@ -397,6 +399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &7161303333475928505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,7 +459,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2785729410248205834
@@ -489,6 +492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &3158972960118164973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,7 +552,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8336564852782253688
@@ -581,6 +585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &7388711841454277866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,7 +645,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.03
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7261307883016843403
@@ -673,6 +678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &8319652100004844364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732,7 +738,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.045
-  m_Height: 0.1
+  m_Height: 0.01
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8244611084844017299
@@ -765,6 +771,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   parts: {fileID: 0}
+  Loaded: 0
 --- !u!114 &7285116075367401718
 MonoBehaviour:
   m_ObjectHideFlags: 0
