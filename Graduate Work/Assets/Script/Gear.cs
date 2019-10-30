@@ -235,6 +235,10 @@ public class Gear : MonoBehaviour, IGear
                             lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                         }
                     }
+                    else
+                    {
+                        lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
+                    }
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
                 {
@@ -262,6 +266,10 @@ public class Gear : MonoBehaviour, IGear
                             lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                         }
                     }
+                    else
+                    {
+                        lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
+                    }
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
                 {
@@ -276,6 +284,10 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
                         lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                    }
+                    else
+                    {
+                        lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
