@@ -224,7 +224,7 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        float parl = Vector3.Dot(transform.forward, lparts.gameObj.transform.forward);
+                        float parl = Vector3.Dot(axis, lparts.gameObj.transform.forward);
 
                         if (parl > 0)
                         {
@@ -250,7 +250,7 @@ public class Gear : MonoBehaviour, IGear
                     {
                         Vector3 dir = lparts.gameObj.transform.position - transform.position;
 
-                        float wPos = Vector3.Dot(transform.forward, dir) * Vector3.Dot(lparts.gameObj.transform.forward, dir);
+                        float wPos = Vector3.Dot(axis, dir) * Vector3.Dot(lparts.gameObj.transform.forward, dir);
 
                         if (wPos > 0)
                         {
@@ -280,9 +280,19 @@ public class Gear : MonoBehaviour, IGear
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
-                    float inSpeed = -speed * Time.deltaTime;
-                    Vector3 direction = new Vector3(Mathf.Abs(lparts.gameObj.transform.right.x), Mathf.Abs(lparts.gameObj.transform.right.y), Mathf.Abs(lparts.gameObj.transform.right.z));
-                    direction = direction * inSpeed / 10;
+                    float rdir = Vector3.Dot(axis, lparts.gameObj.transform.forward);
+
+                    Vector3 direction;
+
+                    if (rdir > 0)
+                    {
+                        direction = lparts.gameObj.transform.right * Time.deltaTime * speed / 10;
+                    }
+                    else
+                    {
+                        direction = lparts.gameObj.transform.right * Time.deltaTime * -speed / 10;
+                    }
+                    
                     lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
                     //Vector3 tVector = (transform.position - point);
                     //if (tVector == Vector3.zero)
