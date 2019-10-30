@@ -36,9 +36,9 @@ public class RackGear : MonoBehaviour, IGear
     private int moveType;
     private string kind;
     private bool loaded;
-    public List<MoveCell> moveList;
     public Vector3 lastPos;
     public Vector3 moveDir;
+    public MoveCell cell;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -76,7 +76,6 @@ public class RackGear : MonoBehaviour, IGear
         LinkParts = new List<GameObject>();
         holeList = new List<Transform>();
         otherList = new List<Transform>();
-        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -91,6 +90,7 @@ public class RackGear : MonoBehaviour, IGear
         rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
         lastPos = transform.position;
         moveDir = Vector3.zero;
+        cell = new MoveCell();
         ResetValue();
     }
 
@@ -234,53 +234,96 @@ public class RackGear : MonoBehaviour, IGear
                     lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
                 }
             }
-           
-            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
+            cell.Point = point;
+            cell.Axis = axis;
+            cell.MoveSpeed = speed;
+            cell.MoveType = moveType;
+            cell.Motor = motor;
+            //moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        foreach (MoveCell cell in moveList)
+        if (cell.MoveType == 0)
         {
-            if (cell.MoveType == 0)
+            transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+            int count = 0;
+            GameObject obj = null;
+
+            foreach (MotorLink link in Node.lList)
             {
-                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
-
-                int count = 0;
-                GameObject obj = null;
-
-                foreach (MotorLink link in Node.lList)
+                if (link.type == MotorLink.LinkType.Tight)
                 {
-                    if (link.type == MotorLink.LinkType.Tight)
-                    {
-                        return;
-                    }
-                    if (link.type == MotorLink.LinkType.Loose)
-                    {
-                        count++;
-                        if (this.gameObject.Equals(link.right.gameObj))
-                        {
-                            obj = link.left.gameObj;
-                        }
-                        else
-                        {
-                            obj = link.right.gameObj;
-                        }
-                    }
+                    return;
                 }
-                if (count == 1)
+                if (link.type == MotorLink.LinkType.Loose)
                 {
-                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+                    count++;
+                    if (this.gameObject.Equals(link.right.gameObj))
+                    {
+                        obj = link.left.gameObj;
+                    }
+                    else
+                    {
+                        obj = link.right.gameObj;
+                    }
                 }
             }
-            else
+            if (count == 1)
             {
-                transform.Translate(cell.Axis, Space.World);
-                moveDir = transform.position - lastPos;
-                lastPos = transform.position;
+                transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
             }
         }
+        else
+        {
+            //Debug.Log(cell.Axis);
+            transform.Translate(cell.Axis, Space.World);
+            moveDir = transform.position - lastPos;
+            lastPos = transform.position;
+        }
+        //foreach (MoveCell cell in moveList)
+        //{
+        //    if (cell.MoveType == 0)
+        //    {
+        //        transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+        //        int count = 0;
+        //        GameObject obj = null;
+
+        //        foreach (MotorLink link in Node.lList)
+        //        {
+        //            if (link.type == MotorLink.LinkType.Tight)
+        //            {
+        //                return;
+        //            }
+        //            if (link.type == MotorLink.LinkType.Loose)
+        //            {
+        //                count++;
+        //                if (this.gameObject.Equals(link.right.gameObj))
+        //                {
+        //                    obj = link.left.gameObj;
+        //                }
+        //                else
+        //                {
+        //                    obj = link.right.gameObj;
+        //                }
+        //            }
+        //        }
+        //        if (count == 1)
+        //        {
+        //            transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //Debug.Log(cell.Axis);
+        //        transform.Translate(cell.Axis, Space.World);
+        //        moveDir = transform.position - lastPos;
+        //        lastPos = transform.position;
+        //    }
+        //}
 
         //if (this.moveType == 0)
         //{
@@ -320,7 +363,7 @@ public class RackGear : MonoBehaviour, IGear
 
     public void ResetValue()
     {
-        moveList.Clear();
+        
     }
 
     public bool OnDragCheck
@@ -578,36 +621,8 @@ public class RackGear : MonoBehaviour, IGear
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
             LinkParts.Add(other.gameObject);
-
-            if (loaded)
-            {
-                foreach (MotorLink lk in Node.lList)
-                {
-                    GameObject g;
-
-                    if (lk.left.gameObj.Equals(this.gameObject))
-                    {
-                        g = lk.right.gameObj;
-                    }
-                    else
-                    {
-                        g = lk.left.gameObj;
-                    }
-
-                    if (g.Equals(other.gameObject))
-                    {
-                        return;
-                    }
-                }
-                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
-                gearControl.linkGear(this, linkGear);
-            }
-
-            if (onDrag)
-            {
-                IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
-                gearControl.linkGear(this, linkGear);
-            }
+            IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
+            gearControl.linkGear(this, linkGear);
         }
     }
 

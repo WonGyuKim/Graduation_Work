@@ -28,7 +28,7 @@ public class Connector : MonoBehaviour, IParts
     private int moveType;
     private string kind;
     private bool loaded;
-    public List<MoveCell> moveList;
+    public MoveCell cell;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -60,7 +60,6 @@ public class Connector : MonoBehaviour, IParts
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.transform.position.x + Screen.width / 2, Camera.main.transform.position.y + Screen.height / 2, scrSpace.z));
         LinkParts = new List<GameObject>();
         holeList = new List<Transform>();
-        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -70,6 +69,7 @@ public class Connector : MonoBehaviour, IParts
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
         dis = int.MaxValue;
+        cell = new MoveCell();
         ResetValue();
     }
 
@@ -184,24 +184,36 @@ public class Connector : MonoBehaviour, IParts
                     }
                 }
             }
-
-            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
+            cell.Point = point;
+            cell.Axis = axis;
+            cell.MoveSpeed = speed;
+            cell.MoveType = moveType;
+            cell.Motor = motor;
+            //moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        foreach (MoveCell cell in moveList)
+        if (cell.MoveType == 0)
         {
-            if (cell.MoveType == 0)
-            {
-                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
-            }
-            else
-            {
-                transform.Translate(cell.Axis, Space.World);
-            }
+            transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
         }
+        else
+        {
+            transform.Translate(cell.Axis, Space.World);
+        }
+        //foreach (MoveCell cell in moveList)
+        //{
+        //    if (cell.MoveType == 0)
+        //    {
+        //        transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+        //    }
+        //    else
+        //    {
+        //        transform.Translate(cell.Axis, Space.World);
+        //    }
+        //}
 
         //if (this.moveType == 0)
         //{
@@ -215,7 +227,7 @@ public class Connector : MonoBehaviour, IParts
 
     public void ResetValue()
     {
-        moveList.Clear();
+        
     }
 
     public bool OnDragCheck

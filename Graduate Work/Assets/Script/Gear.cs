@@ -36,7 +36,7 @@ public class Gear : MonoBehaviour, IGear
     private int moveType;
     private string kind;
     private bool loaded;
-    public List<MoveCell> moveList;
+    public MoveCell cell;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -74,7 +74,6 @@ public class Gear : MonoBehaviour, IGear
         LinkParts = new List<GameObject>();
         holeList = new List<Transform>();
         otherList = new List<Transform>();
-        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -87,6 +86,7 @@ public class Gear : MonoBehaviour, IGear
         hole = null;
         dis = int.MaxValue;
         rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
+        cell = new MoveCell();
         ResetValue();
     }
 
@@ -224,7 +224,16 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        float parl = Vector3.Dot(transform.forward, lparts.gameObj.transform.forward);
+
+                        if (parl > 0)
+                        {
+                            lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        }
+                        else
+                        {
+                            lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        }
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Bevel)
@@ -239,7 +248,19 @@ public class Gear : MonoBehaviour, IGear
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        Vector3 dir = lparts.gameObj.transform.position - transform.position;
+
+                        float wPos = Vector3.Dot(transform.forward, dir) * Vector3.Dot(lparts.gameObj.transform.forward, dir);
+
+                        if (wPos > 0)
+                        {
+                            lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        }
+
+                        else
+                        {
+                            lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        }
                     }
                 }
                 else if (link.type == MotorLink.LinkType.Worm)
@@ -259,69 +280,114 @@ public class Gear : MonoBehaviour, IGear
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
-                    float moveSpeed = speed * Time.deltaTime;
-                    Vector3 direction = lparts.gameObj.transform.right * moveSpeed / 10;
-                    Vector3 tVector = (transform.position - point);
-                    if (tVector == Vector3.zero)
-                    {
-                        tVector = transform.forward;
-                    }
-                    tVector = tVector.normalized;
-                    if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
-                        && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
-                        && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
-                    {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
-                    }
+                    float inSpeed = -speed * Time.deltaTime;
+                    Vector3 direction = new Vector3(Mathf.Abs(lparts.gameObj.transform.right.x), Mathf.Abs(lparts.gameObj.transform.right.y), Mathf.Abs(lparts.gameObj.transform.right.z));
+                    direction = direction * inSpeed / 10;
+                    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
+                    //Vector3 tVector = (transform.position - point);
+                    //if (tVector == Vector3.zero)
+                    //{
+                    //    tVector = transform.forward;
+                    //}
+                    //tVector = tVector.normalized;
+                    //if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
+                    //    && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
+                    //    && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
+                    //{
+                    //    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
+                    //}
                 }
             }
-            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
+            cell.Point = point;
+            cell.Axis = axis;
+            cell.MoveSpeed = speed;
+            cell.MoveType = moveType;
+            cell.Motor = motor;
+            //moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        foreach (MoveCell cell in moveList)
+        if (cell.MoveType == 0)
         {
-            if (cell.MoveType == 0)
+            transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+            int count = 0;
+            GameObject obj = null;
+
+            foreach (MotorLink link in Node.lList)
             {
-                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
-
-                int count = 0;
-                GameObject obj = null;
-
-                foreach (MotorLink link in Node.lList)
+                if (link.type == MotorLink.LinkType.Tight)
                 {
-                    if (link.type == MotorLink.LinkType.Tight)
+                    return;
+                }
+                if (link.type == MotorLink.LinkType.Loose)
+                {
+                    if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
                     {
-                        return;
-                    }
-                    if (link.type == MotorLink.LinkType.Loose)
-                    {
-                        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
+                        count++;
+                        if (this.gameObject.Equals(link.right.gameObj))
                         {
-                            count++;
-                            if (this.gameObject.Equals(link.right.gameObj))
-                            {
-                                obj = link.left.gameObj;
-                            }
-                            else
-                            {
-                                obj = link.right.gameObj;
-                            }
+                            obj = link.left.gameObj;
+                        }
+                        else
+                        {
+                            obj = link.right.gameObj;
                         }
                     }
                 }
-                if (count == 1)
-                {
-                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
-                }
             }
-            else
+            if (count == 1)
             {
-                transform.Translate(cell.Axis, Space.World);
+                transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
             }
         }
+        else
+        {
+            transform.Translate(cell.Axis, Space.World);
+        }
+        //foreach (MoveCell cell in moveList)
+        //{
+        //    if (cell.MoveType == 0)
+        //    {
+        //        transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+        //        int count = 0;
+        //        GameObject obj = null;
+
+        //        foreach (MotorLink link in Node.lList)
+        //        {
+        //            if (link.type == MotorLink.LinkType.Tight)
+        //            {
+        //                return;
+        //            }
+        //            if (link.type == MotorLink.LinkType.Loose)
+        //            {
+        //                if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
+        //                {
+        //                    count++;
+        //                    if (this.gameObject.Equals(link.right.gameObj))
+        //                    {
+        //                        obj = link.left.gameObj;
+        //                    }
+        //                    else
+        //                    {
+        //                        obj = link.right.gameObj;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        if (count == 1)
+        //        {
+        //            transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        transform.Translate(cell.Axis, Space.World);
+        //    }
+        //}
 
         //if (this.moveType == 0)
         //{
@@ -361,7 +427,7 @@ public class Gear : MonoBehaviour, IGear
 
     public void ResetValue()
     {
-        moveList.Clear();
+        
     }
 
     public bool OnDragCheck

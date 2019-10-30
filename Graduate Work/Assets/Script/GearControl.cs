@@ -48,27 +48,43 @@ public class GearControl : MonoBehaviour
         GameObject g1 = gear1.gameObj;
         GameObject g2 = gear2.gameObj;
 
-        Vector3 g1Vec = g1.transform.TransformDirection(g1.transform.forward);
-        Vector3 g2Vec = g2.transform.TransformDirection(g2.transform.forward);
+        Vector3 g1Vec = /*g1.transform.TransformDirection*/(g1.transform.forward);
+        Vector3 g2Vec = /*g2.transform.TransformDirection*/(g2.transform.forward);
         Vector3 v = g1Vec - g2Vec;
         float angle = Mathf.Abs(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);
 
+        //float angle1 = Mathf.Abs(Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg);
+        //float angle2 = Mathf.Abs(Mathf.Atan2(v.z, v.x) * Mathf.Rad2Deg);
+        //float angle3 = Mathf.Abs(Mathf.Atan2(v.y, v.z) * Mathf.Rad2Deg);
+        //if(angle1 > 90)
+        //    angle1 = 90 - (angle1 - 90);
+
+        //if (angle2 > 90)
+        //    angle2 = 90 - (angle2 - 90);
+
+        //if (angle3 > 90)
+        //    angle3 = 90 - (angle3 - 90);
+
+        //Debug.Log("angle1 : " + angle1.ToString() + " angle2 : " + angle2.ToString() + " angle3 : " + angle3.ToString());
+        Vector3 ag = Vector3.Cross(g1.gameObject.transform.forward, g2.gameObject.transform.forward);
+        bool isBevel = !(ag == Vector3.zero);
+
         if (g1.tag == "BevelGear" && g2.tag == "BevelGear")
         {
-            if (angle >= 45)
+            if (isBevel)
                 link.type = MotorLink.LinkType.Bevel;
             else
                 link.type = MotorLink.LinkType.Gear;
         }
-        else if ((g1.tag == "WormGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "WormGear"))
+        else if ((g1.tag == "WormGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "WormGear") && isBevel)
         {
             link.type = MotorLink.LinkType.Worm;
         }
-        else if ((g1.tag == "RackGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "RackGear") && angle < 45)
+        else if ((g1.tag == "RackGear" && (g2.tag == "Gear" || g2.tag == "BevelGear")) || ((g1.tag == "Gear" || g1.tag == "BevelGear") && g2.tag == "RackGear") && !isBevel)
         {
             link.type = MotorLink.LinkType.Rack;
         }
-        else if((g1.tag == "Gear" || g1.tag == "BevelGear") && (g2.tag == "Gear" || g2.tag == "BevelGear") && !(g1.tag == "BevelGear" && g2.tag == "BevelGear") && angle < 45)
+        else if((g1.tag == "Gear" || g1.tag == "BevelGear") && (g2.tag == "Gear" || g2.tag == "BevelGear") && !(g1.tag == "BevelGear" && g2.tag == "BevelGear") && !isBevel)
         {
             link.type = MotorLink.LinkType.Gear;
         }

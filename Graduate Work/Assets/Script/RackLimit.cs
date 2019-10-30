@@ -34,10 +34,7 @@ public class RackLimit : MonoBehaviour
                             //{
                             //    cell.Motor.RotateSpeed = -cell.Motor.RotateSpeed;
                             //}
-                            foreach (Motor m in rotM.motorList)
-                            {
-                                m.RotateSpeed = -m.RotateSpeed;
-                            }
+                            rack.cell.Motor.RotateSpeed = -rack.cell.Motor.RotateSpeed;
                         }
                     }
                 }

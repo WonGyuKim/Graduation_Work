@@ -147,10 +147,10 @@ public class RotateMotor : MonoBehaviour
                 {
                     node.parts.MotorRotate();
                 }
-                foreach (MotorNode node in nodeList)
-                {
-                    node.parts.ResetValue();
-                }
+                //foreach (MotorNode node in nodeList)
+                //{
+                //    node.parts.ResetValue();
+                //}
                 nodeList.Clear();
             }
         }

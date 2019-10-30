@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
         gear24,
         gear40,
         motor,
-        rackGear,
+        rackGear_new,
         wormGear,
         angular_beam_2x4,
         angular_block_0,
@@ -237,8 +237,8 @@ public class UIManager : MonoBehaviour
             case Object.motor:
                 ObjectName = Object.motor.ToString();
                 break;
-            case Object.rackGear:
-                ObjectName = Object.rackGear.ToString();
+            case Object.rackGear_new:
+                ObjectName = Object.rackGear_new.ToString();
                 break;
             case Object.wormGear:
                 ObjectName = Object.wormGear.ToString();
@@ -568,7 +568,7 @@ public class UIManager : MonoBehaviour
 
     public void RackGear()
     {
-        target = (int)Object.rackGear;
+        target = (int)Object.rackGear_new;
 
         CreateObject();
     }

@@ -26,4 +26,13 @@ public class MoveCell
         MoveType = moveType;
         Motor = motor;
     }
+
+    //public void MoveChange(Vector3 point, Vector3 axis, float moveSpeed, int moveType, Motor motor)
+    //{
+    //    Point = point;
+    //    Axis = axis;
+    //    MoveSpeed = moveSpeed;
+    //    MoveType = moveType;
+    //    Motor = motor;
+    //}
 }

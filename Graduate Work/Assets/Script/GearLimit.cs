@@ -17,11 +17,11 @@ public class GearLimit : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.Equals(pnt.gameObj) && (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear"))
+        if (!other.gameObject.Equals(pnt.gameObj) && (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear"))
         {
             IGear colG = other.gameObject.GetComponent<IGear>();
             gList.Add(colG);
-
+            Debug.Log("colG");
             foreach (MotorLink lk in pnt.node.lList)
             {
                 if (lk.left.gameObj.Equals(colG.gameObj))
@@ -40,7 +40,7 @@ public class GearLimit : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (!other.gameObject.Equals(pnt.gameObj) && (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear"))
+        if (!other.gameObject.Equals(pnt.gameObj) && (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear"))
         {
             IGear colG = other.gameObject.GetComponent<IGear>();
             if (gList.Remove(colG))

@@ -31,7 +31,7 @@ public class Beam : MonoBehaviour, IParts
     private int moveType;
     private string kind;
     private bool loaded;
-    public List<MoveCell> moveList;
+    public MoveCell cell;
 
     public void HoleInput(Transform hole, Transform other)
     {
@@ -68,7 +68,6 @@ public class Beam : MonoBehaviour, IParts
         LinkParts = new List<GameObject>();
         holeList = new List<Transform>();
         otherList = new List<Transform>();
-        moveList = new List<MoveCell>();
         onDrag = false;
         tEnter = false;
         emptyObject = Resources.Load("Models/Prefabs/Parent") as GameObject;
@@ -78,6 +77,7 @@ public class Beam : MonoBehaviour, IParts
         rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
         hole = null;
         dis = int.MaxValue;
+        cell = new MoveCell();
         ResetValue();
     }
 
@@ -168,54 +168,96 @@ public class Beam : MonoBehaviour, IParts
                     lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
             }
-
-            moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
+            cell.Point = point;
+            cell.Axis = axis;
+            cell.MoveSpeed = speed;
+            cell.MoveType = moveType;
+            cell.Motor = motor;
+            //moveList.Add(new MoveCell(point, axis, speed, moveType, motor));
         }
     }
 
     public void MotorRotate()
     {
-        foreach (MoveCell cell in moveList)
+        if (cell.MoveType == 0)
         {
-            if (cell.MoveType == 0)
+            transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+            int count = 0;
+            GameObject obj = null;
+
+            foreach (MotorLink link in Node.lList)
             {
-                transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
-
-                int count = 0;
-                GameObject obj = null;
-
-                foreach (MotorLink link in Node.lList)
+                if (link.type == MotorLink.LinkType.Tight)
                 {
-                    if (link.type == MotorLink.LinkType.Tight)
+                    return;
+                }
+                if (link.type == MotorLink.LinkType.Loose)
+                {
+                    if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
                     {
-                        return;
-                    }
-                    if (link.type == MotorLink.LinkType.Loose)
-                    {
-                        if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
+                        count++;
+                        if (this.gameObject.Equals(link.right.gameObj))
                         {
-                            count++;
-                            if (this.gameObject.Equals(link.right.gameObj))
-                            {
-                                obj = link.left.gameObj;
-                            }
-                            else
-                            {
-                                obj = link.right.gameObj;
-                            }
+                            obj = link.left.gameObj;
+                        }
+                        else
+                        {
+                            obj = link.right.gameObj;
                         }
                     }
                 }
-                if (count == 1)
-                {
-                    transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
-                }
             }
-            else
+            if (count == 1)
             {
-                transform.Translate(cell.Axis, Space.World);
+                transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
             }
         }
+        else
+        {
+            transform.Translate(cell.Axis, Space.World);
+        }
+        //foreach (MoveCell cell in moveList)
+        //{
+        //    if (cell.MoveType == 0)
+        //    {
+        //        transform.RotateAround(cell.Point, cell.Axis, cell.MoveSpeed);
+
+        //        int count = 0;
+        //        GameObject obj = null;
+
+        //        foreach (MotorLink link in Node.lList)
+        //        {
+        //            if (link.type == MotorLink.LinkType.Tight)
+        //            {
+        //                return;
+        //            }
+        //            if (link.type == MotorLink.LinkType.Loose)
+        //            {
+        //                if (Vector3.Cross(link.linkObject.transform.forward, cell.Axis) == Vector3.zero)
+        //                {
+        //                    count++;
+        //                    if (this.gameObject.Equals(link.right.gameObj))
+        //                    {
+        //                        obj = link.left.gameObj;
+        //                    }
+        //                    else
+        //                    {
+        //                        obj = link.right.gameObj;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        if (count == 1)
+        //        {
+        //            transform.RotateAround(obj.transform.position, obj.transform.forward, -cell.MoveSpeed);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        transform.Translate(cell.Axis, Space.World);
+        //    }
+        //}
 
         //if (this.moveType == 0)
         //{
@@ -255,7 +297,7 @@ public class Beam : MonoBehaviour, IParts
 
     public void ResetValue()
     {
-        moveList.Clear();
+        
     }
 
     public bool OnDragCheck
