@@ -71,4 +71,6 @@ public interface IParts
 public interface IGear : IParts
 {
     void GearMove();
+
+    bool GearLinkCheck(IGear target);
 }

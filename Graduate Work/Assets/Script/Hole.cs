@@ -60,7 +60,6 @@ public class Hole : MonoBehaviour
  
         link.left.node.AddLink(link);
         link.right.node.AddLink(link);
-
         if (h.gameObject.Equals(transform.gameObject))
         {
             MoveControl();
@@ -100,13 +99,13 @@ public class Hole : MonoBehaviour
             if (iparts.Loaded)
             {
                 Vector3 cr = Vector3.Cross(other.transform.forward, transform.forward);
-                float vx = Mathf.Round(cr.x * 100f) / 100;
-                float vy = Mathf.Round(cr.y * 100f) / 100;
-                float vz = Mathf.Round(cr.z * 100f) / 100;
+                //float vx = Mathf.Round(cr.x * 100f) / 100;
+                //float vy = Mathf.Round(cr.y * 100f) / 100;
+                //float vz = Mathf.Round(cr.z * 100f) / 100;
 
-                cr = new Vector3(vx, vy, vx);
+                //cr = new Vector3(vx, vy, vx);
 
-                if (cr == Vector3.zero)
+                if (Mathf.Round(cr.x * 100f) / 100 == 0 && Mathf.Round(cr.y * 100f) / 100 == 0 && Mathf.Round(cr.z * 100f) / 100 == 0)
                 {
                     if (other.transform.parent != null)
                     {
@@ -162,7 +161,8 @@ public class Hole : MonoBehaviour
             }
 
             Vector3 cross = Vector3.Cross(other.transform.forward, transform.forward);
-            if (cross == Vector3.zero)
+
+            if (Mathf.Round(cross.x * 100f) / 100 == 0 && Mathf.Round(cross.y * 100f) / 100 == 0 && Mathf.Round(cross.z * 100f) / 100 == 0)
             {
                 if (other.transform.parent != null)
                 {

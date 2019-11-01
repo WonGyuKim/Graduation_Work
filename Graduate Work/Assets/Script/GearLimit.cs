@@ -21,15 +21,9 @@ public class GearLimit : MonoBehaviour
         {
             IGear colG = other.gameObject.GetComponent<IGear>();
             gList.Add(colG);
-            Debug.Log("colG");
             foreach (MotorLink lk in pnt.node.lList)
             {
-                if (lk.left.gameObj.Equals(colG.gameObj))
-                {
-                    gc.deLinkGear(pnt, colG);
-                    break;
-                }
-                else if (lk.right.gameObj.Equals(colG.gameObj))
+                if (lk.left.gameObj.Equals(colG.gameObj) || lk.right.gameObj.Equals(colG.gameObj))
                 {
                     gc.deLinkGear(pnt, colG);
                     break;
@@ -45,7 +39,10 @@ public class GearLimit : MonoBehaviour
             IGear colG = other.gameObject.GetComponent<IGear>();
             if (gList.Remove(colG))
             {
-
+                if(colG.GearLinkCheck(pnt))
+                {
+                    gc.linkGear(pnt, colG);
+                }
             }
         }
     }

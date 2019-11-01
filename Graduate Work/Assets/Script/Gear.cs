@@ -302,10 +302,10 @@ public class Gear : MonoBehaviour, IGear
                     }
                     else
                     {
-                        direction = lparts.gameObj.transform.right * Time.deltaTime * -speed / 10;
+                        direction = -lparts.gameObj.transform.right * Time.deltaTime * speed / 10;
                     }
                     
-                    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, direction, speed, this.rad, 1, motor);
                     //Vector3 tVector = (transform.position - point);
                     //if (tVector == Vector3.zero)
                     //{
@@ -789,5 +789,17 @@ public class Gear : MonoBehaviour, IGear
                 Destroy(this.gameObject);
             }
         }
+    }
+
+    public bool GearLinkCheck(IGear target)
+    {
+        foreach(GameObject g in LinkParts)
+        {
+            if(target.gameObj.Equals(g))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

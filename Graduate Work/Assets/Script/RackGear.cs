@@ -231,7 +231,12 @@ public class RackGear : MonoBehaviour, IGear
                 }
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
+                    float dot1 = Vector3.Dot(axis, transform.right);
+                    float dot2 = Vector3.Dot(transform.forward, lparts.gameObj.transform.forward);
+                    if(dot1 * dot2 * speed > 0)
+                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, speed, rad, 0, motor);
+                    else
+                        lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, speed, rad, 0, motor);
                 }
             }
             cell.Point = point;
@@ -703,5 +708,17 @@ public class RackGear : MonoBehaviour, IGear
                 Destroy(this.gameObject);
             }
         }
+    }
+
+    public bool GearLinkCheck(IGear target)
+    {
+        foreach (GameObject g in LinkParts)
+        {
+            if (target.gameObj.Equals(g))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

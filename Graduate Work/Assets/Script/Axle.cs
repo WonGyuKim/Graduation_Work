@@ -337,7 +337,7 @@ public class Axle : MonoBehaviour, IParts
                 zAxis = Vector3.Project(Dis, transform.forward);
                 Dis = Dis - zAxis;
                 tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                if((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                if((Mathf.Abs(dis - tmpDis)) < 0.02f)
                 {
                     Hole newHo = ho.gameObject.GetComponent<Hole>();
                     newHo.HoleLink(h);

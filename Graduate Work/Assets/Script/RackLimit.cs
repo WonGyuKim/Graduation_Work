@@ -23,17 +23,13 @@ public class RackLimit : MonoBehaviour
             {
                 if (link.type == MotorLink.LinkType.Rack)
                 {
-                    if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
+                    if (link.right.gameObj.Equals(other.gameObject) || link.left.gameObj.Equals(other.gameObject))
                     {
                         Vector3 dir = rack.transform.position - transform.position;
                         //dir = dir.normalized;
 
                         if (Vector3.Dot(dir, rack.moveDir) > 0)
                         {
-                            //foreach (MoveCell cell in rack.moveList)
-                            //{
-                            //    cell.Motor.RotateSpeed = -cell.Motor.RotateSpeed;
-                            //}
                             rack.cell.Motor.RotateSpeed = -rack.cell.Motor.RotateSpeed;
                         }
                     }
@@ -41,38 +37,4 @@ public class RackLimit : MonoBehaviour
             }
         }
     }
-
-    //void OnTriggerExit(Collider other)
-    //{
-    //    if (rotM.motoring)
-    //    {
-    //        foreach (MotorLink link in rack.node.lList)
-    //        {
-    //            if (link.type == MotorLink.LinkType.Rack)
-    //            {
-    //                if (link.right.gameObj == other.gameObject || link.left.gameObj == other.gameObject)
-    //                {
-    //                    Vector3 dir = rack.transform.position - transform.position;
-    //                    dir = dir.normalized;
-    //                    Vector3 rdir = new Vector3();
-    //                    foreach (MoveCell mc in rack.moveList)
-    //                    {
-    //                        rdir = mc.Axis;
-    //                    }
-    //                    rdir = this.transform.TransformPoint(rdir);
-    //                    rdir = rdir.normalized;
-                        
-    //                    if (Vector3.Dot(dir, rdir) > 0)
-    //                    {
-    //                        foreach (Motor m in rotM.motorList)
-    //                        {
-    //                            m.RotateSpeed = -m.RotateSpeed;
-    //                        }
-    //                        return;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
 }

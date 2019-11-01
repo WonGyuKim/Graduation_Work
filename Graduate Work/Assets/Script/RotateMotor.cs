@@ -134,6 +134,7 @@ public class RotateMotor : MonoBehaviour
             {
                 if (motor.on)
                 {
+                    //Vector3 forW = new Vector3(Mathf.Abs(motor.transform.forward.x), Mathf.Abs(motor.transform.forward.y), Mathf.Abs(motor.transform.forward.z));
                     motor.MotoringMove(motor.transform.position, motor.transform.forward, motor.RotateSpeed * Time.deltaTime * 100, 0, 0, motor);
                     nodeList = nodeList.Distinct().ToList();
                     foreach (MotorNode node in nodeList)
