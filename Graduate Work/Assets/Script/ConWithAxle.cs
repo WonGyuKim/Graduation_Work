@@ -82,6 +82,8 @@ public class ConWithAxle : MonoBehaviour, IParts
 
     void OnMouseDown()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -183,6 +185,9 @@ public class ConWithAxle : MonoBehaviour, IParts
                 else
                     lparts = link.left;
 
+                if (lparts.Search)
+                    continue;
+
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     if (moveType == 1)
@@ -262,6 +267,14 @@ public class ConWithAxle : MonoBehaviour, IParts
         
     }
 
+    public bool Search
+    {
+        get
+        {
+            return this.search;
+        }
+    }
+
     public bool OnDragCheck
     {
         get
@@ -335,7 +348,7 @@ public class ConWithAxle : MonoBehaviour, IParts
                 zAxis = Vector3.Project(Dis, transform.forward);
                 Dis = Dis - zAxis;
                 tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                if ((Mathf.Abs(dis - tmpDis)) < 0.02f)
                 {
                     Hole newHo = ho.gameObject.GetComponent<Hole>();
                     newHo.HoleLink(h);
@@ -374,6 +387,8 @@ public class ConWithAxle : MonoBehaviour, IParts
 
     void OnMouseDrag()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();

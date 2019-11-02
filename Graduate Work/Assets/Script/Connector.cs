@@ -151,6 +151,9 @@ public class Connector : MonoBehaviour, IParts
                 else
                     lparts = link.left;
 
+                if (lparts.Search)
+                    continue;
+
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     if (moveType == 1)
@@ -174,7 +177,7 @@ public class Connector : MonoBehaviour, IParts
                             tVector = transform.forward;
                         }
                         tVector = tVector.normalized;
-
+                        axis = axis.normalized;
                         if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
                             || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                             || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
@@ -229,7 +232,13 @@ public class Connector : MonoBehaviour, IParts
     {
         
     }
-
+    public bool Search
+    {
+        get
+        {
+            return this.search;
+        }
+    }
     public bool OnDragCheck
     {
         get
@@ -270,6 +279,8 @@ public class Connector : MonoBehaviour, IParts
 
     void OnMouseDown()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -322,7 +333,7 @@ public class Connector : MonoBehaviour, IParts
                 zAxis = Vector3.Project(Dis, transform.forward);
                 Dis = Dis - zAxis;
                 tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
-                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                if ((Mathf.Abs(dis - tmpDis)) < 0.02f)
                 {
                     Hole newHo = ho.gameObject.GetComponent<Hole>();
                     newHo.HoleLink(h);
@@ -361,6 +372,8 @@ public class Connector : MonoBehaviour, IParts
 
     void OnMouseDrag()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();

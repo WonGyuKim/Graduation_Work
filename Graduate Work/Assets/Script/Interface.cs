@@ -66,6 +66,11 @@ public interface IParts
     }
 
     void ObjectDestroy();
+
+    bool Search
+    {
+        get;
+    }
 }
 
 public interface IGear : IParts

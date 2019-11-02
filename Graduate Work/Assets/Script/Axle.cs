@@ -80,6 +80,9 @@ public class Axle : MonoBehaviour, IParts
 
     void OnMouseDown()
     {
+        if(Input.GetKey(KeyCode.LeftAlt))
+            return;
+
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -95,7 +98,6 @@ public class Axle : MonoBehaviour, IParts
                 gobj.transform.parent = Parent.transform;
             }
         }
-
     }
 
     public void Link(Transform hole, Transform otherTrans)
@@ -181,7 +183,8 @@ public class Axle : MonoBehaviour, IParts
                     lparts = link.right;
                 else
                     lparts = link.left;
-
+                if (lparts.Search)
+                    continue;
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     if (moveType == 1)
@@ -207,7 +210,7 @@ public class Axle : MonoBehaviour, IParts
                             tVector = transform.forward;
                         }
                         tVector = tVector.normalized;
-
+                        axis = axis.normalized;
                         if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) != Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
                              || Mathf.Round(Mathf.Abs(axis.y) * 1000f) != Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                              || Mathf.Round(Mathf.Abs(axis.z) * 1000f) != Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
@@ -277,6 +280,14 @@ public class Axle : MonoBehaviour, IParts
         get
         {
             return this.gameObject;
+        }
+    }
+
+    public bool Search
+    {
+        get
+        {
+            return this.search;
         }
     }
 
@@ -376,6 +387,9 @@ public class Axle : MonoBehaviour, IParts
 
     void OnMouseDrag()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
+
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();

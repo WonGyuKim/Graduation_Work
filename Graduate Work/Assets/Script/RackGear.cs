@@ -36,8 +36,6 @@ public class RackGear : MonoBehaviour, IGear
     private int moveType;
     private string kind;
     private bool loaded;
-    public Vector3 lastPos;
-    public Vector3 moveDir;
     public MoveCell cell;
 
     public void HoleInput(Transform hole, Transform other)
@@ -88,8 +86,6 @@ public class RackGear : MonoBehaviour, IGear
         hole = null;
         dis = int.MaxValue;
         rad = transform.gameObject.GetComponent<Renderer>().bounds.size.x;
-        lastPos = transform.position;
-        moveDir = Vector3.zero;
         cell = new MoveCell();
         ResetValue();
     }
@@ -203,6 +199,9 @@ public class RackGear : MonoBehaviour, IGear
                 else
                     lparts = link.left;
 
+                if (lparts.Search)
+                    continue;
+
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
@@ -211,32 +210,24 @@ public class RackGear : MonoBehaviour, IGear
                 {
                     lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
                 }
-                else if (link.type == MotorLink.LinkType.Gear)
-                {
-                    //float ratio = rad / this.rad;
-                    //speed *= ratio;
-                    //rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
-                }
-                else if (link.type == MotorLink.LinkType.Bevel)
-                {
-                    //float ratio = rad / this.rad;
-                    //speed *= ratio;
-                    //rad = this.rad;
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
-                }
-                else if (link.type == MotorLink.LinkType.Worm)
-                {
-                    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
-                }
+                //else if (link.type == MotorLink.LinkType.Gear)
+                //{
+                //    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
+                //}
+                //else if (link.type == MotorLink.LinkType.Bevel)
+                //{
+                //    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
+                //}
+                //else if (link.type == MotorLink.LinkType.Worm)
+                //{
+                //    lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, rad, 0, motor);
+                //}
                 else if (link.type == MotorLink.LinkType.Rack)
                 {
                     float dot1 = Vector3.Dot(axis, transform.right);
                     float dot2 = Vector3.Dot(transform.forward, lparts.gameObj.transform.forward);
-                    if(dot1 * dot2 * speed > 0)
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, speed, rad, 0, motor);
-                    else
-                        lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, speed, rad, 0, motor);
+                    float sDir = speed / Mathf.Abs(speed);
+                    lparts.MotoringMove(lparts.gameObj.transform.position, dot1 * dot2 * sDir * lparts.gameObj.transform.forward, speed, rad, 0, motor);
                 }
             }
             cell.Point = point;
@@ -285,8 +276,6 @@ public class RackGear : MonoBehaviour, IGear
         {
             //Debug.Log(cell.Axis);
             transform.Translate(cell.Axis, Space.World);
-            moveDir = transform.position - lastPos;
-            lastPos = transform.position;
         }
         //foreach (MoveCell cell in moveList)
         //{
@@ -371,6 +360,14 @@ public class RackGear : MonoBehaviour, IGear
         
     }
 
+    public bool Search
+    {
+        get
+        {
+            return this.search;
+        }
+    }
+
     public bool OnDragCheck
     {
         get
@@ -389,6 +386,8 @@ public class RackGear : MonoBehaviour, IGear
 
     void OnMouseDown()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -548,7 +547,7 @@ public class RackGear : MonoBehaviour, IGear
                 Dis = Dis - zAxis;
                 tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
 
-                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                if ((Mathf.Abs(dis - tmpDis)) < 0.02f)
                 {
                     Hole newHo = holeList[i].gameObject.GetComponent<Hole>();
                     newHo.HoleLink(h);
@@ -575,6 +574,8 @@ public class RackGear : MonoBehaviour, IGear
 
     void OnMouseDrag()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();

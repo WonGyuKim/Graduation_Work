@@ -26,10 +26,10 @@ public class RackLimit : MonoBehaviour
                     if (link.right.gameObj.Equals(other.gameObject) || link.left.gameObj.Equals(other.gameObject))
                     {
                         Vector3 dir = rack.transform.position - transform.position;
-                        //dir = dir.normalized;
 
-                        if (Vector3.Dot(dir, rack.moveDir) > 0)
+                        if (Vector3.Dot(dir, rack.cell.Axis) > 0)
                         {
+                            rack.cell.Axis = -rack.cell.Axis;
                             rack.cell.Motor.RotateSpeed = -rack.cell.Motor.RotateSpeed;
                         }
                     }

@@ -149,6 +149,14 @@ public class Gear : MonoBehaviour, IGear
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
     }
 
+    public bool Search
+    {
+        get
+        {
+            return this.search;
+        }
+    }
+
     public void ArcballMove()
     {
         Vector3 click;
@@ -203,7 +211,10 @@ public class Gear : MonoBehaviour, IGear
                     lparts = link.right;
                 else
                     lparts = link.left;
-                
+
+                if (lparts.Search)
+                    continue;
+
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
@@ -220,20 +231,13 @@ public class Gear : MonoBehaviour, IGear
                         tVector = transform.forward;
                     }
                     tVector = tVector.normalized;
+                    axis = axis.normalized;
                     if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
                         float parl = Vector3.Dot(axis, lparts.gameObj.transform.forward);
-
-                        if (parl > 0)
-                        {
-                            lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
-                        }
-                        else
-                        {
-                            lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
-                        }
+                        lparts.MotoringMove(lparts.gameObj.transform.position, parl * lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                     }
                     else
                     {
@@ -248,23 +252,15 @@ public class Gear : MonoBehaviour, IGear
                         tVector = transform.forward;
                     }
                     tVector = tVector.normalized;
+                    axis = axis.normalized;
                     if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
                         Vector3 dir = lparts.gameObj.transform.position - transform.position;
-
+                        dir = dir.normalized;
                         float wPos = Vector3.Dot(axis, dir) * Vector3.Dot(lparts.gameObj.transform.forward, dir);
-
-                        if (wPos > 0)
-                        {
-                            lparts.MotoringMove(lparts.gameObj.transform.position, -lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
-                        }
-
-                        else
-                        {
-                            lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
-                        }
+                        lparts.MotoringMove(lparts.gameObj.transform.position, -wPos * lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
                     }
                     else
                     {
@@ -279,11 +275,19 @@ public class Gear : MonoBehaviour, IGear
                         tVector = transform.forward;
                     }
                     tVector = tVector.normalized;
+                    axis = axis.normalized;
                     if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
                         && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
                     {
-                        lparts.MotoringMove(lparts.gameObj.transform.position, lparts.gameObj.transform.forward, -speed, this.rad, moveType, motor);
+                        Vector3 v3Origin = lparts.gameObj.transform.position - transform.position;
+                        float sDir = speed / Mathf.Abs(speed);
+                        Quaternion qn = Quaternion.AngleAxis(sDir * 0.01f, axis);
+                        Vector3 v3Rotate = qn * v3Origin;
+                        Vector3 rVelc = v3Rotate - v3Origin;
+                        rVelc = rVelc.normalized;
+                        float dot = Vector3.Dot(rVelc, lparts.gameObj.transform.forward);
+                        lparts.MotoringMove(lparts.gameObj.transform.position, -dot * sDir * lparts.gameObj.transform.forward, speed, this.rad, moveType, motor);
                     }
                     else
                     {
@@ -294,30 +298,9 @@ public class Gear : MonoBehaviour, IGear
                 {
                     float rdir = Vector3.Dot(axis, lparts.gameObj.transform.forward);
 
-                    Vector3 direction;
-
-                    if (rdir > 0)
-                    {
-                        direction = lparts.gameObj.transform.right * Time.deltaTime * speed / 10;
-                    }
-                    else
-                    {
-                        direction = -lparts.gameObj.transform.right * Time.deltaTime * speed / 10;
-                    }
+                    Vector3 direction = rdir * lparts.gameObj.transform.right * Time.deltaTime * speed / 10;
                     
                     lparts.MotoringMove(lparts.gameObj.transform.position, direction, speed, this.rad, 1, motor);
-                    //Vector3 tVector = (transform.position - point);
-                    //if (tVector == Vector3.zero)
-                    //{
-                    //    tVector = transform.forward;
-                    //}
-                    //tVector = tVector.normalized;
-                    //if (Mathf.Round(Mathf.Abs(axis.x) * 1000f) == Mathf.Round(Mathf.Abs(tVector.x) * 1000f)
-                    //    && Mathf.Round(Mathf.Abs(axis.y) * 1000f) == Mathf.Round(Mathf.Abs(tVector.y) * 1000f)
-                    //    && Mathf.Round(Mathf.Abs(axis.z) * 1000f) == Mathf.Round(Mathf.Abs(tVector.z) * 1000f))
-                    //{
-                    //    lparts.MotoringMove(lparts.gameObj.transform.position, direction, -speed, this.rad, 1, motor);
-                    //}
                 }
             }
             cell.Point = point;
@@ -470,6 +453,8 @@ public class Gear : MonoBehaviour, IGear
 
     void OnMouseDown()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -629,7 +614,7 @@ public class Gear : MonoBehaviour, IGear
                 Dis = Dis - zAxis;
                 tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
 
-                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                if ((Mathf.Abs(dis - tmpDis)) < 0.02f)
                 {
                     Hole newHo = holeList[i].gameObject.GetComponent<Hole>();
                     newHo.HoleLink(h);
@@ -656,6 +641,8 @@ public class Gear : MonoBehaviour, IGear
 
     void OnMouseDrag()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();

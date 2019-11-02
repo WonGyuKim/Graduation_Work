@@ -158,7 +158,8 @@ public class Beam : MonoBehaviour, IParts
                     lparts = link.right;
                 else
                     lparts = link.left;
-
+                if (lparts.Search)
+                    continue;
                 if (link.type == MotorLink.LinkType.Tight)
                 {
                     lparts.MotoringMove(point, axis, speed, 0, moveType, motor);
@@ -338,8 +339,19 @@ public class Beam : MonoBehaviour, IParts
         Parent.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
     }
 
+    public bool Search
+    {
+        get
+        {
+            return this.search;
+        }
+    }
+
     void OnMouseDown()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
+
         scrSpace = Camera.main.WorldToScreenPoint(transform.position);
         xf = Input.mousePosition.x - scrSpace.x;
         yf = Input.mousePosition.y - scrSpace.y;
@@ -409,7 +421,7 @@ public class Beam : MonoBehaviour, IParts
                 Dis = Dis - zAxis;
                 tmpDis = Mathf.Sqrt(Dis.x * Dis.x + Dis.y * Dis.y + Dis.z * Dis.z);
 
-                if ((Mathf.Abs(dis - tmpDis)) < 0.05f)
+                if ((Mathf.Abs(dis - tmpDis)) < 0.02f)
                 {
                     Hole newHo = holeList[i].gameObject.GetComponent<Hole>();
                     newHo.HoleLink(h);
@@ -436,6 +448,9 @@ public class Beam : MonoBehaviour, IParts
 
     void OnMouseDrag()
     {
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
+
         if (Input.GetKey(KeyCode.LeftControl))
         {
             //ArcballMove();
