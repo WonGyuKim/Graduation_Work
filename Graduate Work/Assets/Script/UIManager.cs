@@ -18,7 +18,9 @@ public class UIManager : MonoBehaviour
     public Button Save;
     public Button Load;
     public Text Selected;
-    public InputField FilePath;
+    public InputField FileName;
+    public ScrollRect FileView;
+    
 
     // Variables
     private int target;
@@ -26,6 +28,7 @@ public class UIManager : MonoBehaviour
     public IParts data;
     private bool selected, selected_all;
     string path;
+    DirectoryInfo DI;
 
     //Contents
     public GameObject Content_view;
@@ -89,6 +92,24 @@ public class UIManager : MonoBehaviour
         selected = false;
         selected_all = false;
         path = "Models/Prefabs/";
+        DI = new DirectoryInfo(Application.dataPath + "/SavedData");
+        Debug.Log(FileView.content.name);
+        //FileView.content.
+        
+
+        foreach (FileInfo file in DI.GetFiles())
+        {
+            if (file.Extension == ".bin")
+            {
+                Debug.Log(file.Name);
+                //Text item = new Text();
+                GameObject item = FileItem(file.Name, 1);
+
+                //item.transform.parent = FileView.content;
+                item.transform.SetParent(FileView.content);
+                item.transform.position = item.transform.parent.position;
+            }
+        }
 
         Axle_Contents.SetActive(false);
         Beam_Contents.SetActive(false);
@@ -325,7 +346,7 @@ public class UIManager : MonoBehaviour
         //        foreach (GameObject gameobject in data_all)
         //        {
         //            //Debug.Log(gameobject);
-                    
+
         //            output.Vector3 = gameobject.transform.position;
         //            output.Quaternion = gameobject.transform.rotation;
         //            output.Kind = gameobject.GetComponent<IParts>().Kind;
@@ -337,16 +358,49 @@ public class UIManager : MonoBehaviour
         //    else if (selected)// save only selected object
         //    {
         //        output = new SaveData(data.gameObj.transform.position, data.gameObj.transform.rotation, data.Kind);
-                
+
         //        bf.Serialize(fs, output);
         //    }
 
         //    fs.Close();
         //}
-        
+
         /*
          * Saving Script without UnityEditor
          */
+
+        if (FileName.text.Length != 0 && selected)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream fs = new FileStream(Application.dataPath + "/SavedData/" + FileName.text, FileMode.Create);
+            SaveData output;
+
+            if (selected && selected_all) // save selected object and connected with it
+            {
+                List<GameObject> data_all = data.LinkSearch();
+                output = new SaveData();
+
+                foreach (GameObject gameobject in data_all)
+                {
+                    //Debug.Log(gameobject);
+
+                    output.Vector3 = gameobject.transform.position;
+                    output.Quaternion = gameobject.transform.rotation;
+                    output.Kind = gameobject.GetComponent<IParts>().Kind;
+                    bf.Serialize(fs, output);
+                    gameobject.GetComponent<IParts>().SearchReset();
+                }
+
+            }
+            else if (selected)// save only selected object
+            {
+                output = new SaveData(data.gameObj.transform.position, data.gameObj.transform.rotation, data.Kind);
+
+                bf.Serialize(fs, output);
+            }
+
+            fs.Close();
+        }
     }
 
     public void LoadObject()
@@ -379,6 +433,45 @@ public class UIManager : MonoBehaviour
         /*
          * Loading Script without UnityEditor
          */
+
+        if (FileName.text.Length != 0)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream fs = new FileStream(Application.dataPath + "/SavedData/" + FileName.text, FileMode.Open);
+            SaveData input;
+            GameObject load;
+
+            while (fs.Position != fs.Length)
+            {
+                input = bf.Deserialize(fs) as SaveData;
+
+                load = MakeObject(input);
+                load.GetComponent<IParts>().Loaded = true;
+
+            }
+
+            fs.Close();
+        }
+
+    }
+
+    public GameObject FileItem(string name, int number)
+    {
+        GameObject item = new GameObject("FileItem(" + number + ")");
+        item.AddComponent<LayoutElement>();
+
+
+        Text text = item.AddComponent<Text>();
+        text.text = name;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        text.horizontalOverflow = UnityEngine.HorizontalWrapMode.Overflow;
+
+        //RectTransform rect = item.GetComponent<RectTransform>();
+        //rect.sizeDelta = new Vector2(, rect.rect.height);
+
+        //Rect rect2 = FileView as Rect;
+
+        return item;
     }
 
     public void AxleContents()
