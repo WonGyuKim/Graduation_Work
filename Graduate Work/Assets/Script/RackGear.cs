@@ -636,7 +636,10 @@ public class RackGear : MonoBehaviour, IGear
     {
         if (other.tag == "Gear" || other.tag == "BevelGear" || other.tag == "WormGear" || other.tag == "RackGear")
         {
-            LinkParts.Remove(other.gameObject);
+            if(LinkParts.Remove(other.gameObject))
+            {
+
+            }
             if (onDrag)
             {
                 IGear linkGear = other.transform.gameObject.GetComponent<IGear>();
