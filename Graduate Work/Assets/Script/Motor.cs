@@ -455,7 +455,7 @@ public class Motor : MonoBehaviour, IParts
         if (Node.lList.Count == 0)
         {
             UIManager ui = GameObject.Find("UI Manager").GetComponent<UIManager>();
-            
+
             if (ui.list.Remove(this.gameObject) && rotM.motorList.Remove(this))
             {
                 ui.data = null;
