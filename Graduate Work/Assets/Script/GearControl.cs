@@ -92,8 +92,8 @@ public class GearControl : MonoBehaviour
             {
                 if (link1 == link2)
                 {
-                    gear1.node.lList.Remove(link1);
-                    gear2.node.lList.Remove(link2);
+                    gear1.node.DelLink(link1);
+                    gear2.node.DelLink(link2);
                     Destroy(link1.linkObject);
                     return;
                 }

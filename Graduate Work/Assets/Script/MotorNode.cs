@@ -16,4 +16,12 @@ public class MotorNode : MonoBehaviour
     {
         lList.Add(link);
     }
+
+    public void DelLink(MotorLink link)
+    {
+        if(lList.Remove(link))
+        {
+
+        }
+    }
 }
