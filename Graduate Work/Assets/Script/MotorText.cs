@@ -11,7 +11,7 @@ public class MotorText : MonoBehaviour
     public Toggle tog;
     public float RotateSpeed;
 
-    void OnEnable()
+    void Start()
     {
         motorText = GetComponent<Text>();
         RotateMotor rotM = GameObject.Find("RotateControl").GetComponent<RotateMotor>();
