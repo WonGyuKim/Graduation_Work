@@ -23,7 +23,7 @@ e1bbf0ab858085e38fae6b12ebbdcd35 UnityEngine.Timeline.dll:UnityEngine.Timeline.P
 e7a73f5f78ba6445195ec23b74a1ce2d Unity.TextMeshPro.dll:TMPro.TMP_ScrollbarEventHandler
 10ffbc469dfd377e81438de3bd52ce36 Assembly-CSharp.dll:.builder
 9e6956e3f2aa8887d090614a38c27f78 Assembly-CSharp.dll:.Player
-ffab367b583e8032ff514ff7b7aaca09 Assembly-CSharp.dll:.UIManager
+ae9c06adb96c64648782d29793fa573f Assembly-CSharp.dll:.UIManager
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.wheel
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.Advertisements.Editor.dll:UnityEngine.Advertisements.Editor.Placeholder
 cf9f5cf2c3145a37ac07f00e50e460f9 UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter

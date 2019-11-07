@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using UnityEditor;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class UIManager : MonoBehaviour
 {
@@ -29,6 +25,7 @@ public class UIManager : MonoBehaviour
     private bool selected, selected_all;
     string path;
     DirectoryInfo DI;
+    int FileCount;
 
     //Contents
     public GameObject Content_view;
@@ -92,22 +89,19 @@ public class UIManager : MonoBehaviour
         selected = false;
         selected_all = false;
         path = "Models/Prefabs/";
-        DI = new DirectoryInfo(Application.dataPath + "/SavedData");
-        Debug.Log(FileView.content.name);
-        //FileView.content.
-        
+        string SavePath = Application.dataPath + "/SavedData/";
+        if (!Directory.Exists(SavePath))
+            Directory.CreateDirectory(SavePath);
+
+        DI = new DirectoryInfo(SavePath);
+        FileCount = 0;
+
 
         foreach (FileInfo file in DI.GetFiles())
         {
             if (file.Extension == ".bin")
             {
-                Debug.Log(file.Name);
-                //Text item = new Text();
-                GameObject item = FileItem(file.Name, 1);
-
-                //item.transform.parent = FileView.content;
-                item.transform.SetParent(FileView.content);
-                item.transform.position = item.transform.parent.position;
+                AddFileItem(file.Name.Replace(".bin", ""), Color.black);
             }
         }
 
@@ -372,7 +366,7 @@ public class UIManager : MonoBehaviour
         if (FileName.text.Length != 0 && selected)
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream(Application.dataPath + "/SavedData/" + FileName.text, FileMode.Create);
+            FileStream fs = new FileStream(DI + FileName.text + ".bin", FileMode.Create);
             SaveData output;
 
             if (selected && selected_all) // save selected object and connected with it
@@ -400,6 +394,23 @@ public class UIManager : MonoBehaviour
             }
 
             fs.Close();
+
+            bool overwrite = false;
+
+            for (int i = 0; i < FileView.content.childCount; i++)
+            {
+                Debug.Log(FileView.content.GetChild(i).GetComponent<Text>().text);
+                if (FileView.content.GetChild(i).GetComponent<Text>().text == FileName.text)
+                {
+                    overwrite = true;
+                    FileView.content.GetChild(i).GetComponent<Text>().color = Color.red;
+                    break;
+                }
+            }
+
+            if (!overwrite)
+                AddFileItem(FileName.text, Color.blue);
+            FileName.text = "";
         }
     }
 
@@ -437,7 +448,7 @@ public class UIManager : MonoBehaviour
         if (FileName.text.Length != 0)
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream(Application.dataPath + "/SavedData/" + FileName.text, FileMode.Open);
+            FileStream fs = new FileStream(DI + FileName.text + ".bin", FileMode.Open);
             SaveData input;
             GameObject load;
 
@@ -451,27 +462,28 @@ public class UIManager : MonoBehaviour
             }
 
             fs.Close();
-        }
+            FileName.text = "";
 
+        }
     }
 
-    public GameObject FileItem(string name, int number)
+    public void AddFileItem(string name, Color color)
     {
-        GameObject item = new GameObject("FileItem(" + number + ")");
+        GameObject item = new GameObject("FileItem(" + FileCount + ")");
         item.AddComponent<LayoutElement>();
-
 
         Text text = item.AddComponent<Text>();
         text.text = name;
+        text.fontSize = 20;
+        text.color = color;
         text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        text.horizontalOverflow = UnityEngine.HorizontalWrapMode.Overflow;
+        text.horizontalOverflow = HorizontalWrapMode.Overflow;
 
-        //RectTransform rect = item.GetComponent<RectTransform>();
-        //rect.sizeDelta = new Vector2(, rect.rect.height);
-
-        //Rect rect2 = FileView as Rect;
-
-        return item;
+        ContentSizeFitter CSF = item.AddComponent<ContentSizeFitter>();
+        CSF.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        CSF.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        item.transform.SetParent(FileView.content);
+        FileCount++;
     }
 
     public void AxleContents()
@@ -818,7 +830,7 @@ public class UIManager : MonoBehaviour
             }
             HorU = true;
 
-            HorUtext.GetComponent<Text>().text = "펼치기";
+            HorUtext.GetComponent<Text>().text = "Show";
         }
         else
         {
@@ -848,7 +860,7 @@ public class UIManager : MonoBehaviour
             }
             HorU = false;
 
-            HorUtext.GetComponent<Text>().text = "숨기기";
+            HorUtext.GetComponent<Text>().text = "Hide";
         }
     }
 }
