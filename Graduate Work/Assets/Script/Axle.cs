@@ -12,6 +12,9 @@ public class Axle : MonoBehaviour, IParts
     private Vector3 befoMouse;
     private float xf;
     private float yf;
+    private Vector3 origin;
+    private GameObject sphere;
+    private Quaternion temp_rotate;
     private List<GameObject> LinkParts;
     public bool search; //탐색 확인 변수
     public GameObject emptyObject;//프리팹에서 empty오브젝트를 받아올 변수
@@ -89,6 +92,8 @@ public class Axle : MonoBehaviour, IParts
         onDrag = true;
         befoMouse = Input.mousePosition;
         loaded = false;
+        if (Input.GetKey(KeyCode.LeftControl))
+            SetArcballData();
         if (Input.GetKey(KeyCode.A))
         {
             AllList = LinkSearch();
@@ -165,8 +170,114 @@ public class Axle : MonoBehaviour, IParts
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - xf, Input.mousePosition.y - yf, scrSpace.z));
     }
 
+    void SetArcballData()
+    {
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit rayhit;
+
+            if (Physics.Raycast(ray, out rayhit))
+            {
+                float round = 0;
+                Vector3 far = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+                MeshCollider mesh = rayhit.collider as MeshCollider;
+
+                foreach (Vector3 vertex in mesh.sharedMesh.vertices)
+                {
+                    if (Mathf.Pow(transform.position.x - far.x, 2) + Mathf.Pow(transform.position.y - far.y, 2) + Mathf.Pow(transform.position.z - far.z, 2)
+                        < Mathf.Pow(transform.position.x - vertex.x, 2) + Mathf.Pow(transform.position.y - vertex.y, 2) + Mathf.Pow(transform.position.z - vertex.z, 2))
+                    {
+                        far.x = vertex.x;
+                        far.y = vertex.y;
+                        far.z = vertex.z;
+                    }
+                }
+
+                round = far.magnitude;
+
+                sphere = new GameObject("Sphere Collider");
+                sphere.transform.position = transform.position;
+                sphere.transform.parent = transform;
+                sphere.transform.rotation = transform.rotation;
+
+                SphereCollider temp = sphere.AddComponent<SphereCollider>();
+                temp.radius = round;
+                temp_rotate = transform.rotation;
+            }
+
+            if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+            {
+                origin = rayhit.point - transform.position;
+            }
+        }
+    }
+
+
     public void ArcballMove()
     {
+        Vector3 click, click_N, origin_N;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit rayhit;
+
+        if (Physics.Raycast(ray, out rayhit) && rayhit.collider.gameObject.Equals(sphere))
+        {
+            click = rayhit.point - transform.position;
+
+            // arcball rotation
+
+            // Step_1. 
+            click_N = Vector3.Normalize(click);
+            origin_N = Vector3.Normalize(origin);
+
+            // Step_2.
+            //Inner Product : For getting an angle between two vectors
+            float InPro = Vector3.Dot(origin_N, click_N);
+            float angle = Mathf.Acos(InPro) / 2;
+
+            // Step_3.
+            // Cross Product : For getting rotation axis
+            Vector3 CroPro = Vector3.Cross(origin_N, click_N);
+
+            // Step_4. Now We can make conclusion Rotation by Quaternion
+            Quaternion result = new Quaternion(Mathf.Sin(angle) * CroPro.x, Mathf.Sin(angle) * CroPro.y, Mathf.Sin(angle) * CroPro.z, Mathf.Cos(angle));
+
+            sphere.transform.rotation = result * temp_rotate;
+            transform.rotation = result * temp_rotate;
+            //result.z = 0;
+            //Debug.Log("x : " + Mathf.Abs(result.x));
+            //Debug.Log("y : " + Mathf.Abs(result.y));
+            //Debug.Log("=====");
+            //if (Mathf.Abs(result.x) >= Mathf.Abs(result.y))
+            //{
+            //    // y-axis rotation
+            //    result.y = 0;
+            //    sphere.transform.rotation = result * temp_rotate;
+            //    if (Mathf.Abs(sphere.transform.rotation.eulerAngles.x) % 90 < ArcballRange)
+            //        transform.rotation = Quaternion.Euler(sphere.transform.rotation.eulerAngles.x, Mathf.Floor(sphere.transform.rotation.eulerAngles.y / 90) * 90, sphere.transform.rotation.eulerAngles.z);
+            //    else if (90 - ArcballRange < Mathf.Abs(sphere.transform.rotation.eulerAngles.x) % 90)
+            //        transform.rotation = Quaternion.Euler(sphere.transform.rotation.eulerAngles.x, (Mathf.Floor(sphere.transform.rotation.eulerAngles.y / 90) + 1) * 90, sphere.transform.rotation.eulerAngles.z);
+            //    else
+            //        transform.rotation = result * temp_rotate;
+            //    //Debug.Log("HI");
+            //}
+            //else if (Mathf.Abs(result.x) < Mathf.Abs(result.y))
+            //{
+            //    // x-axis rotation
+            //    result.x = 0;
+            //    sphere.transform.rotation = result * temp_rotate;
+            //    if (Mathf.Abs(sphere.transform.rotation.eulerAngles.y) % 90 < ArcballRange)
+            //        transform.rotation = Quaternion.Euler(Mathf.Floor(sphere.transform.rotation.eulerAngles.x / 90) * 90, sphere.transform.rotation.eulerAngles.y, sphere.transform.rotation.eulerAngles.z);
+            //    else if (90 - ArcballRange < Mathf.Abs(sphere.transform.rotation.eulerAngles.y) % 90)
+            //        transform.rotation = Quaternion.Euler((Mathf.Floor(sphere.transform.rotation.eulerAngles.x / 90) + 1) * 90, sphere.transform.rotation.eulerAngles.y, sphere.transform.rotation.eulerAngles.z);
+            //    else
+            //        transform.rotation = result * temp_rotate;
+
+            //    //Debug.Log("Chilly");
+            //}
+
+        }
 
     }
 
@@ -370,6 +481,7 @@ public class Axle : MonoBehaviour, IParts
         }
         hole = null;
         onDrag = false;
+        Destroy(sphere);
     }
 
     public MotorNode node
@@ -392,11 +504,11 @@ public class Axle : MonoBehaviour, IParts
 
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            //ArcballMove();
-            float rotate_spd = 300.0f;
-            float temp_x_axis = Input.GetAxis("Mouse X") * rotate_spd * Time.deltaTime;
-            float temp_y_axis = Input.GetAxis("Mouse Y") * rotate_spd * Time.deltaTime;
-            transform.Rotate(temp_y_axis, -temp_x_axis, 0, Space.World);
+            ArcballMove();
+            //float rotate_spd = 300.0f;
+            //float temp_x_axis = Input.GetAxis("Mouse X") * rotate_spd * Time.deltaTime;
+            //float temp_y_axis = Input.GetAxis("Mouse Y") * rotate_spd * Time.deltaTime;
+            //transform.Rotate(temp_y_axis, -temp_x_axis, 0, Space.World);
         }
         else if (Input.GetKey(KeyCode.A))
         {
